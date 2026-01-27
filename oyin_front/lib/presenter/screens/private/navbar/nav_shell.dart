@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
-import '../../../extensions/_export.dart';
 import '../chat/chat_screen.dart';
 import '../match/match_screen.dart';
 import '../profile/profile_screen.dart';

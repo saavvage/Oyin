@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../app/localization/app_localizations.dart';
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 
 class ProfileAvatarSection extends StatelessWidget {
   const ProfileAvatarSection({
@@ -38,7 +36,7 @@ class ProfileAvatarSection extends StatelessWidget {
                 color: palette.card,
                 boxShadow: [
                   BoxShadow(
-                    color: palette.primary.withOpacity(0.35),
+                    color: palette.primary.withValues(alpha:0.35),
                     blurRadius: 18,
                     offset: const Offset(0, 10),
                   ),
@@ -59,7 +57,7 @@ class ProfileAvatarSection extends StatelessWidget {
                   color: palette.card,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.35),
+                      color: Colors.black.withValues(alpha: 0.35),
                       blurRadius: 8,
                     )
                   ],
@@ -79,7 +77,7 @@ class ProfileAvatarSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
-            color: palette.primary.withOpacity(0.12),
+            color: palette.primary.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(

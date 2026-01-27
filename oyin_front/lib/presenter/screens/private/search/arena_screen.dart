@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/_export.dart';
-import '../../../extensions/theme.dart';
 import '../search/match_result_screen.dart';
 
 class ArenaScreen extends StatelessWidget {
@@ -219,7 +218,7 @@ class _PlayerRow extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.15),
+                color: accentColor.withValues(alpha:0.15),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

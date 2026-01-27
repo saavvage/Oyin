@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../extensions/_export.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../app/app.dart';
-import '../../../utils/phone_mask.dart';
 import '../login/phone_screen.dart';
 
 class AuthEntryScreen extends StatelessWidget {

@@ -32,7 +32,7 @@ class RewardSheet extends StatelessWidget {
               final day = i + 1;
               final reward = day == 7 ? 500 : day * 10;
               final claimed = day <= 2; 
-              final tileColor = claimed ? Colors.green.withOpacity(0.12) : Colors.transparent;
+              final tileColor = claimed ? Colors.green.withValues(alpha:0.12) : Colors.transparent;
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 4),
                 decoration: BoxDecoration(
