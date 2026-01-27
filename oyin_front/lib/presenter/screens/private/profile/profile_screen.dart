@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
+import '../wallet/wallet_screen.dart';
 import 'cubit/_export.dart';
 import 'widgets/_export.dart';
 
@@ -42,12 +43,15 @@ class _ProfileView extends StatelessWidget {
                   ProfileAvatarSection(
                     name: state.name,
                     tagline: state.tagline,
+                    email: state.email,
                     location: state.location,
                     league: state.league,
                     avatarUrl: state.avatarUrl,
                   ),
                   24.vSpacing,
                   ProfileStatsGrid(l10n: l10n, stats: state.stats),
+                  16.vSpacing,
+                  WalletEntryButton(balance: 350),
                   20.vSpacing,
                   NextMatchCard(l10n: l10n, match: state.nextMatch),
                   20.vSpacing,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../app/localization/locale_keys.dart';
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 import '../cubit/settings_state.dart';
 
 class SettingsSectionList extends StatelessWidget {

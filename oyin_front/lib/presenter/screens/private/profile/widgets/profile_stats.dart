@@ -22,7 +22,7 @@ class ProfileStatsGrid extends StatelessWidget {
       _StatCard(
         label: l10n.reputation,
         value: stats.reputation.toStringAsFixed(1),
-        caption: stats.reputationNote,
+        caption: l10n.reputationExcellent,
         icon: Icons.verified_user,
       ),
       _StatCard(
@@ -33,7 +33,7 @@ class ProfileStatsGrid extends StatelessWidget {
       _StatCard(
         label: l10n.matches,
         value: stats.matches.toString(),
-        caption: stats.matchesDelta,
+        caption: l10n.matchesDeltaThisMonth(stats.matchesDeltaValue),
         icon: Icons.calendar_month,
       ),
       _StatCard(

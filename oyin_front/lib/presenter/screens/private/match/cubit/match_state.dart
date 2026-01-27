@@ -1,4 +1,4 @@
-import '../../../../../domain/entities/private/models/match_profile.dart';
+import 'package:oyin_front/domain/export.dart';
 
 
 class MatchState {

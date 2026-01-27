@@ -5,7 +5,7 @@ import '../../../extensions/_export.dart';
 import '../chat/chat_screen.dart';
 import '../match/match_screen.dart';
 import '../profile/profile_screen.dart';
-import '../search/match_result_screen.dart';
+import '../search/arena_screen.dart';
 import 'liquid_navbar.dart';
 import 'nav_item.dart';
 
@@ -21,7 +21,7 @@ class _NavShellState extends State<NavShell> {
 
   late final pages = [
     const MatchScreen(),
-    const MatchResultScreen(), // placeholder for Search tab
+    const ArenaScreen(), 
     const ChatScreen(),
     const ProfileScreen(),
   ];

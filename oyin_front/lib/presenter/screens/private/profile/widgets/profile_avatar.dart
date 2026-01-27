@@ -12,6 +12,7 @@ class ProfileAvatarSection extends StatelessWidget {
     required this.location,
     required this.league,
     required this.avatarUrl,
+    this.email = '',
   });
 
   final String name;
@@ -19,6 +20,7 @@ class ProfileAvatarSection extends StatelessWidget {
   final String location;
   final String league;
   final String avatarUrl;
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -74,31 +76,32 @@ class ProfileAvatarSection extends StatelessWidget {
           style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
         ),
         10.vSpacing,
-        Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 10,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: palette.primary.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                league,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelLarge
-                    ?.copyWith(color: palette.primary, fontWeight: FontWeight.w700),
-              ),
-            ),
-            Text(
-              tagline,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
-            ),
-          ],
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: palette.primary.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            league,
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge
+                ?.copyWith(color: palette.primary, fontWeight: FontWeight.w700),
+          ),
         ),
+        8.vSpacing,
+        Text(
+          tagline,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
+        ),
+        if (email.isNotEmpty) ...[
+          6.vSpacing,
+          Text(
+            email,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
+          ),
+        ],
         8.vSpacing,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

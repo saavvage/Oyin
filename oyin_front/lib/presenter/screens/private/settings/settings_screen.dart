@@ -58,7 +58,6 @@ class _SettingsView extends StatelessWidget {
                     onToggleDisputeUpdates: context.read<SettingsCubit>().toggleDisputeUpdates,
                     onLocaleSelected: (code) {
                       context.read<SettingsCubit>().setLocale(code);
-                      AppLocalizations.delegate.load(Locale(code));
                       OyinApp.of(context).setLocale(Locale(code));
                     },
                     selectedLocale: state.selectedLocale,

@@ -1,19 +1,21 @@
+import '../../../../../app/localization/locale_keys.dart';
+
 class ProfileStats {
   const ProfileStats({
     required this.reputation,
-    required this.reputationNote,
     required this.record,
     required this.matches,
-    required this.matchesDelta,
     required this.reliability,
+    this.reputationNoteKey = LocaleKeys.reputationExcellent,
+    this.matchesDeltaValue = '2',
   });
 
   final double reputation;
-  final String reputationNote;
   final String record;
   final int matches;
-  final String matchesDelta;
   final int reliability;
+  final String reputationNoteKey;
+  final String matchesDeltaValue;
 }
 
 class NextMatch {
@@ -37,6 +39,7 @@ class ProfileState {
     required this.avatarUrl,
     required this.name,
     required this.tagline,
+    required this.email,
     required this.location,
     required this.league,
     required this.stats,
@@ -47,6 +50,7 @@ class ProfileState {
   final String avatarUrl;
   final String name;
   final String tagline;
+  final String email;
   final String location;
   final String league;
   final ProfileStats stats;

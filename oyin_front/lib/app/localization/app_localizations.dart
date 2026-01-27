@@ -110,6 +110,63 @@ class AppLocalizations {
   String get aiAssistantSubtitle => _string(LocaleKeys.aiAssistantSubtitle);
   String get madeWithCare => _string(LocaleKeys.madeWithCare);
   String get language => _string(LocaleKeys.language);
+  String get reputationExcellent => _string(LocaleKeys.reputationExcellent);
+  String matchesDeltaThisMonth(String value) =>
+      _string(LocaleKeys.matchesDeltaThisMonth).replaceFirst('{value}', value);
+  String get statusDisputeOpen => _string(LocaleKeys.statusDisputeOpen);
+  String get statusContractSigned => _string(LocaleKeys.statusContractSigned);
+  String get statusDraftingContract => _string(LocaleKeys.statusDraftingContract);
+  String get statusMatched => _string(LocaleKeys.statusMatched);
+  String get arenaTitle => _string(LocaleKeys.arenaTitle);
+  String get arenaStanding => _string(LocaleKeys.arenaStanding);
+  String get arenaRank => _string(LocaleKeys.arenaRank);
+  String arenaRating(String value) => _string(LocaleKeys.arenaRating).replaceFirst('{value}', value);
+  String get arenaAllPlayers => _string(LocaleKeys.arenaAllPlayers);
+  String get arenaFairFight => _string(LocaleKeys.arenaFairFight);
+  String get arenaInRange => _string(LocaleKeys.arenaInRange);
+  String get arenaChallenge => _string(LocaleKeys.arenaChallenge);
+  String get arenaPending => _string(LocaleKeys.arenaPending);
+  String walletBalance(String value) => _string(LocaleKeys.walletBalance).replaceFirst('{value}', value);
+  String get walletTransfer => _string(LocaleKeys.walletTransfer);
+  String get walletStore => _string(LocaleKeys.walletStore);
+  String get walletHistory => _string(LocaleKeys.walletHistory);
+  String get walletDailyReward => _string(LocaleKeys.walletDailyReward);
+  String get walletClaimBonus => _string(LocaleKeys.walletClaimBonus);
+  String get walletClaim => _string(LocaleKeys.walletClaim);
+  String get walletDailyStreak => _string(LocaleKeys.walletDailyStreak);
+  String walletDay(String value) => _string(LocaleKeys.walletDay).replaceFirst('{value}', value);
+  String get walletGetReward => _string(LocaleKeys.walletGetReward);
+  String walletCoins(String value) => _string(LocaleKeys.walletCoins).replaceFirst('{value}', value);
+  String get walletPhoneNumber => _string(LocaleKeys.walletPhoneNumber);
+  String get walletCoinsAmount => _string(LocaleKeys.walletCoinsAmount);
+  String get walletBuy => _string(LocaleKeys.walletBuy);
+  String get walletSend => _string(LocaleKeys.walletSend);
+  String get storeItemGym => _string(LocaleKeys.storeItemGym);
+  String get storeItemEquipment => _string(LocaleKeys.storeItemEquipment);
+  String get storeItemCoach => _string(LocaleKeys.storeItemCoach);
+  String get storeItemEnergy => _string(LocaleKeys.storeItemEnergy);
+  String get onboardingTitle => _string(LocaleKeys.onboardingTitle);
+  String get onboardingSubtitle => _string(LocaleKeys.onboardingSubtitle);
+  String get getStarted => _string(LocaleKeys.getStarted);
+  String get logIn => _string(LocaleKeys.logIn);
+  String get phoneNumberLabel => _string(LocaleKeys.phoneNumber);
+  String get sendCode => _string(LocaleKeys.sendCode);
+  String get phoneEntryTitle => _string(LocaleKeys.phoneEntryTitle);
+  String get phoneEntrySubtitle => _string(LocaleKeys.phoneEntrySubtitle);
+  String get termsAgree => _string(LocaleKeys.termsAgree);
+  String get verificationTitle => _string(LocaleKeys.verificationTitle);
+  String verificationSubtitle(String phone) =>
+      _string(LocaleKeys.verificationSubtitle).replaceFirst('{phone}', phone);
+  String get resendCode => _string(LocaleKeys.resendCode);
+  String get verifyIdentity => _string(LocaleKeys.verifyIdentity);
+  String get profileInfoTitle => _string(LocaleKeys.profileInfoTitle);
+  String get profileInfoSubtitle => _string(LocaleKeys.profileInfoSubtitle);
+  String get firstName => _string(LocaleKeys.firstName);
+  String get lastName => _string(LocaleKeys.lastName);
+  String get email => _string(LocaleKeys.email);
+  String get birthDate => _string(LocaleKeys.birthDate);
+  String get city => _string(LocaleKeys.city);
+  String get continueLabel => _string(LocaleKeys.continueLabel);
 
   String nameAndAge(String name, int age) =>
       _string(LocaleKeys.nameAge).replaceFirst('{name}', name).replaceFirst('{age}', age.toString());
@@ -231,6 +288,62 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.aiAssistantSubtitle: 'We will connect your personal fight-AI helper here.',
     LocaleKeys.madeWithCare: 'Made with care for you ❤️',
     LocaleKeys.language: 'Language',
+    LocaleKeys.reputationExcellent: 'Excellent',
+    LocaleKeys.matchesDeltaThisMonth: '+{value} this mo.',
+    LocaleKeys.statusDisputeOpen: 'Dispute Open',
+    LocaleKeys.statusContractSigned: 'CONTRACT SIGNED',
+    LocaleKeys.statusDraftingContract: 'DRAFTING CONTRACT…',
+    LocaleKeys.statusMatched: 'Matched',
+    LocaleKeys.arenaTitle: 'Arena',
+    LocaleKeys.arenaStanding: 'YOUR STANDING',
+    LocaleKeys.arenaRank: 'Rank',
+    LocaleKeys.arenaRating: 'Rating: {value}',
+    LocaleKeys.arenaAllPlayers: 'All Players',
+    LocaleKeys.arenaFairFight: 'Fair Fight (+/- 200)',
+    LocaleKeys.arenaInRange: 'In your range',
+    LocaleKeys.arenaChallenge: 'Challenge',
+    LocaleKeys.arenaPending: 'Pending',
+    LocaleKeys.walletBalance: 'Balance: {value}',
+    LocaleKeys.walletTransfer: 'Transfer',
+    LocaleKeys.walletStore: 'Store',
+    LocaleKeys.walletHistory: 'History',
+    LocaleKeys.walletDailyReward: 'Daily reward',
+    LocaleKeys.walletClaimBonus: 'Claim your streak bonus',
+    LocaleKeys.walletClaim: 'Claim',
+    LocaleKeys.walletDailyStreak: 'Daily streak',
+    LocaleKeys.walletDay: 'Day {value}',
+    LocaleKeys.walletGetReward: 'Get reward',
+    LocaleKeys.walletCoins: '{value} coins',
+    LocaleKeys.walletPhoneNumber: 'Phone number',
+    LocaleKeys.walletCoinsAmount: 'Coins amount',
+    LocaleKeys.walletBuy: 'Buy',
+    LocaleKeys.walletSend: 'Send',
+    LocaleKeys.storeItemGym: 'Gym pass',
+    LocaleKeys.storeItemEquipment: 'Equipment',
+    LocaleKeys.storeItemCoach: 'Coach session',
+    LocaleKeys.storeItemEnergy: 'Energy drink',
+    LocaleKeys.onboardingTitle: 'Train Harder,\nTogether.',
+    LocaleKeys.onboardingSubtitle:
+        'The hybrid matching system for fighters. Find partners, track stats, and grow safely.',
+    LocaleKeys.getStarted: 'Get Started',
+    LocaleKeys.logIn: 'Log In',
+    LocaleKeys.phoneNumber: 'Phone Number',
+    LocaleKeys.sendCode: 'Send Code',
+    LocaleKeys.phoneEntryTitle: 'Let’s get you in the ring.',
+    LocaleKeys.phoneEntrySubtitle: 'Enter your phone number to verify your account and find sparring partners.',
+    LocaleKeys.termsAgree: 'By continuing, you agree to our Terms & Privacy Policy.',
+    LocaleKeys.verificationTitle: 'Enter Verification Code',
+    LocaleKeys.verificationSubtitle: 'We sent a code to {phone}. Enter it below to continue.',
+    LocaleKeys.resendCode: 'Resend',
+    LocaleKeys.verifyIdentity: 'Verify Identity',
+    LocaleKeys.profileInfoTitle: 'Tell us about you',
+    LocaleKeys.profileInfoSubtitle: 'We’ll use this to personalise matches.',
+    LocaleKeys.firstName: 'First Name',
+    LocaleKeys.lastName: 'Last Name',
+    LocaleKeys.email: 'Email',
+    LocaleKeys.birthDate: 'Date of Birth',
+    LocaleKeys.city: 'City',
+    LocaleKeys.continueLabel: 'Continue',
   },
   'ru': {
     LocaleKeys.discovery: 'Поиск',
@@ -319,6 +432,62 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.aiAssistantSubtitle: 'Здесь будет подключен ваш персональный AI-ассистент.',
     LocaleKeys.madeWithCare: 'Сделано с заботой для вас ❤️',
     LocaleKeys.language: 'Язык',
+    LocaleKeys.reputationExcellent: 'Отлично',
+    LocaleKeys.matchesDeltaThisMonth: '+{value} в этом мес.',
+    LocaleKeys.statusDisputeOpen: 'Открыт спор',
+    LocaleKeys.statusContractSigned: 'КОНТРАКТ ПОДПИСАН',
+    LocaleKeys.statusDraftingContract: 'КОНТРАКТ ГОТОВИТСЯ',
+    LocaleKeys.statusMatched: 'Матч!',
+    LocaleKeys.arenaTitle: 'Арена',
+    LocaleKeys.arenaStanding: 'ТВОЙ РЕЙТИНГ',
+    LocaleKeys.arenaRank: 'Ранг',
+    LocaleKeys.arenaRating: 'Рейтинг: {value}',
+    LocaleKeys.arenaAllPlayers: 'Все игроки',
+    LocaleKeys.arenaFairFight: 'Честный бой (+/- 200)',
+    LocaleKeys.arenaInRange: 'В твоём диапазоне',
+    LocaleKeys.arenaChallenge: 'Бросить вызов',
+    LocaleKeys.arenaPending: 'Ожидание',
+    LocaleKeys.walletBalance: 'Баланс: {value}',
+    LocaleKeys.walletTransfer: 'Перевод',
+    LocaleKeys.walletStore: 'Магазин',
+    LocaleKeys.walletHistory: 'История',
+    LocaleKeys.walletDailyReward: 'Ежедневная награда',
+    LocaleKeys.walletClaimBonus: 'Забери бонус за серию',
+    LocaleKeys.walletClaim: 'Получить',
+    LocaleKeys.walletDailyStreak: 'Ежедневная серия',
+    LocaleKeys.walletDay: '{value}-й день',
+    LocaleKeys.walletGetReward: 'Забрать награду',
+    LocaleKeys.walletCoins: '{value} монет',
+    LocaleKeys.walletPhoneNumber: 'Номер телефона',
+    LocaleKeys.walletCoinsAmount: 'Количество монет',
+    LocaleKeys.walletBuy: 'Купить',
+    LocaleKeys.walletSend: 'Отправить',
+    LocaleKeys.storeItemGym: 'Абонемент в зал',
+    LocaleKeys.storeItemEquipment: 'Экипировка',
+    LocaleKeys.storeItemCoach: 'Тренировка с коучем',
+    LocaleKeys.storeItemEnergy: 'Энергетик',
+    LocaleKeys.onboardingTitle: 'Тренируйся сильнее,\nвместе.',
+    LocaleKeys.onboardingSubtitle:
+        'Гибридная система матчмейкинга для бойцов. Находи партнёров, веди статистику и прогрессируй безопасно.',
+    LocaleKeys.getStarted: 'Начать',
+    LocaleKeys.logIn: 'Войти',
+    LocaleKeys.phoneNumber: 'Номер телефона',
+    LocaleKeys.sendCode: 'Отправить код',
+    LocaleKeys.phoneEntryTitle: 'Заходим на ринг.',
+    LocaleKeys.phoneEntrySubtitle: 'Укажи телефон, чтобы подтвердить аккаунт и найти спарринг-партнёров.',
+    LocaleKeys.termsAgree: 'Продолжая, вы соглашаетесь с Условиями и Политикой конфиденциальности.',
+    LocaleKeys.verificationTitle: 'Введите код подтверждения',
+    LocaleKeys.verificationSubtitle: 'Мы отправили код на {phone}. Введите его ниже, чтобы продолжить.',
+    LocaleKeys.resendCode: 'Отправить ещё раз',
+    LocaleKeys.verifyIdentity: 'Подтвердить личность',
+    LocaleKeys.profileInfoTitle: 'Расскажи о себе',
+    LocaleKeys.profileInfoSubtitle: 'Это поможет нам персонализировать подбор.',
+    LocaleKeys.firstName: 'Имя',
+    LocaleKeys.lastName: 'Фамилия',
+    LocaleKeys.email: 'Почта',
+    LocaleKeys.birthDate: 'Дата рождения',
+    LocaleKeys.city: 'Город',
+    LocaleKeys.continueLabel: 'Далее',
   },
   'kk': {
     LocaleKeys.discovery: 'Іздеу',
@@ -406,5 +575,61 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.aiAssistantSubtitle: 'Мұнда сіздің жеке fight-AI қосылады.',
     LocaleKeys.madeWithCare: 'Сіз үшін қамқорлықпен жасалды ❤️',
     LocaleKeys.language: 'Тіл',
+    LocaleKeys.reputationExcellent: 'Өте жақсы',
+    LocaleKeys.matchesDeltaThisMonth: '+{value} осы айда',
+    LocaleKeys.statusDisputeOpen: 'Даудың ашылды',
+    LocaleKeys.statusContractSigned: 'ШАРТ ҚОЛ ҚОЙЫЛДЫ',
+    LocaleKeys.statusDraftingContract: 'ШАРТ ДАЙЫНДАЛУДА',
+    LocaleKeys.statusMatched: 'Матч',
+    LocaleKeys.arenaTitle: 'Арена',
+    LocaleKeys.arenaStanding: 'СЕНІҢ КӨРСЕТКІШІҢ',
+    LocaleKeys.arenaRank: 'Дәреже',
+    LocaleKeys.arenaRating: 'Рейтинг: {value}',
+    LocaleKeys.arenaAllPlayers: 'Барлық ойыншылар',
+    LocaleKeys.arenaFairFight: 'Әділ жекпе-жек (+/- 200)',
+    LocaleKeys.arenaInRange: 'Сенің диапазонда',
+    LocaleKeys.arenaChallenge: 'Шақыру',
+    LocaleKeys.arenaPending: 'Күту',
+    LocaleKeys.walletBalance: 'Баланс: {value}',
+    LocaleKeys.walletTransfer: 'Аудару',
+    LocaleKeys.walletStore: 'Дүкен',
+    LocaleKeys.walletHistory: 'Тарих',
+    LocaleKeys.walletDailyReward: 'Күн сайынғы сыйақы',
+    LocaleKeys.walletClaimBonus: 'Серия бонусын ал',
+    LocaleKeys.walletClaim: 'Алу',
+    LocaleKeys.walletDailyStreak: 'Күн сайынғы серия',
+    LocaleKeys.walletDay: '{value}-күн',
+    LocaleKeys.walletGetReward: 'Сыйақыны алу',
+    LocaleKeys.walletCoins: '{value} монета',
+    LocaleKeys.walletPhoneNumber: 'Телефон нөмірі',
+    LocaleKeys.walletCoinsAmount: 'Монет саны',
+    LocaleKeys.walletBuy: 'Сатып алу',
+    LocaleKeys.walletSend: 'Жіберу',
+    LocaleKeys.storeItemGym: 'Зал абонементі',
+    LocaleKeys.storeItemEquipment: 'Жабдық',
+    LocaleKeys.storeItemCoach: 'Жаттықтыру сабағы',
+    LocaleKeys.storeItemEnergy: 'Энергетик',
+    LocaleKeys.onboardingTitle: 'Күшті жаттығу,\nбірге.',
+    LocaleKeys.onboardingSubtitle:
+        'Жекпе-жекшілерге арналған гибридті матчинг. Серіктестерді тап, статистиканы жүргіз, қауіпсіз дамы.',
+    LocaleKeys.getStarted: 'Бастау',
+    LocaleKeys.logIn: 'Кіру',
+    LocaleKeys.phoneNumber: 'Телефон нөмірі',
+    LocaleKeys.sendCode: 'Код жіберу',
+    LocaleKeys.phoneEntryTitle: 'Рингке кірейік.',
+    LocaleKeys.phoneEntrySubtitle: 'Аккаунтты растау және спарринг табу үшін нөмірді енгіз.',
+    LocaleKeys.termsAgree: 'Жалғастыру арқылы Шарттармен және Құпиялылық саясатымен келісесіз.',
+    LocaleKeys.verificationTitle: 'Растау кодын енгізіңіз',
+    LocaleKeys.verificationSubtitle: 'Код {phone} нөміріне жіберілді. Жалғастыру үшін енгізіңіз.',
+    LocaleKeys.resendCode: 'Қайта жіберу',
+    LocaleKeys.verifyIdentity: 'Тұлғаны растау',
+    LocaleKeys.profileInfoTitle: 'Өзің туралы айт',
+    LocaleKeys.profileInfoSubtitle: 'Біз матчты жеке баптаймыз.',
+    LocaleKeys.firstName: 'Аты',
+    LocaleKeys.lastName: 'Тегі',
+    LocaleKeys.email: 'Email',
+    LocaleKeys.birthDate: 'Туған күн',
+    LocaleKeys.city: 'Қала',
+    LocaleKeys.continueLabel: 'Жалғастыру',
   },
 };

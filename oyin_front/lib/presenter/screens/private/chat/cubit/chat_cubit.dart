@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'chat_state.dart';
+import '../../../../../app/localization/locale_keys.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit()
@@ -13,12 +14,12 @@ class ChatCubit extends Cubit<ChatState> {
                 subtitle: 'Dispute started regarding the final set score. Please upload…',
                 avatarUrl:
                     'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
-                status: 'Dispute Open',
+                statusKey: LocaleKeys.statusDisputeOpen,
                 timestamp: 'Mon',
                 badgeCount: null,
                 accent: 'red',
                 highlight: true,
-                buttonLabel: 'resolve',
+                buttonKey: 'resolve',
               ),
             ],
             upcoming: const [
@@ -27,36 +28,36 @@ class ChatCubit extends Cubit<ChatState> {
                 subtitle: "See you at the court at 5? I'll bring th…",
                 avatarUrl:
                     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-                status: 'CONTRACT SIGNED',
+                statusKey: LocaleKeys.statusContractSigned,
                 timestamp: '10:30 AM',
                 badgeCount: 1,
                 accent: 'green',
                 highlight: false,
-                buttonLabel: null,
+                buttonKey: null,
               ),
               ChatCard(
                 name: 'Dmitry K.',
                 subtitle: 'I sent the location proposal. Let me know if that works for you.',
                 avatarUrl:
                     'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
-                status: 'DRAFTING CONTRACT…',
+                statusKey: LocaleKeys.statusDraftingContract,
                 timestamp: 'Yesterday',
                 badgeCount: null,
                 accent: 'yellow',
                 highlight: false,
-                buttonLabel: 'view',
+                buttonKey: 'view',
               ),
               ChatCard(
                 name: 'Maria S.',
                 subtitle: 'Matched! Start chatting to set up.',
                 avatarUrl:
                     'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
-                status: 'MATCHED',
+                statusKey: LocaleKeys.statusMatched,
                 timestamp: '2d ago',
                 badgeCount: null,
                 accent: 'muted',
                 highlight: false,
-                buttonLabel: null,
+                buttonKey: null,
               ),
             ],
           ),

@@ -1,4 +1,4 @@
-import '../../domain/export.dart';
+import 'package:oyin_front/domain/export.dart';
 
 abstract class AppEvent {}
 

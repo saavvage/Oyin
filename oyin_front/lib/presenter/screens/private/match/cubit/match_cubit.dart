@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../domain/entities/private/models/match_profile.dart';
+import 'package:oyin_front/domain/export.dart';
 import 'match_state.dart';
 
 class MatchCubit extends Cubit<MatchState> {

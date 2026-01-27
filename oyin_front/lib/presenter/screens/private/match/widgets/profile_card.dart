@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
-import '../../../../../domain/entities/private/models/match_profile.dart';
+import 'package:oyin_front/domain/export.dart';
 import '../../../../extensions/_export.dart';
 import '../../../../extensions/theme.dart';
 import 'components.dart';

@@ -14,7 +14,10 @@ class MatchResultHeader extends StatelessWidget {
     final palette = context.palette;
     return Row(
       children: [
-        const SizedBox(width: 48),
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).maybePop(),
+        ),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,

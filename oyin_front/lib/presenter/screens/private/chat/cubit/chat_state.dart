@@ -3,23 +3,23 @@ class ChatCard {
     required this.name,
     required this.subtitle,
     required this.avatarUrl,
-    required this.status,
+    required this.statusKey,
     required this.timestamp,
     this.badgeCount,
     this.accent,
     this.highlight,
-    this.buttonLabel,
+    this.buttonKey,
   });
 
   final String name;
   final String subtitle;
   final String avatarUrl;
-  final String status;
+  final String statusKey;
   final String timestamp;
   final int? badgeCount;
   final String? accent;
   final bool? highlight;
-  final String? buttonLabel;
+  final String? buttonKey;
 }
 
 class ChatState {

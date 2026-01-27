@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../extensions/_export.dart';
 import '../../../../extensions/theme.dart';
 import '../cubit/chat_state.dart';
+import '../../../../../app/localization/app_localizations.dart';
 
 class ChatListCard extends StatelessWidget {
   const ChatListCard({
@@ -22,6 +23,7 @@ class ChatListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final palette = context.palette;
     final cardColor = card.highlight == true ? Colors.redAccent.withOpacity(0.12) : palette.card;
     final borderColor = card.highlight == true ? Colors.redAccent : Colors.transparent;
@@ -69,7 +71,7 @@ class ChatListCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            card.status,
+                            _statusText(card.statusKey, l10n),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelSmall
@@ -111,7 +113,7 @@ class ChatListCard extends StatelessWidget {
             card.subtitle,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-          if (card.buttonLabel != null) ...[
+          if (card.buttonKey != null) ...[
             12.vSpacing,
             SizedBox(
               width: double.infinity,
@@ -127,7 +129,7 @@ class ChatListCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      card.buttonLabel == 'resolve' ? 'Resolve Dispute' : 'View Proposal',
+                      _buttonText(card.buttonKey!, l10n),
                       style: const TextStyle(fontWeight: FontWeight.w800),
                     ),
                     6.hSpacing,
@@ -152,6 +154,32 @@ class ChatListCard extends StatelessWidget {
         return Colors.amber;
       default:
         return palette.iconMuted;
+    }
+  }
+
+  String _statusText(String key, AppLocalizations l10n) {
+    switch (key) {
+      case 'status_dispute_open':
+        return l10n.statusDisputeOpen;
+      case 'status_contract_signed':
+        return l10n.statusContractSigned;
+      case 'status_drafting_contract':
+        return l10n.statusDraftingContract;
+      case 'status_matched':
+        return l10n.statusMatched;
+      default:
+        return key;
+    }
+  }
+
+  String _buttonText(String key, AppLocalizations l10n) {
+    switch (key) {
+      case 'resolve':
+        return l10n.resolveDispute;
+      case 'view':
+        return l10n.viewProposal;
+      default:
+        return key;
     }
   }
 }
