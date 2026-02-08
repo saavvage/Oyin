@@ -114,6 +114,7 @@ class MatchActionButton extends StatelessWidget {
     required this.label,
     required this.background,
     required this.iconColor,
+    this.onTap,
     this.shadowColor,
     this.size = 64,
   });
@@ -122,37 +123,41 @@ class MatchActionButton extends StatelessWidget {
   final String label;
   final Color background;
   final Color iconColor;
+  final VoidCallback? onTap;
   final Color? shadowColor;
   final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: background,
-            boxShadow: shadowColor == null
-                ? null
-                : [
-                    BoxShadow(
-                      color: shadowColor!,
-                      blurRadius: 24,
-                      offset: const Offset(0, 12),
-                    )
-                  ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: size,
+            height: size,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: background,
+              boxShadow: shadowColor == null
+                  ? null
+                  : [
+                      BoxShadow(
+                        color: shadowColor!,
+                        blurRadius: 24,
+                        offset: const Offset(0, 12),
+                      )
+                    ],
+            ),
+            child: Icon(icon, color: iconColor, size: size / 2),
           ),
-          child: Icon(icon, color: iconColor, size: size / 2),
-        ),
-        8.vSpacing,
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
-        ),
-      ],
+          8.vSpacing,
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }

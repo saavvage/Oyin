@@ -11,6 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_dotenv: ^5.1.0
   flutter_localizations:
     sdk: flutter
   dio: ^5.3.3
@@ -18,7 +19,7 @@ dependencies:
   equatable: ^2.0.5
   http: ^1.2.2
   url_launcher: ^6.3.0
-  record: ^6.1.1 
+  record: ^6.1.1
   audioplayers: ^6.0.0
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.8
@@ -31,7 +32,6 @@ dependencies:
   path_provider: ^2.1.4
   path: ^1.9.0
   device_info_plus: ^12.3.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -41,6 +41,9 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/env/.env
 
  
   # assets:

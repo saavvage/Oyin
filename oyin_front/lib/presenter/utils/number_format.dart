@@ -28,7 +28,6 @@ class NumberFormatter {
     return buffer.toString();
   }
 
-  /// Shortens large numbers to 1.2K / 3.4M / 1.0B, keeping up to 1 decimal.
   String formatShort(num value) {
     final isNegative = value < 0;
     final absValue = value.abs();

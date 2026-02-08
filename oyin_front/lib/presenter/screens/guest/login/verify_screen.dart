@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/export.dart';
+import '../../../../domain/export.dart';
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../register/profile_info_screen.dart';
+import '../../private/navbar/nav_shell.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
   const VerifyCodeScreen({super.key, required this.phone});
@@ -14,6 +18,7 @@ class VerifyCodeScreen extends StatefulWidget {
 }
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
+  bool _isLoading = false;
   final _controllers = List.generate(6, (_) => TextEditingController());
 
   @override
@@ -77,14 +82,72 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               ),
               const Spacer(),
               _PrimaryActionButton(
-                label: l10n.verifyIdentity,
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => ProfileInfoScreen(phone: widget.phone),
-                    ),
-                  );
-                },
+                label: _isLoading ? '${l10n.verifyIdentity}...' : l10n.verifyIdentity,
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        final code = _controllers.map((c) => c.text).join();
+                        if (code.length != _controllers.length) {
+                          AppNotifier.showMessage(
+                            context,
+                            l10n.verifyCodeIncompleteMessage,
+                            title: l10n.verifyCodeIncompleteTitle,
+                            type: AppNotificationType.warning,
+                          );
+                          return;
+                        }
+                        setState(() => _isLoading = true);
+                        try {
+                          final response = await AuthApi.verify(
+                            phone: widget.phone,
+                            code: code,
+                          );
+                          await SessionStorage.setAccessToken(response.accessToken);
+
+                          final user = response.user;
+                          if (user.isNotEmpty) {
+                            final name = (user['name'] ?? '').toString().trim();
+                            final parts = name.isNotEmpty ? name.split(' ') : <String>[];
+                            final firstName = parts.isNotEmpty ? parts.first : '';
+                            final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+
+                            DateTime? birthDate;
+                            final rawBirth = user['birthDate'];
+                            if (rawBirth is String) {
+                              birthDate = DateTime.tryParse(rawBirth);
+                            }
+
+                            MockUserRepository.instance.save(
+                              UserProfileM(
+                                firstName: firstName,
+                                lastName: lastName,
+                                email: (user['email'] ?? '').toString(),
+                                city: (user['city'] ?? '').toString(),
+                                phone: (user['phone'] ?? widget.phone).toString(),
+                                birthDate: birthDate,
+                              ),
+                            );
+                          }
+
+                          if (!mounted) return;
+                          if (response.isNewUser) {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (_) => ProfileInfoScreen(phone: widget.phone),
+                              ),
+                            );
+                          } else {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (_) => const NavShell()),
+                            );
+                          }
+                        } catch (error) {
+                          if (!mounted) return;
+                          AppNotifier.showError(context, error);
+                        } finally {
+                          if (mounted) setState(() => _isLoading = false);
+                        }
+                      },
               ),
               16.vSpacing,
             ],
@@ -135,7 +198,7 @@ class _PrimaryActionButton extends StatelessWidget {
   const _PrimaryActionButton({required this.label, required this.onPressed});
 
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

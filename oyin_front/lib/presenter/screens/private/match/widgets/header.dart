@@ -8,9 +8,11 @@ class MatchHeader extends StatelessWidget {
   const MatchHeader({
     super.key,
     required this.l10n,
+    this.onFilters,
   });
 
   final AppLocalizations l10n;
+  final VoidCallback? onFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class MatchHeader extends StatelessWidget {
         CircleIconButton(
           icon: Icons.tune_rounded,
           palette: palette,
+          onTap: onFilters,
         ),
       ],
     );

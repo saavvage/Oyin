@@ -1,3 +1,5 @@
+import 'package:oyin_front/domain/export.dart';
+
 class SettingsState {
   const SettingsState({
     required this.searchPlaceholder,
@@ -9,6 +11,7 @@ class SettingsState {
     required this.matchRequests,
     required this.disputeUpdates,
     required this.selectedLocale,
+    required this.matchFilters,
   });
 
   final String searchPlaceholder;
@@ -20,12 +23,14 @@ class SettingsState {
   final bool matchRequests;
   final bool disputeUpdates;
   final String selectedLocale; // 'en', 'ru', 'kz'
+  final MatchFilters matchFilters;
 
   SettingsState copyWith({
     bool? publicVisibility,
     bool? matchRequests,
     bool? disputeUpdates,
     String? selectedLocale,
+    MatchFilters? matchFilters,
   }) =>
       SettingsState(
         searchPlaceholder: searchPlaceholder,
@@ -37,6 +42,7 @@ class SettingsState {
         matchRequests: matchRequests ?? this.matchRequests,
         disputeUpdates: disputeUpdates ?? this.disputeUpdates,
         selectedLocale: selectedLocale ?? this.selectedLocale,
+        matchFilters: matchFilters ?? this.matchFilters,
       );
 }
 

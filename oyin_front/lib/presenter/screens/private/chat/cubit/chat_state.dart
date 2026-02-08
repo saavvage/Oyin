@@ -1,5 +1,6 @@
 class ChatCard {
   const ChatCard({
+    required this.id,
     required this.name,
     required this.subtitle,
     required this.avatarUrl,
@@ -11,6 +12,7 @@ class ChatCard {
     this.buttonKey,
   });
 
+  final String id;
   final String name;
   final String subtitle;
   final String avatarUrl;

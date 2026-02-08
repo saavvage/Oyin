@@ -56,6 +56,30 @@ class ProfileState {
   final ProfileStats stats;
   final NextMatch nextMatch;
   final List<ProfileSettingItem> settingsItems;
+
+  ProfileState copyWith({
+    String? avatarUrl,
+    String? name,
+    String? tagline,
+    String? email,
+    String? location,
+    String? league,
+    ProfileStats? stats,
+    NextMatch? nextMatch,
+    List<ProfileSettingItem>? settingsItems,
+  }) {
+    return ProfileState(
+      avatarUrl: avatarUrl ?? this.avatarUrl,
+      name: name ?? this.name,
+      tagline: tagline ?? this.tagline,
+      email: email ?? this.email,
+      location: location ?? this.location,
+      league: league ?? this.league,
+      stats: stats ?? this.stats,
+      nextMatch: nextMatch ?? this.nextMatch,
+      settingsItems: settingsItems ?? this.settingsItems,
+    );
+  }
 }
 
 class ProfileSettingItem {

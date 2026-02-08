@@ -1,11 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oyin_front/infrastructure/export.dart';
 
 import '../../../../../domain/export.dart';
 import '../../../../../app/localization/locale_keys.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
-  ProfileCubit() : super(_buildInitial());
+  ProfileCubit() : super(_buildInitial()) {
+    _loadProfile();
+  }
 
   static ProfileState _buildInitial() {
     final user = MockUserRepository.instance.getOrDefault();
@@ -55,5 +58,28 @@ class ProfileCubit extends Cubit<ProfileState> {
         ),
       ],
     );
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      final data = await UsersApi.getMe();
+      final name = (data['name'] ?? state.name).toString();
+      final email = (data['email'] ?? state.email).toString();
+      final city = (data['city'] ?? state.location).toString();
+      final avatar = (data['avatarUrl'] ?? '').toString();
+
+      final safeName = name.isNotEmpty && name.toLowerCase() != 'new user'
+          ? name
+          : state.name;
+
+      emit(
+        state.copyWith(
+          name: safeName,
+          email: email.isNotEmpty ? email : state.email,
+          location: city.isNotEmpty ? city : state.location,
+          avatarUrl: avatar.isNotEmpty ? avatar : state.avatarUrl,
+        ),
+      );
+    } catch (_) {}
   }
 }

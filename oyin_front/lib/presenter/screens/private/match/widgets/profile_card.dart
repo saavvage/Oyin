@@ -11,10 +11,12 @@ class MatchProfileCard extends StatelessWidget {
     super.key,
     required this.profile,
     required this.l10n,
+    this.onInfoTap,
   });
 
   final MatchProfile profile;
   final AppLocalizations l10n;
+  final VoidCallback? onInfoTap;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +131,7 @@ class MatchProfileCard extends StatelessWidget {
             child: CircleIconButton(
               icon: Icons.info_outline,
               palette: palette,
-              onTap: () {},
+              onTap: onInfoTap,
             ),
           ),
         ],

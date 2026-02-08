@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../infrastructure/export.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../utils/phone_mask.dart';
 import '../../../utils/validators.dart';
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import 'verify_screen.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class PhoneLoginScreen extends StatefulWidget {
 }
 
 class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+  bool _isLoading = false;
   final _phoneController = TextEditingController();
   PhoneCountry _country = kPhoneCountries.first;
   bool _isMasking = false;
@@ -131,22 +134,40 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
               ),
               const Spacer(),
               _PrimaryActionButton(
-                label: l10n.sendCode,
-                onPressed: () {
-                  final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-                  if (!Validators.isPhoneComplete(digitsOnly: digits, requiredLength: _country.maxDigits)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l10n.phoneNumberLabel)),
-                    );
-                    return;
-                  }
-                  final phone = '${_country.dialCode} ${formatPhoneDigits(digits)}';
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => VerifyCodeScreen(phone: phone),
-                    ),
-                  );
-                },
+                label: _isLoading ? '${l10n.sendCode}...' : l10n.sendCode,
+                onPressed: _isLoading
+                    ? null
+                    : () async {
+                        final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
+                        if (!Validators.isPhoneComplete(
+                          digitsOnly: digits,
+                          requiredLength: _country.maxDigits,
+                        )) {
+                          AppNotifier.showMessage(
+                            context,
+                            l10n.phoneNumberIncompleteMessage,
+                            title: l10n.phoneNumberIncompleteTitle,
+                            type: AppNotificationType.warning,
+                          );
+                          return;
+                        }
+                        final phone = '${_country.dialCode} ${formatPhoneDigits(digits)}';
+                        setState(() => _isLoading = true);
+                        try {
+                          await AuthApi.login(phone: phone);
+                          if (!mounted) return;
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => VerifyCodeScreen(phone: phone),
+                            ),
+                          );
+                        } catch (error) {
+                          if (!mounted) return;
+                          AppNotifier.showError(context, error);
+                        } finally {
+                          if (mounted) setState(() => _isLoading = false);
+                        }
+                      },
               ),
               12.vSpacing,
               Text(
@@ -287,7 +308,7 @@ class _PrimaryActionButton extends StatelessWidget {
   const _PrimaryActionButton({required this.label, required this.onPressed});
 
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

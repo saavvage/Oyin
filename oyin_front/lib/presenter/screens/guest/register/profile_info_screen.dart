@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../../../../domain/export.dart';
+import '../../../../infrastructure/export.dart';
 import '../../private/navbar/nav_shell.dart';
 
 class ProfileInfoScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class ProfileInfoScreen extends StatefulWidget {
 }
 
 class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
+  bool _isLoading = false;
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _email = TextEditingController();
@@ -135,23 +138,56 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                     ),
                     const SizedBox(height: 24),
                     _PrimaryActionButton(
-                      label: l10n.continueLabel,
-                      onPressed: () {
-                        MockUserRepository.instance.save(
-                          UserProfileM(
-                            firstName: _firstName.text.trim(),
-                            lastName: _lastName.text.trim(),
-                            email: _email.text.trim(),
-                            city: _city.text.trim(),
-                            phone: widget.phone,
-                            birthDate: _birthDate,
-                          ),
-                        );
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(builder: (_) => const NavShell()),
-                          (route) => false,
-                        );
-                      },
+                      label: _isLoading ? '${l10n.continueLabel}...' : l10n.continueLabel,
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                              MockUserRepository.instance.save(
+                                UserProfileM(
+                                  firstName: _firstName.text.trim(),
+                                  lastName: _lastName.text.trim(),
+                                  email: _email.text.trim(),
+                                  city: _city.text.trim(),
+                                  phone: widget.phone,
+                                  birthDate: _birthDate,
+                                ),
+                              );
+                              setState(() => _isLoading = true);
+                              try {
+                                final fullName = [
+                                  _firstName.text.trim(),
+                                  _lastName.text.trim(),
+                                ].where((v) => v.isNotEmpty).join(' ');
+
+                                await UsersApi.updateProfile(
+                                  name: fullName.isNotEmpty ? fullName : 'New User',
+                                  email: _email.text.trim(),
+                                  city: _city.text.trim(),
+                                  birthDate: _birthDate,
+                                );
+
+                                await UsersApi.createSportProfile(
+                                  sportType: 'TENNIS',
+                                  level: 'AMATEUR',
+                                );
+                                if (mounted) {
+                                  AppNotifier.showSuccess(
+                                    context,
+                                    l10n.profileSavedMessage,
+                                  );
+                                }
+                                if (!mounted) return;
+                                Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(builder: (_) => const NavShell()),
+                                  (route) => false,
+                                );
+                              } catch (error) {
+                                if (!mounted) return;
+                                AppNotifier.showError(context, error);
+                              } finally {
+                                if (mounted) setState(() => _isLoading = false);
+                              }
+                            },
                     ),
                     12.vSpacing,
                   ],
@@ -222,7 +258,7 @@ class _PrimaryActionButton extends StatelessWidget {
   const _PrimaryActionButton({required this.label, required this.onPressed});
 
   final String label;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

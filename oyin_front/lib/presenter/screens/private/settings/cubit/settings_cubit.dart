@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:oyin_front/domain/export.dart';
+import 'package:oyin_front/infrastructure/export.dart';
 import 'settings_state.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
@@ -99,8 +101,17 @@ class SettingsCubit extends Cubit<SettingsState> {
             matchRequests: true,
             disputeUpdates: false,
             selectedLocale: 'en',
+            matchFilters: MatchFilters.defaults,
           ),
-        );
+        ) {
+    _loadMatchFilters();
+  }
+
+  Future<void> _loadMatchFilters() async {
+    final filters = await SessionStorage.getMatchFilters();
+    if (isClosed) return;
+    emit(state.copyWith(matchFilters: filters));
+  }
 
   void togglePublicVisibility(bool value) => emit(state.copyWith(publicVisibility: value));
   void toggleMatchRequests(bool value) => emit(state.copyWith(matchRequests: value));
@@ -108,4 +119,9 @@ class SettingsCubit extends Cubit<SettingsState> {
   void toggleDisputeUpdates(bool value) => emit(state.copyWith(disputeUpdates: value));
 
   void setLocale(String localeCode) => emit(state.copyWith(selectedLocale: localeCode));
+
+  Future<void> updateMatchFilters(MatchFilters filters) async {
+    await SessionStorage.setMatchFilters(filters);
+    emit(state.copyWith(matchFilters: filters));
+  }
 }

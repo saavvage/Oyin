@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
+import '../messanger/messanger_screen.dart';
 import 'cubit/_export.dart';
 import 'widgets/_export.dart';
 
@@ -12,7 +13,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ChatCubit(),
+      create: (_) => ChatCubit()..loadThreads(),
       child: const _ChatView(),
     );
   }
@@ -20,6 +21,18 @@ class ChatScreen extends StatelessWidget {
 
 class _ChatView extends StatelessWidget {
   const _ChatView();
+
+  void _openChat(BuildContext context, ChatCard card) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MessangerScreen(
+          chatId: card.id,
+          partnerName: card.name,
+          partnerAvatarUrl: card.avatarUrl,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +74,7 @@ class _ChatView extends StatelessWidget {
                   ...state.actionRequired.map(
                     (card) => ChatListCard(
                       card: card,
-                      onTap: () {},
+                      onTap: () => _openChat(context, card),
                     ),
                   ),
                   14.vSpacing,
@@ -77,7 +90,7 @@ class _ChatView extends StatelessWidget {
                   ...state.upcoming.map(
                     (card) => ChatListCard(
                       card: card,
-                      onTap: () {},
+                      onTap: () => _openChat(context, card),
                     ),
                   ),
                 ],

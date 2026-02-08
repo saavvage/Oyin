@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../extensions/_export.dart';
 import 'nav_item.dart';
 
@@ -21,14 +20,14 @@ class FrostedNavBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: palette.card.withOpacity(0.9),
+        color: palette.card.withValues(alpha:0.9),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.35),
+            color: Colors.black.withValues(alpha:0.35),
             blurRadius: 18,
             offset: const Offset(0, -6),
           ),

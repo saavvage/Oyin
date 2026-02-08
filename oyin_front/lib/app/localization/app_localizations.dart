@@ -168,6 +168,79 @@ class AppLocalizations {
   String get city => _string(LocaleKeys.city);
   String get continueLabel => _string(LocaleKeys.continueLabel);
 
+  String get notifTitleSuccess => _string(LocaleKeys.notifTitleSuccess);
+  String get notifTitleWarning => _string(LocaleKeys.notifTitleWarning);
+  String get notifTitleInfo => _string(LocaleKeys.notifTitleInfo);
+  String get notifTitleError => _string(LocaleKeys.notifTitleError);
+
+  String get errorNoConnectionTitle => _string(LocaleKeys.errorNoConnectionTitle);
+  String get errorNoConnectionMessage => _string(LocaleKeys.errorNoConnectionMessage);
+  String get errorTimeoutTitle => _string(LocaleKeys.errorTimeoutTitle);
+  String get errorTimeoutMessage => _string(LocaleKeys.errorTimeoutMessage);
+  String get errorUnauthorizedTitle => _string(LocaleKeys.errorUnauthorizedTitle);
+  String get errorUnauthorizedMessage => _string(LocaleKeys.errorUnauthorizedMessage);
+  String get errorForbiddenTitle => _string(LocaleKeys.errorForbiddenTitle);
+  String get errorForbiddenMessage => _string(LocaleKeys.errorForbiddenMessage);
+  String get errorNotFoundTitle => _string(LocaleKeys.errorNotFoundTitle);
+  String get errorNotFoundMessage => _string(LocaleKeys.errorNotFoundMessage);
+  String get errorServerTitle => _string(LocaleKeys.errorServerTitle);
+  String get errorServerMessage => _string(LocaleKeys.errorServerMessage);
+  String get errorUnknownTitle => _string(LocaleKeys.errorUnknownTitle);
+  String get errorUnknownMessage => _string(LocaleKeys.errorUnknownMessage);
+
+  String get phoneNumberIncompleteTitle => _string(LocaleKeys.phoneNumberIncompleteTitle);
+  String get phoneNumberIncompleteMessage => _string(LocaleKeys.phoneNumberIncompleteMessage);
+  String get verifyCodeIncompleteTitle => _string(LocaleKeys.verifyCodeIncompleteTitle);
+  String get verifyCodeIncompleteMessage => _string(LocaleKeys.verifyCodeIncompleteMessage);
+  String get profileSavedMessage => _string(LocaleKeys.profileSavedMessage);
+
+  String get messengerStartConversation => _string(LocaleKeys.messengerStartConversation);
+  String get messengerOnline => _string(LocaleKeys.messengerOnline);
+  String get messengerMessageHint => _string(LocaleKeys.messengerMessageHint);
+  String get messengerBlockedHint => _string(LocaleKeys.messengerBlockedHint);
+  String get messengerActionDeleteChat => _string(LocaleKeys.messengerActionDeleteChat);
+  String get messengerActionBlockUser => _string(LocaleKeys.messengerActionBlockUser);
+  String get messengerActionReport => _string(LocaleKeys.messengerActionReport);
+  String get messengerDialogDeleteTitle => _string(LocaleKeys.messengerDialogDeleteTitle);
+  String get messengerDialogDeleteDesc => _string(LocaleKeys.messengerDialogDeleteDesc);
+  String get messengerDialogDeleteConfirm => _string(LocaleKeys.messengerDialogDeleteConfirm);
+  String get messengerDialogBlockTitle => _string(LocaleKeys.messengerDialogBlockTitle);
+  String get messengerDialogBlockDesc => _string(LocaleKeys.messengerDialogBlockDesc);
+  String get messengerDialogBlockConfirm => _string(LocaleKeys.messengerDialogBlockConfirm);
+  String get messengerDialogReportTitle => _string(LocaleKeys.messengerDialogReportTitle);
+  String get messengerDialogReportDesc => _string(LocaleKeys.messengerDialogReportDesc);
+  String get messengerDialogReportConfirm => _string(LocaleKeys.messengerDialogReportConfirm);
+  String get messengerDialogCancel => _string(LocaleKeys.messengerDialogCancel);
+  String get messengerChatDeleted => _string(LocaleKeys.messengerChatDeleted);
+  String get messengerUserBlocked => _string(LocaleKeys.messengerUserBlocked);
+  String get messengerReportSent => _string(LocaleKeys.messengerReportSent);
+  String get messengerSomethingWrong => _string(LocaleKeys.messengerSomethingWrong);
+  String get messengerAttachmentCamera => _string(LocaleKeys.messengerAttachmentCamera);
+  String get messengerAttachmentLibrary => _string(LocaleKeys.messengerAttachmentLibrary);
+  String get messengerAttachmentFile => _string(LocaleKeys.messengerAttachmentFile);
+  String get messengerAttachmentPhoto => _string(LocaleKeys.messengerAttachmentPhoto);
+  String get messengerAttachmentVideo => _string(LocaleKeys.messengerAttachmentVideo);
+  String get matchFiltersTitle => _string(LocaleKeys.matchFiltersTitle);
+  String get matchFiltersDistance => _string(LocaleKeys.matchFiltersDistance);
+  String matchFiltersDistanceValue(int min, int max) => _string(LocaleKeys.matchFiltersDistanceValue)
+      .replaceFirst('{min}', min.toString())
+      .replaceFirst('{max}', max.toString());
+  String get matchFiltersAge => _string(LocaleKeys.matchFiltersAge);
+  String matchFiltersAgeValue(int min, int max) => _string(LocaleKeys.matchFiltersAgeValue)
+      .replaceFirst('{min}', min.toString())
+      .replaceFirst('{max}', max.toString());
+  String get matchFiltersApply => _string(LocaleKeys.matchFiltersApply);
+  String get matchFinishTitle => _string(LocaleKeys.matchFinishTitle);
+  String get matchFinishSubtitle => _string(LocaleKeys.matchFinishSubtitle);
+  String get matchResetDislikes => _string(LocaleKeys.matchResetDislikes);
+  String get matchTryChangeFilters => _string(LocaleKeys.matchTryChangeFilters);
+  String get matchProfileDetailsTitle => _string(LocaleKeys.matchProfileDetailsTitle);
+  String get matchProfileCityLabel => _string(LocaleKeys.matchProfileCityLabel);
+  String get matchProfileDistanceLabel => _string(LocaleKeys.matchProfileDistanceLabel);
+  String get matchProfileRatingLabel => _string(LocaleKeys.matchProfileRatingLabel);
+  String get matchProfileSportsLabel => _string(LocaleKeys.matchProfileSportsLabel);
+  String get matchProfileLevelLabel => _string(LocaleKeys.matchProfileLevelLabel);
+
   String nameAndAge(String name, int age) =>
       _string(LocaleKeys.nameAge).replaceFirst('{name}', name).replaceFirst('{age}', age.toString());
 
@@ -344,6 +417,72 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.birthDate: 'Date of Birth',
     LocaleKeys.city: 'City',
     LocaleKeys.continueLabel: 'Continue',
+
+    LocaleKeys.notifTitleSuccess: 'Success',
+    LocaleKeys.notifTitleWarning: 'Warning',
+    LocaleKeys.notifTitleInfo: 'Notification',
+    LocaleKeys.notifTitleError: 'Error',
+    LocaleKeys.errorNoConnectionTitle: 'No connection',
+    LocaleKeys.errorNoConnectionMessage: 'Check your internet connection and try again.',
+    LocaleKeys.errorTimeoutTitle: 'Server timeout',
+    LocaleKeys.errorTimeoutMessage: 'Please try again later.',
+    LocaleKeys.errorUnauthorizedTitle: 'Session expired',
+    LocaleKeys.errorUnauthorizedMessage: 'Please sign in again.',
+    LocaleKeys.errorForbiddenTitle: 'Access denied',
+    LocaleKeys.errorForbiddenMessage: 'You do not have permission to perform this action.',
+    LocaleKeys.errorNotFoundTitle: 'Not found',
+    LocaleKeys.errorNotFoundMessage: 'Requested data was not found.',
+    LocaleKeys.errorServerTitle: 'Server error',
+    LocaleKeys.errorServerMessage: 'Please try again later or contact support.',
+    LocaleKeys.errorUnknownTitle: 'Error',
+    LocaleKeys.errorUnknownMessage: 'Something went wrong. Please try again.',
+    LocaleKeys.phoneNumberIncompleteTitle: 'Invalid phone',
+    LocaleKeys.phoneNumberIncompleteMessage: 'Enter the full phone number.',
+    LocaleKeys.verifyCodeIncompleteTitle: 'Verification code',
+    LocaleKeys.verifyCodeIncompleteMessage: 'Enter the full code.',
+    LocaleKeys.profileSavedMessage: 'Profile saved',
+    LocaleKeys.messengerStartConversation: 'Start chatting',
+    LocaleKeys.messengerOnline: 'Online',
+    LocaleKeys.messengerMessageHint: 'Message...',
+    LocaleKeys.messengerBlockedHint: 'You blocked this user',
+    LocaleKeys.messengerActionDeleteChat: 'Delete chat',
+    LocaleKeys.messengerActionBlockUser: 'Block user',
+    LocaleKeys.messengerActionReport: 'Report',
+    LocaleKeys.messengerDialogDeleteTitle: 'Delete chat?',
+    LocaleKeys.messengerDialogDeleteDesc: 'The dialog will be removed only for you.',
+    LocaleKeys.messengerDialogDeleteConfirm: 'Delete',
+    LocaleKeys.messengerDialogBlockTitle: 'Block user?',
+    LocaleKeys.messengerDialogBlockDesc: 'You will stop receiving messages.',
+    LocaleKeys.messengerDialogBlockConfirm: 'Block',
+    LocaleKeys.messengerDialogReportTitle: 'Send report?',
+    LocaleKeys.messengerDialogReportDesc: 'We will review your report.',
+    LocaleKeys.messengerDialogReportConfirm: 'Send',
+    LocaleKeys.messengerDialogCancel: 'Cancel',
+    LocaleKeys.messengerChatDeleted: 'Chat deleted',
+    LocaleKeys.messengerUserBlocked: 'User blocked',
+    LocaleKeys.messengerReportSent: 'Report sent',
+    LocaleKeys.messengerSomethingWrong: 'Something went wrong',
+    LocaleKeys.messengerAttachmentCamera: 'Take photo',
+    LocaleKeys.messengerAttachmentLibrary: 'Add photo/video',
+    LocaleKeys.messengerAttachmentFile: 'Attach file',
+    LocaleKeys.messengerAttachmentPhoto: 'Photo',
+    LocaleKeys.messengerAttachmentVideo: 'Video',
+    LocaleKeys.matchFiltersTitle: 'Search filters',
+    LocaleKeys.matchFiltersDistance: 'Distance',
+    LocaleKeys.matchFiltersDistanceValue: '{min}–{max} km',
+    LocaleKeys.matchFiltersAge: 'Age range',
+    LocaleKeys.matchFiltersAgeValue: '{min}–{max} yrs',
+    LocaleKeys.matchFiltersApply: 'Apply filters',
+    LocaleKeys.matchFinishTitle: 'Swipes are over',
+    LocaleKeys.matchFinishSubtitle: 'Try changing filters or reset dislikes to see more.',
+    LocaleKeys.matchResetDislikes: 'Reset dislikes',
+    LocaleKeys.matchTryChangeFilters: 'Try changing filters',
+    LocaleKeys.matchProfileDetailsTitle: 'Profile details',
+    LocaleKeys.matchProfileCityLabel: 'City',
+    LocaleKeys.matchProfileDistanceLabel: 'Distance',
+    LocaleKeys.matchProfileRatingLabel: 'Rating',
+    LocaleKeys.matchProfileSportsLabel: 'Sports',
+    LocaleKeys.matchProfileLevelLabel: 'Level',
   },
   'ru': {
     LocaleKeys.discovery: 'Поиск',
@@ -488,6 +627,72 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.birthDate: 'Дата рождения',
     LocaleKeys.city: 'Город',
     LocaleKeys.continueLabel: 'Далее',
+
+    LocaleKeys.notifTitleSuccess: 'Успешно',
+    LocaleKeys.notifTitleWarning: 'Предупреждение',
+    LocaleKeys.notifTitleInfo: 'Уведомление',
+    LocaleKeys.notifTitleError: 'Ошибка',
+    LocaleKeys.errorNoConnectionTitle: 'Нет соединения',
+    LocaleKeys.errorNoConnectionMessage: 'Проверьте подключение к интернету и попробуйте снова.',
+    LocaleKeys.errorTimeoutTitle: 'Сервер не отвечает',
+    LocaleKeys.errorTimeoutMessage: 'Попробуйте повторить позже.',
+    LocaleKeys.errorUnauthorizedTitle: 'Сессия истекла',
+    LocaleKeys.errorUnauthorizedMessage: 'Пожалуйста, войдите снова.',
+    LocaleKeys.errorForbiddenTitle: 'Нет доступа',
+    LocaleKeys.errorForbiddenMessage: 'Недостаточно прав для выполнения действия.',
+    LocaleKeys.errorNotFoundTitle: 'Не найдено',
+    LocaleKeys.errorNotFoundMessage: 'Запрошенные данные не найдены.',
+    LocaleKeys.errorServerTitle: 'Ошибка сервера',
+    LocaleKeys.errorServerMessage: 'Попробуйте позже или свяжитесь с поддержкой.',
+    LocaleKeys.errorUnknownTitle: 'Ошибка',
+    LocaleKeys.errorUnknownMessage: 'Что-то пошло не так. Попробуйте снова.',
+    LocaleKeys.phoneNumberIncompleteTitle: 'Некорректный номер',
+    LocaleKeys.phoneNumberIncompleteMessage: 'Введите номер телефона полностью.',
+    LocaleKeys.verifyCodeIncompleteTitle: 'Код подтверждения',
+    LocaleKeys.verifyCodeIncompleteMessage: 'Введите код полностью.',
+    LocaleKeys.profileSavedMessage: 'Профиль сохранён',
+    LocaleKeys.messengerStartConversation: 'Начните общение',
+    LocaleKeys.messengerOnline: 'Онлайн',
+    LocaleKeys.messengerMessageHint: 'Сообщение...',
+    LocaleKeys.messengerBlockedHint: 'Вы заблокировали пользователя',
+    LocaleKeys.messengerActionDeleteChat: 'Удалить чат',
+    LocaleKeys.messengerActionBlockUser: 'Заблокировать',
+    LocaleKeys.messengerActionReport: 'Пожаловаться',
+    LocaleKeys.messengerDialogDeleteTitle: 'Удалить чат?',
+    LocaleKeys.messengerDialogDeleteDesc: 'Диалог будет удален только у вас.',
+    LocaleKeys.messengerDialogDeleteConfirm: 'Удалить',
+    LocaleKeys.messengerDialogBlockTitle: 'Заблокировать пользователя?',
+    LocaleKeys.messengerDialogBlockDesc: 'Вы перестанете получать сообщения.',
+    LocaleKeys.messengerDialogBlockConfirm: 'Заблокировать',
+    LocaleKeys.messengerDialogReportTitle: 'Отправить жалобу?',
+    LocaleKeys.messengerDialogReportDesc: 'Мы рассмотрим вашу жалобу.',
+    LocaleKeys.messengerDialogReportConfirm: 'Отправить',
+    LocaleKeys.messengerDialogCancel: 'Отмена',
+    LocaleKeys.messengerChatDeleted: 'Чат удален',
+    LocaleKeys.messengerUserBlocked: 'Пользователь заблокирован',
+    LocaleKeys.messengerReportSent: 'Жалоба отправлена',
+    LocaleKeys.messengerSomethingWrong: 'Что-то пошло не так',
+    LocaleKeys.messengerAttachmentCamera: 'Сделать фото',
+    LocaleKeys.messengerAttachmentLibrary: 'Добавить фото/видео',
+    LocaleKeys.messengerAttachmentFile: 'Прикрепить файл',
+    LocaleKeys.messengerAttachmentPhoto: 'Фото',
+    LocaleKeys.messengerAttachmentVideo: 'Видео',
+    LocaleKeys.matchFiltersTitle: 'Фильтр поиска',
+    LocaleKeys.matchFiltersDistance: 'Дистанция',
+    LocaleKeys.matchFiltersDistanceValue: '{min}–{max} км',
+    LocaleKeys.matchFiltersAge: 'Возраст',
+    LocaleKeys.matchFiltersAgeValue: '{min}–{max} лет',
+    LocaleKeys.matchFiltersApply: 'Применить фильтр',
+    LocaleKeys.matchFinishTitle: 'Свайпы закончились',
+    LocaleKeys.matchFinishSubtitle: 'Попробуйте изменить фильтр или отменить дизлайки.',
+    LocaleKeys.matchResetDislikes: 'Отменить дизлайки',
+    LocaleKeys.matchTryChangeFilters: 'Попробуйте изменить фильтр',
+    LocaleKeys.matchProfileDetailsTitle: 'Профиль',
+    LocaleKeys.matchProfileCityLabel: 'Город',
+    LocaleKeys.matchProfileDistanceLabel: 'Дистанция',
+    LocaleKeys.matchProfileRatingLabel: 'Рейтинг',
+    LocaleKeys.matchProfileSportsLabel: 'Виды спорта',
+    LocaleKeys.matchProfileLevelLabel: 'Уровень',
   },
   'kk': {
     LocaleKeys.discovery: 'Іздеу',
@@ -631,5 +836,71 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.birthDate: 'Туған күн',
     LocaleKeys.city: 'Қала',
     LocaleKeys.continueLabel: 'Жалғастыру',
+
+    LocaleKeys.notifTitleSuccess: 'Сәтті',
+    LocaleKeys.notifTitleWarning: 'Ескерту',
+    LocaleKeys.notifTitleInfo: 'Хабарлама',
+    LocaleKeys.notifTitleError: 'Қате',
+    LocaleKeys.errorNoConnectionTitle: 'Байланыс жоқ',
+    LocaleKeys.errorNoConnectionMessage: 'Интернетке қосылуды тексеріп, қайта көріңіз.',
+    LocaleKeys.errorTimeoutTitle: 'Сервер жауап бермейді',
+    LocaleKeys.errorTimeoutMessage: 'Кейінірек қайталап көріңіз.',
+    LocaleKeys.errorUnauthorizedTitle: 'Сеанс аяқталды',
+    LocaleKeys.errorUnauthorizedMessage: 'Қайта кіріңіз.',
+    LocaleKeys.errorForbiddenTitle: 'Қатынау жоқ',
+    LocaleKeys.errorForbiddenMessage: 'Бұл әрекетті орындауға рұқсат жоқ.',
+    LocaleKeys.errorNotFoundTitle: 'Табылмады',
+    LocaleKeys.errorNotFoundMessage: 'Сұралған деректер табылмады.',
+    LocaleKeys.errorServerTitle: 'Сервер қатесі',
+    LocaleKeys.errorServerMessage: 'Кейінірек көріңіз немесе қолдауға жазыңыз.',
+    LocaleKeys.errorUnknownTitle: 'Қате',
+    LocaleKeys.errorUnknownMessage: 'Бірдеңе дұрыс емес. Қайта көріңіз.',
+    LocaleKeys.phoneNumberIncompleteTitle: 'Қате нөмір',
+    LocaleKeys.phoneNumberIncompleteMessage: 'Телефон нөмірін толық енгізіңіз.',
+    LocaleKeys.verifyCodeIncompleteTitle: 'Растау коды',
+    LocaleKeys.verifyCodeIncompleteMessage: 'Кодты толық енгізіңіз.',
+    LocaleKeys.profileSavedMessage: 'Профиль сақталды',
+    LocaleKeys.messengerStartConversation: 'Әңгіме бастаңыз',
+    LocaleKeys.messengerOnline: 'Онлайн',
+    LocaleKeys.messengerMessageHint: 'Хабарлама...',
+    LocaleKeys.messengerBlockedHint: 'Сіз бұл пайдаланушыны бұғаттадыңыз',
+    LocaleKeys.messengerActionDeleteChat: 'Чатты жою',
+    LocaleKeys.messengerActionBlockUser: 'Пайдаланушыны бұғаттау',
+    LocaleKeys.messengerActionReport: 'Шағымдану',
+    LocaleKeys.messengerDialogDeleteTitle: 'Чатты жою керек пе?',
+    LocaleKeys.messengerDialogDeleteDesc: 'Диалог тек сізде жойылады.',
+    LocaleKeys.messengerDialogDeleteConfirm: 'Жою',
+    LocaleKeys.messengerDialogBlockTitle: 'Пайдаланушыны бұғаттайсыз ба?',
+    LocaleKeys.messengerDialogBlockDesc: 'Сіз хабарламаларды алмайсыз.',
+    LocaleKeys.messengerDialogBlockConfirm: 'Бұғаттау',
+    LocaleKeys.messengerDialogReportTitle: 'Шағым жіберу керек пе?',
+    LocaleKeys.messengerDialogReportDesc: 'Шағымыңызды қарастырамыз.',
+    LocaleKeys.messengerDialogReportConfirm: 'Жіберу',
+    LocaleKeys.messengerDialogCancel: 'Бас тарту',
+    LocaleKeys.messengerChatDeleted: 'Чат жойылды',
+    LocaleKeys.messengerUserBlocked: 'Пайдаланушы бұғатталды',
+    LocaleKeys.messengerReportSent: 'Шағым жіберілді',
+    LocaleKeys.messengerSomethingWrong: 'Қате орын алды',
+    LocaleKeys.messengerAttachmentCamera: 'Фото түсіру',
+    LocaleKeys.messengerAttachmentLibrary: 'Фото/видео қосу',
+    LocaleKeys.messengerAttachmentFile: 'Файлды тіркеу',
+    LocaleKeys.messengerAttachmentPhoto: 'Фото',
+    LocaleKeys.messengerAttachmentVideo: 'Видео',
+    LocaleKeys.matchFiltersTitle: 'Іздеу сүзгілері',
+    LocaleKeys.matchFiltersDistance: 'Қашықтық',
+    LocaleKeys.matchFiltersDistanceValue: '{min}–{max} км',
+    LocaleKeys.matchFiltersAge: 'Жас',
+    LocaleKeys.matchFiltersAgeValue: '{min}–{max} жас',
+    LocaleKeys.matchFiltersApply: 'Сүзгіні қолдану',
+    LocaleKeys.matchFinishTitle: 'Свайптар аяқталды',
+    LocaleKeys.matchFinishSubtitle: 'Сүзгіні өзгертіп көріңіз немесе дизлайктарды қайтарыңыз.',
+    LocaleKeys.matchResetDislikes: 'Дизлайктарды қайтару',
+    LocaleKeys.matchTryChangeFilters: 'Сүзгіні өзгертіп көріңіз',
+    LocaleKeys.matchProfileDetailsTitle: 'Профиль',
+    LocaleKeys.matchProfileCityLabel: 'Қала',
+    LocaleKeys.matchProfileDistanceLabel: 'Қашықтық',
+    LocaleKeys.matchProfileRatingLabel: 'Рейтинг',
+    LocaleKeys.matchProfileSportsLabel: 'Спорт түрлері',
+    LocaleKeys.matchProfileLevelLabel: 'Деңгейі',
   },
 };
