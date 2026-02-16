@@ -45,6 +45,7 @@ class ProfileState {
     required this.stats,
     required this.nextMatch,
     required this.settingsItems,
+    required this.sportProfiles,
   });
 
   final String avatarUrl;
@@ -56,6 +57,7 @@ class ProfileState {
   final ProfileStats stats;
   final NextMatch nextMatch;
   final List<ProfileSettingItem> settingsItems;
+  final List<UserSportProfileView> sportProfiles;
 
   ProfileState copyWith({
     String? avatarUrl,
@@ -67,6 +69,7 @@ class ProfileState {
     ProfileStats? stats,
     NextMatch? nextMatch,
     List<ProfileSettingItem>? settingsItems,
+    List<UserSportProfileView>? sportProfiles,
   }) {
     return ProfileState(
       avatarUrl: avatarUrl ?? this.avatarUrl,
@@ -78,8 +81,23 @@ class ProfileState {
       stats: stats ?? this.stats,
       nextMatch: nextMatch ?? this.nextMatch,
       settingsItems: settingsItems ?? this.settingsItems,
+      sportProfiles: sportProfiles ?? this.sportProfiles,
     );
   }
+}
+
+class UserSportProfileView {
+  const UserSportProfileView({
+    required this.sportType,
+    required this.level,
+    required this.skills,
+    required this.experienceYears,
+  });
+
+  final String sportType;
+  final String level;
+  final List<String> skills;
+  final int experienceYears;
 }
 
 class ProfileSettingItem {

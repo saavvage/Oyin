@@ -10,6 +10,8 @@ class SettingsState {
     required this.publicVisibility,
     required this.matchRequests,
     required this.disputeUpdates,
+    required this.timedRemindersEnabled,
+    required this.timedRemindersIntervalMinutes,
     required this.selectedLocale,
     required this.matchFilters,
   });
@@ -22,6 +24,8 @@ class SettingsState {
   final bool publicVisibility;
   final bool matchRequests;
   final bool disputeUpdates;
+  final bool timedRemindersEnabled;
+  final int timedRemindersIntervalMinutes;
   final String selectedLocale; // 'en', 'ru', 'kz'
   final MatchFilters matchFilters;
 
@@ -29,28 +33,29 @@ class SettingsState {
     bool? publicVisibility,
     bool? matchRequests,
     bool? disputeUpdates,
+    bool? timedRemindersEnabled,
+    int? timedRemindersIntervalMinutes,
     String? selectedLocale,
     MatchFilters? matchFilters,
-  }) =>
-      SettingsState(
-        searchPlaceholder: searchPlaceholder,
-        userName: userName,
-        userSubtitle: userSubtitle,
-        userTag: userTag,
-        sections: sections,
-        publicVisibility: publicVisibility ?? this.publicVisibility,
-        matchRequests: matchRequests ?? this.matchRequests,
-        disputeUpdates: disputeUpdates ?? this.disputeUpdates,
-        selectedLocale: selectedLocale ?? this.selectedLocale,
-        matchFilters: matchFilters ?? this.matchFilters,
-      );
+  }) => SettingsState(
+    searchPlaceholder: searchPlaceholder,
+    userName: userName,
+    userSubtitle: userSubtitle,
+    userTag: userTag,
+    sections: sections,
+    publicVisibility: publicVisibility ?? this.publicVisibility,
+    matchRequests: matchRequests ?? this.matchRequests,
+    disputeUpdates: disputeUpdates ?? this.disputeUpdates,
+    timedRemindersEnabled: timedRemindersEnabled ?? this.timedRemindersEnabled,
+    timedRemindersIntervalMinutes:
+        timedRemindersIntervalMinutes ?? this.timedRemindersIntervalMinutes,
+    selectedLocale: selectedLocale ?? this.selectedLocale,
+    matchFilters: matchFilters ?? this.matchFilters,
+  );
 }
 
 class SettingsSection {
-  const SettingsSection({
-    required this.title,
-    required this.items,
-  });
+  const SettingsSection({required this.title, required this.items});
 
   final String title;
   final List<SettingsItem> items;

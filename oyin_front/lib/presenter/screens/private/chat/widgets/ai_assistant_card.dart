@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
+import '../../../../widgets/_export.dart';
 
 class AiAssistantCard extends StatelessWidget {
   const AiAssistantCard({super.key, required this.l10n});
@@ -38,24 +38,26 @@ class AiAssistantCard extends StatelessWidget {
                   children: [
                     Text(
                       l10n.aiAssistant,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w800),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     8.hSpacing,
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: palette.accent,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         l10n.aiComingSoon,
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelSmall
-                            ?.copyWith(color: palette.muted, fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: palette.muted,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -63,13 +65,25 @@ class AiAssistantCard extends StatelessWidget {
                 6.vSpacing,
                 Text(
                   l10n.aiAssistantSubtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: palette.muted),
                 ),
               ],
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showFrostedInfoModal(
+                context,
+                title: l10n.aiAssistant,
+                subtitle: 'Модуль готовится к запуску.',
+                tips: const [
+                  'Здесь будут рекомендации по подготовке к матчу и разборы споров.',
+                  'На первом этапе доступны подсказки по доказательствам и fair-play.',
+                ],
+              );
+            },
             icon: const Icon(Icons.chevron_right),
           ),
         ],

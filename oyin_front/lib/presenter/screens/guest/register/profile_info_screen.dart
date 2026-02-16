@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
-import '../../../widgets/_export.dart';
-import '../../../../domain/export.dart';
-import '../../../../infrastructure/export.dart';
-import '../../private/navbar/nav_shell.dart';
+import 'onboarding_draft.dart';
+import 'sport_selection_screen.dart';
 
 class ProfileInfoScreen extends StatefulWidget {
   const ProfileInfoScreen({super.key, this.phone = ''});
@@ -45,9 +43,9 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: context.palette.primary,
-                ),
+            colorScheme: Theme.of(
+              context,
+            ).colorScheme.copyWith(primary: context.palette.primary),
           ),
           child: child ?? const SizedBox.shrink(),
         );
@@ -91,17 +89,23 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                       value: 1,
                       minHeight: 6,
                       backgroundColor: context.palette.badge,
-                      valueColor: AlwaysStoppedAnimation<Color>(context.palette.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        context.palette.primary,
+                      ),
                     ),
                     28.vSpacing,
                     Text(
                       l10n.profileInfoTitle,
-                      style: Theme.of(context).textTheme.titleLarge?.weighted(FontWeight.w800),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleLarge?.weighted(FontWeight.w800),
                     ),
                     12.vSpacing,
                     Text(
                       l10n.profileInfoSubtitle,
-                      style: Theme.of(context).textTheme.bodyLarge?.colored(context.palette.muted),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyLarge?.colored(context.palette.muted),
                     ),
                     28.vSpacing,
                     _RoundedField(
@@ -138,55 +142,38 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                     ),
                     const SizedBox(height: 24),
                     _PrimaryActionButton(
-                      label: _isLoading ? '${l10n.continueLabel}...' : l10n.continueLabel,
+                      label: _isLoading
+                          ? '${l10n.continueLabel}...'
+                          : l10n.continueLabel,
                       onPressed: _isLoading
                           ? null
                           : () async {
-                              MockUserRepository.instance.save(
-                                UserProfileM(
-                                  firstName: _firstName.text.trim(),
-                                  lastName: _lastName.text.trim(),
-                                  email: _email.text.trim(),
-                                  city: _city.text.trim(),
-                                  phone: widget.phone,
-                                  birthDate: _birthDate,
+                              final fullName = [
+                                _firstName.text.trim(),
+                                _lastName.text.trim(),
+                              ].where((v) => v.isNotEmpty).join(' ');
+
+                              final draft = RegistrationOnboardingDraft(
+                                phone: widget.phone,
+                                name: fullName,
+                                email: _email.text.trim(),
+                                city: _city.text.trim(),
+                                birthDate: _birthDate,
+                                selectedSports: const [],
+                                level: null,
+                                experienceYears: null,
+                                skills: const [],
+                              );
+
+                              setState(() => _isLoading = true);
+                              if (!mounted) return;
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      SportSelectionScreen(draft: draft),
                                 ),
                               );
-                              setState(() => _isLoading = true);
-                              try {
-                                final fullName = [
-                                  _firstName.text.trim(),
-                                  _lastName.text.trim(),
-                                ].where((v) => v.isNotEmpty).join(' ');
-
-                                await UsersApi.updateProfile(
-                                  name: fullName.isNotEmpty ? fullName : 'New User',
-                                  email: _email.text.trim(),
-                                  city: _city.text.trim(),
-                                  birthDate: _birthDate,
-                                );
-
-                                await UsersApi.createSportProfile(
-                                  sportType: 'TENNIS',
-                                  level: 'AMATEUR',
-                                );
-                                if (mounted) {
-                                  AppNotifier.showSuccess(
-                                    context,
-                                    l10n.profileSavedMessage,
-                                  );
-                                }
-                                if (!mounted) return;
-                                Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(builder: (_) => const NavShell()),
-                                  (route) => false,
-                                );
-                              } catch (error) {
-                                if (!mounted) return;
-                                AppNotifier.showError(context, error);
-                              } finally {
-                                if (mounted) setState(() => _isLoading = false);
-                              }
+                              if (mounted) setState(() => _isLoading = false);
                             },
                     ),
                     12.vSpacing,
@@ -225,7 +212,9 @@ class _RoundedField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context).textTheme.titleSmall?.weighted(FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.weighted(FontWeight.w700),
         ),
         8.vSpacing,
         TextField(
@@ -238,7 +227,10 @@ class _RoundedField extends StatelessWidget {
             filled: true,
             fillColor: context.palette.card,
             hintStyle: TextStyle(color: context.palette.muted),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(16),
               borderSide: BorderSide(color: context.palette.badge),
@@ -270,12 +262,16 @@ class _PrimaryActionButton extends StatelessWidget {
           backgroundColor: context.palette.primary,
           foregroundColor: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           elevation: 6,
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleMedium?.weighted(FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.weighted(FontWeight.w700),
         ),
       ),
     );

@@ -8,5 +8,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'assets/env/.env');
   await SessionStorage.init();
+  await PushNotificationsService.initialize();
   runApp(const OyinApp());
 }

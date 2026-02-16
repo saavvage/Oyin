@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 import '../cubit/match_result_state.dart';
 
 class PlayerScoreCard extends StatelessWidget {
-  const PlayerScoreCard({
-    super.key,
-    required this.player,
-    required this.onTap,
-  });
+  const PlayerScoreCard({super.key, required this.player, required this.onTap});
 
   final MatchResultPlayer player;
   final VoidCallback onTap;
@@ -25,23 +20,31 @@ class PlayerScoreCard extends StatelessWidget {
             CircleAvatar(
               radius: 36,
               backgroundColor: palette.accent,
-              backgroundImage: NetworkImage(player.avatarUrl),
+              backgroundImage: player.avatarUrl.isNotEmpty
+                  ? NetworkImage(player.avatarUrl)
+                  : null,
+              child: player.avatarUrl.isEmpty && player.name.isNotEmpty
+                  ? Text(player.name[0])
+                  : null,
             ),
             if (player.isYou)
               Positioned(
                 bottom: -4,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: palette.primary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     'YOU',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge
-                        ?.copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -50,7 +53,9 @@ class PlayerScoreCard extends StatelessWidget {
         12.vSpacing,
         Text(
           player.name,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         12.vSpacing,
         GestureDetector(
@@ -66,7 +71,9 @@ class PlayerScoreCard extends StatelessWidget {
             child: Center(
               child: Text(
                 player.score?.toString() ?? '-',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               ),
             ),
           ),

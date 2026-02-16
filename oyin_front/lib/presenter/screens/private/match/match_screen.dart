@@ -13,10 +13,7 @@ class MatchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => MatchCubit(),
-      child: const _MatchView(),
-    );
+    return BlocProvider(create: (_) => MatchCubit(), child: const _MatchView());
   }
 }
 
@@ -45,7 +42,10 @@ class _MatchViewState extends State<_MatchView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -58,23 +58,28 @@ class _MatchViewState extends State<_MatchView> {
                         l10n: l10n,
                         nearbySelected: state.nearbySelected,
                         timeMatchSelected: state.timeMatchSelected,
-                        onNearby: () => context.read<MatchCubit>().selectNearby(),
-                        onTimeMatch: () => context.read<MatchCubit>().selectTimeMatch(),
+                        onNearby: () =>
+                            context.read<MatchCubit>().selectNearby(),
+                        onTimeMatch: () =>
+                            context.read<MatchCubit>().selectTimeMatch(),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Center(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        child: _buildBody(
-                          context,
-                          state: state,
-                          l10n: l10n,
-                        ),
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 250),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            (!state.isLoading &&
+                                !state.isFinished &&
+                                profile != null)
+                            ? 0
+                            : 20,
+                      ),
+                      child: Center(
+                        child: _buildBody(context, state: state, l10n: l10n),
                       ),
                     ),
                   ),
@@ -85,7 +90,9 @@ class _MatchViewState extends State<_MatchView> {
                     child: MatchActionsRow(
                       l10n: l10n,
                       onDislike: () => _swipeController.swipeLeft(),
+                      onBoost: () => _swipeController.swipeRight(),
                       onLike: () => _swipeController.swipeRight(),
+                      onInfo: () => _showMatchTips(context, l10n),
                     ),
                   ),
               ],
@@ -96,15 +103,26 @@ class _MatchViewState extends State<_MatchView> {
     );
   }
 
+  void _showMatchTips(BuildContext context, AppLocalizations l10n) {
+    showFrostedInfoModal(
+      context,
+      title: l10n.info,
+      subtitle: 'Подсказки для быстрого матчинга',
+      tips: const [
+        'Используйте свайп вправо, если готовы договориться о тренировке.',
+        'Нажимайте на карточку инфо, чтобы посмотреть полный профиль игрока.',
+        'Меняйте фильтры по расстоянию и возрасту, если карточки закончились.',
+      ],
+    );
+  }
+
   Widget _buildBody(
     BuildContext context, {
     required MatchState state,
     required AppLocalizations l10n,
   }) {
     if (state.isLoading) {
-      return PulsePreloader(
-        imageUrl: state.currentUserAvatarUrl,
-      );
+      return PulsePreloader(imageUrl: state.currentUserAvatarUrl);
     }
 
     if (state.isFinished) {
@@ -145,10 +163,7 @@ class _MatchViewState extends State<_MatchView> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (context) => _MatchFiltersSheet(
-        l10n: l10n,
-        filters: filters,
-      ),
+      builder: (context) => _MatchFiltersSheet(l10n: l10n, filters: filters),
     );
 
     if (result != null) {
@@ -156,7 +171,10 @@ class _MatchViewState extends State<_MatchView> {
     }
   }
 
-  Future<void> _openProfileDetails(BuildContext context, MatchProfile profile) async {
+  Future<void> _openProfileDetails(
+    BuildContext context,
+    MatchProfile profile,
+  ) async {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
     await showModalBottomSheet<void>(
@@ -177,7 +195,9 @@ class _MatchViewState extends State<_MatchView> {
                   children: [
                     Text(
                       l10n.matchProfileDetailsTitle,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const Spacer(),
                     IconButton(
@@ -199,13 +219,17 @@ class _MatchViewState extends State<_MatchView> {
                 16.vSpacing,
                 Text(
                   l10n.nameAndAge(profile.name, profile.age),
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 6.vSpacing,
                 if (profile.city != null && profile.city!.isNotEmpty)
                   Text(
                     '${l10n.matchProfileCityLabel}: ${profile.city}',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: palette.muted),
                   ),
                 12.vSpacing,
                 _InfoRow(
@@ -218,7 +242,9 @@ class _MatchViewState extends State<_MatchView> {
                 ),
                 _InfoRow(
                   label: l10n.matchProfileSportsLabel,
-                  value: profile.sports.isNotEmpty ? profile.sports.join(', ') : profile.sport,
+                  value: profile.sports.isNotEmpty
+                      ? profile.sports.join(', ')
+                      : profile.sport,
                 ),
                 _InfoRow(
                   label: l10n.matchProfileLevelLabel,
@@ -228,7 +254,9 @@ class _MatchViewState extends State<_MatchView> {
                   16.vSpacing,
                   Text(
                     l10n.skills,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   8.vSpacing,
                   Wrap(
@@ -237,7 +265,10 @@ class _MatchViewState extends State<_MatchView> {
                     children: profile.tags
                         .map(
                           (tag) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: palette.surface,
                               borderRadius: BorderRadius.circular(12),
@@ -258,10 +289,7 @@ class _MatchViewState extends State<_MatchView> {
 }
 
 class _MatchFiltersSheet extends StatefulWidget {
-  const _MatchFiltersSheet({
-    required this.l10n,
-    required this.filters,
-  });
+  const _MatchFiltersSheet({required this.l10n, required this.filters});
 
   final AppLocalizations l10n;
   final MatchFilters filters;
@@ -271,10 +299,7 @@ class _MatchFiltersSheet extends StatefulWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.label,
-    required this.value,
-  });
+  const _InfoRow({required this.label, required this.value});
 
   final String label;
   final String value;
@@ -289,12 +314,16 @@ class _InfoRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: palette.muted),
             ),
           ),
           Text(
             value,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         ],
       ),
@@ -334,7 +363,9 @@ class _MatchFiltersSheetState extends State<_MatchFiltersSheet> {
               children: [
                 Text(
                   widget.l10n.matchFiltersTitle,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                 ),
                 const Spacer(),
                 IconButton(
@@ -348,7 +379,8 @@ class _MatchFiltersSheetState extends State<_MatchFiltersSheet> {
               l10n: widget.l10n,
               distanceRange: _distanceRange,
               ageRange: _ageRange,
-              onDistanceChanged: (values) => setState(() => _distanceRange = values),
+              onDistanceChanged: (values) =>
+                  setState(() => _distanceRange = values),
               onAgeChanged: (values) => setState(() => _ageRange = values),
               showApply: true,
               onApply: () {

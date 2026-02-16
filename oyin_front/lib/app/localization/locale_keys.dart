@@ -206,4 +206,83 @@ class LocaleKeys {
   static const matchProfileRatingLabel = 'match_profile_rating_label';
   static const matchProfileSportsLabel = 'match_profile_sports_label';
   static const matchProfileLevelLabel = 'match_profile_level_label';
+
+  static const levelAmateur = 'level_amateur';
+  static const levelSemiPro = 'level_semi_pro';
+  static const levelProfessional = 'level_professional';
+
+  static const onboardingSportSelectionTitle =
+      'onboarding_sport_selection_title';
+  static const onboardingSportSelectionSubtitle =
+      'onboarding_sport_selection_subtitle';
+  static const onboardingSportSelectionSearchHint =
+      'onboarding_sport_selection_search_hint';
+  static const onboardingSportSelectionInfo = 'onboarding_sport_selection_info';
+  static const onboardingSportSelectionCreateProfiles =
+      'onboarding_sport_selection_create_profiles';
+
+  static const onboardingLevelChoosePathTitle =
+      'onboarding_level_choose_path_title';
+  static const onboardingLevelChoosePathSubtitle =
+      'onboarding_level_choose_path_subtitle';
+  static const onboardingLevelAmateurSubtitle =
+      'onboarding_level_amateur_subtitle';
+  static const onboardingLevelAmateurDetail1 =
+      'onboarding_level_amateur_detail_1';
+  static const onboardingLevelAmateurDetail2 =
+      'onboarding_level_amateur_detail_2';
+  static const onboardingLevelSemiProSubtitle =
+      'onboarding_level_semi_pro_subtitle';
+  static const onboardingLevelSemiProDetail1 =
+      'onboarding_level_semi_pro_detail_1';
+  static const onboardingLevelSemiProDetail2 =
+      'onboarding_level_semi_pro_detail_2';
+  static const onboardingLevelProfessionalSubtitle =
+      'onboarding_level_professional_subtitle';
+  static const onboardingLevelProfessionalDetail1 =
+      'onboarding_level_professional_detail_1';
+  static const onboardingLevelProfessionalDetail2 =
+      'onboarding_level_professional_detail_2';
+  static const onboardingLevelWhyItMatters = 'onboarding_level_why_it_matters';
+
+  static const onboardingDetailsProfileTitle =
+      'onboarding_details_profile_title';
+  static const onboardingDetailsFillSubtitle =
+      'onboarding_details_fill_subtitle';
+  static const onboardingDetailsExperienceLabel =
+      'onboarding_details_experience_label';
+  static const onboardingDetailsExperienceHint =
+      'onboarding_details_experience_hint';
+  static const onboardingDetailsYearsSuffix = 'onboarding_details_years_suffix';
+  static const onboardingDetailsExperienceDesc =
+      'onboarding_details_experience_desc';
+  static const onboardingDetailsSkillsLabel = 'onboarding_details_skills_label';
+  static const onboardingDetailsAddSkillHint =
+      'onboarding_details_add_skill_hint';
+  static const onboardingDetailsSuggestionsLabel =
+      'onboarding_details_suggestions_label';
+  static const onboardingDetailsCompleteProfile =
+      'onboarding_details_complete_profile';
+  static const onboardingDetailsSelectSportLevelWarning =
+      'onboarding_details_select_sport_level_warning';
+  static const onboardingDetailsProfileCreatedSuccess =
+      'onboarding_details_profile_created_success';
+  static const onboardingDetailsLevelFallback =
+      'onboarding_details_level_fallback';
+
+  static const profileAvatarChooseGallery = 'profile_avatar_choose_gallery';
+  static const profileAvatarTakePhoto = 'profile_avatar_take_photo';
+
+  static const sportPreferencesSearchHint = 'sport_preferences_search_hint';
+  static const sportPreferencesLevelLabel = 'sport_preferences_level_label';
+  static const sportPreferencesExperienceHint =
+      'sport_preferences_experience_hint';
+  static const sportPreferencesAddSkillHint =
+      'sport_preferences_add_skill_hint';
+  static const sportPreferencesSave = 'sport_preferences_save';
+  static const sportPreferencesSaving = 'sport_preferences_saving';
+  static const sportPreferencesSelectAtLeastOne =
+      'sport_preferences_select_at_least_one';
+  static const sportPreferencesUpdatedSuccess =
+      'sport_preferences_updated_success';
 }

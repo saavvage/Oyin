@@ -22,7 +22,8 @@ class AppLocalizations {
     GlobalCupertinoLocalizations.delegate,
   ];
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   static AppLocalizations of(BuildContext context) =>
       Localizations.of<AppLocalizations>(context, AppLocalizations)!;
@@ -66,7 +67,8 @@ class AppLocalizations {
   String get sportPreferencesDesc => _string(LocaleKeys.sportPreferencesDesc);
   String get matchHistory => _string(LocaleKeys.matchHistory);
   String get matchHistoryDesc => _string(LocaleKeys.matchHistoryDesc);
-  String get searchSettingsPlaceholder => _string(LocaleKeys.searchSettingsPlaceholder);
+  String get searchSettingsPlaceholder =>
+      _string(LocaleKeys.searchSettingsPlaceholder);
   String get account => _string(LocaleKeys.account);
   String get personalInfo => _string(LocaleKeys.personalInfo);
   String get passwordSecurity => _string(LocaleKeys.passwordSecurity);
@@ -115,18 +117,21 @@ class AppLocalizations {
       _string(LocaleKeys.matchesDeltaThisMonth).replaceFirst('{value}', value);
   String get statusDisputeOpen => _string(LocaleKeys.statusDisputeOpen);
   String get statusContractSigned => _string(LocaleKeys.statusContractSigned);
-  String get statusDraftingContract => _string(LocaleKeys.statusDraftingContract);
+  String get statusDraftingContract =>
+      _string(LocaleKeys.statusDraftingContract);
   String get statusMatched => _string(LocaleKeys.statusMatched);
   String get arenaTitle => _string(LocaleKeys.arenaTitle);
   String get arenaStanding => _string(LocaleKeys.arenaStanding);
   String get arenaRank => _string(LocaleKeys.arenaRank);
-  String arenaRating(String value) => _string(LocaleKeys.arenaRating).replaceFirst('{value}', value);
+  String arenaRating(String value) =>
+      _string(LocaleKeys.arenaRating).replaceFirst('{value}', value);
   String get arenaAllPlayers => _string(LocaleKeys.arenaAllPlayers);
   String get arenaFairFight => _string(LocaleKeys.arenaFairFight);
   String get arenaInRange => _string(LocaleKeys.arenaInRange);
   String get arenaChallenge => _string(LocaleKeys.arenaChallenge);
   String get arenaPending => _string(LocaleKeys.arenaPending);
-  String walletBalance(String value) => _string(LocaleKeys.walletBalance).replaceFirst('{value}', value);
+  String walletBalance(String value) =>
+      _string(LocaleKeys.walletBalance).replaceFirst('{value}', value);
   String get walletTransfer => _string(LocaleKeys.walletTransfer);
   String get walletStore => _string(LocaleKeys.walletStore);
   String get walletHistory => _string(LocaleKeys.walletHistory);
@@ -134,9 +139,11 @@ class AppLocalizations {
   String get walletClaimBonus => _string(LocaleKeys.walletClaimBonus);
   String get walletClaim => _string(LocaleKeys.walletClaim);
   String get walletDailyStreak => _string(LocaleKeys.walletDailyStreak);
-  String walletDay(String value) => _string(LocaleKeys.walletDay).replaceFirst('{value}', value);
+  String walletDay(String value) =>
+      _string(LocaleKeys.walletDay).replaceFirst('{value}', value);
   String get walletGetReward => _string(LocaleKeys.walletGetReward);
-  String walletCoins(String value) => _string(LocaleKeys.walletCoins).replaceFirst('{value}', value);
+  String walletCoins(String value) =>
+      _string(LocaleKeys.walletCoins).replaceFirst('{value}', value);
   String get walletPhoneNumber => _string(LocaleKeys.walletPhoneNumber);
   String get walletCoinsAmount => _string(LocaleKeys.walletCoinsAmount);
   String get walletBuy => _string(LocaleKeys.walletBuy);
@@ -173,12 +180,16 @@ class AppLocalizations {
   String get notifTitleInfo => _string(LocaleKeys.notifTitleInfo);
   String get notifTitleError => _string(LocaleKeys.notifTitleError);
 
-  String get errorNoConnectionTitle => _string(LocaleKeys.errorNoConnectionTitle);
-  String get errorNoConnectionMessage => _string(LocaleKeys.errorNoConnectionMessage);
+  String get errorNoConnectionTitle =>
+      _string(LocaleKeys.errorNoConnectionTitle);
+  String get errorNoConnectionMessage =>
+      _string(LocaleKeys.errorNoConnectionMessage);
   String get errorTimeoutTitle => _string(LocaleKeys.errorTimeoutTitle);
   String get errorTimeoutMessage => _string(LocaleKeys.errorTimeoutMessage);
-  String get errorUnauthorizedTitle => _string(LocaleKeys.errorUnauthorizedTitle);
-  String get errorUnauthorizedMessage => _string(LocaleKeys.errorUnauthorizedMessage);
+  String get errorUnauthorizedTitle =>
+      _string(LocaleKeys.errorUnauthorizedTitle);
+  String get errorUnauthorizedMessage =>
+      _string(LocaleKeys.errorUnauthorizedMessage);
   String get errorForbiddenTitle => _string(LocaleKeys.errorForbiddenTitle);
   String get errorForbiddenMessage => _string(LocaleKeys.errorForbiddenMessage);
   String get errorNotFoundTitle => _string(LocaleKeys.errorNotFoundTitle);
@@ -188,90 +199,209 @@ class AppLocalizations {
   String get errorUnknownTitle => _string(LocaleKeys.errorUnknownTitle);
   String get errorUnknownMessage => _string(LocaleKeys.errorUnknownMessage);
 
-  String get phoneNumberIncompleteTitle => _string(LocaleKeys.phoneNumberIncompleteTitle);
-  String get phoneNumberIncompleteMessage => _string(LocaleKeys.phoneNumberIncompleteMessage);
-  String get verifyCodeIncompleteTitle => _string(LocaleKeys.verifyCodeIncompleteTitle);
-  String get verifyCodeIncompleteMessage => _string(LocaleKeys.verifyCodeIncompleteMessage);
+  String get phoneNumberIncompleteTitle =>
+      _string(LocaleKeys.phoneNumberIncompleteTitle);
+  String get phoneNumberIncompleteMessage =>
+      _string(LocaleKeys.phoneNumberIncompleteMessage);
+  String get verifyCodeIncompleteTitle =>
+      _string(LocaleKeys.verifyCodeIncompleteTitle);
+  String get verifyCodeIncompleteMessage =>
+      _string(LocaleKeys.verifyCodeIncompleteMessage);
   String get profileSavedMessage => _string(LocaleKeys.profileSavedMessage);
 
-  String get messengerStartConversation => _string(LocaleKeys.messengerStartConversation);
+  String get messengerStartConversation =>
+      _string(LocaleKeys.messengerStartConversation);
   String get messengerOnline => _string(LocaleKeys.messengerOnline);
   String get messengerMessageHint => _string(LocaleKeys.messengerMessageHint);
   String get messengerBlockedHint => _string(LocaleKeys.messengerBlockedHint);
-  String get messengerActionDeleteChat => _string(LocaleKeys.messengerActionDeleteChat);
-  String get messengerActionBlockUser => _string(LocaleKeys.messengerActionBlockUser);
+  String get messengerActionDeleteChat =>
+      _string(LocaleKeys.messengerActionDeleteChat);
+  String get messengerActionBlockUser =>
+      _string(LocaleKeys.messengerActionBlockUser);
   String get messengerActionReport => _string(LocaleKeys.messengerActionReport);
-  String get messengerDialogDeleteTitle => _string(LocaleKeys.messengerDialogDeleteTitle);
-  String get messengerDialogDeleteDesc => _string(LocaleKeys.messengerDialogDeleteDesc);
-  String get messengerDialogDeleteConfirm => _string(LocaleKeys.messengerDialogDeleteConfirm);
-  String get messengerDialogBlockTitle => _string(LocaleKeys.messengerDialogBlockTitle);
-  String get messengerDialogBlockDesc => _string(LocaleKeys.messengerDialogBlockDesc);
-  String get messengerDialogBlockConfirm => _string(LocaleKeys.messengerDialogBlockConfirm);
-  String get messengerDialogReportTitle => _string(LocaleKeys.messengerDialogReportTitle);
-  String get messengerDialogReportDesc => _string(LocaleKeys.messengerDialogReportDesc);
-  String get messengerDialogReportConfirm => _string(LocaleKeys.messengerDialogReportConfirm);
+  String get messengerDialogDeleteTitle =>
+      _string(LocaleKeys.messengerDialogDeleteTitle);
+  String get messengerDialogDeleteDesc =>
+      _string(LocaleKeys.messengerDialogDeleteDesc);
+  String get messengerDialogDeleteConfirm =>
+      _string(LocaleKeys.messengerDialogDeleteConfirm);
+  String get messengerDialogBlockTitle =>
+      _string(LocaleKeys.messengerDialogBlockTitle);
+  String get messengerDialogBlockDesc =>
+      _string(LocaleKeys.messengerDialogBlockDesc);
+  String get messengerDialogBlockConfirm =>
+      _string(LocaleKeys.messengerDialogBlockConfirm);
+  String get messengerDialogReportTitle =>
+      _string(LocaleKeys.messengerDialogReportTitle);
+  String get messengerDialogReportDesc =>
+      _string(LocaleKeys.messengerDialogReportDesc);
+  String get messengerDialogReportConfirm =>
+      _string(LocaleKeys.messengerDialogReportConfirm);
   String get messengerDialogCancel => _string(LocaleKeys.messengerDialogCancel);
   String get messengerChatDeleted => _string(LocaleKeys.messengerChatDeleted);
   String get messengerUserBlocked => _string(LocaleKeys.messengerUserBlocked);
   String get messengerReportSent => _string(LocaleKeys.messengerReportSent);
-  String get messengerSomethingWrong => _string(LocaleKeys.messengerSomethingWrong);
-  String get messengerAttachmentCamera => _string(LocaleKeys.messengerAttachmentCamera);
-  String get messengerAttachmentLibrary => _string(LocaleKeys.messengerAttachmentLibrary);
-  String get messengerAttachmentFile => _string(LocaleKeys.messengerAttachmentFile);
-  String get messengerAttachmentPhoto => _string(LocaleKeys.messengerAttachmentPhoto);
-  String get messengerAttachmentVideo => _string(LocaleKeys.messengerAttachmentVideo);
+  String get messengerSomethingWrong =>
+      _string(LocaleKeys.messengerSomethingWrong);
+  String get messengerAttachmentCamera =>
+      _string(LocaleKeys.messengerAttachmentCamera);
+  String get messengerAttachmentLibrary =>
+      _string(LocaleKeys.messengerAttachmentLibrary);
+  String get messengerAttachmentFile =>
+      _string(LocaleKeys.messengerAttachmentFile);
+  String get messengerAttachmentPhoto =>
+      _string(LocaleKeys.messengerAttachmentPhoto);
+  String get messengerAttachmentVideo =>
+      _string(LocaleKeys.messengerAttachmentVideo);
   String get matchFiltersTitle => _string(LocaleKeys.matchFiltersTitle);
   String get matchFiltersDistance => _string(LocaleKeys.matchFiltersDistance);
-  String matchFiltersDistanceValue(int min, int max) => _string(LocaleKeys.matchFiltersDistanceValue)
-      .replaceFirst('{min}', min.toString())
-      .replaceFirst('{max}', max.toString());
+  String matchFiltersDistanceValue(int min, int max) => _string(
+    LocaleKeys.matchFiltersDistanceValue,
+  ).replaceFirst('{min}', min.toString()).replaceFirst('{max}', max.toString());
   String get matchFiltersAge => _string(LocaleKeys.matchFiltersAge);
-  String matchFiltersAgeValue(int min, int max) => _string(LocaleKeys.matchFiltersAgeValue)
-      .replaceFirst('{min}', min.toString())
-      .replaceFirst('{max}', max.toString());
+  String matchFiltersAgeValue(int min, int max) => _string(
+    LocaleKeys.matchFiltersAgeValue,
+  ).replaceFirst('{min}', min.toString()).replaceFirst('{max}', max.toString());
   String get matchFiltersApply => _string(LocaleKeys.matchFiltersApply);
   String get matchFinishTitle => _string(LocaleKeys.matchFinishTitle);
   String get matchFinishSubtitle => _string(LocaleKeys.matchFinishSubtitle);
   String get matchResetDislikes => _string(LocaleKeys.matchResetDislikes);
   String get matchTryChangeFilters => _string(LocaleKeys.matchTryChangeFilters);
-  String get matchProfileDetailsTitle => _string(LocaleKeys.matchProfileDetailsTitle);
+  String get matchProfileDetailsTitle =>
+      _string(LocaleKeys.matchProfileDetailsTitle);
   String get matchProfileCityLabel => _string(LocaleKeys.matchProfileCityLabel);
-  String get matchProfileDistanceLabel => _string(LocaleKeys.matchProfileDistanceLabel);
-  String get matchProfileRatingLabel => _string(LocaleKeys.matchProfileRatingLabel);
-  String get matchProfileSportsLabel => _string(LocaleKeys.matchProfileSportsLabel);
-  String get matchProfileLevelLabel => _string(LocaleKeys.matchProfileLevelLabel);
+  String get matchProfileDistanceLabel =>
+      _string(LocaleKeys.matchProfileDistanceLabel);
+  String get matchProfileRatingLabel =>
+      _string(LocaleKeys.matchProfileRatingLabel);
+  String get matchProfileSportsLabel =>
+      _string(LocaleKeys.matchProfileSportsLabel);
+  String get matchProfileLevelLabel =>
+      _string(LocaleKeys.matchProfileLevelLabel);
+  String get levelAmateur => _string(LocaleKeys.levelAmateur);
+  String get levelSemiPro => _string(LocaleKeys.levelSemiPro);
+  String get levelProfessional => _string(LocaleKeys.levelProfessional);
+  String get onboardingSportSelectionTitle =>
+      _string(LocaleKeys.onboardingSportSelectionTitle);
+  String get onboardingSportSelectionSubtitle =>
+      _string(LocaleKeys.onboardingSportSelectionSubtitle);
+  String get onboardingSportSelectionSearchHint =>
+      _string(LocaleKeys.onboardingSportSelectionSearchHint);
+  String get onboardingSportSelectionInfo =>
+      _string(LocaleKeys.onboardingSportSelectionInfo);
+  String onboardingSportSelectionCreateProfiles(int count) => _string(
+    LocaleKeys.onboardingSportSelectionCreateProfiles,
+  ).replaceFirst('{count}', count.toString());
+  String get onboardingLevelChoosePathTitle =>
+      _string(LocaleKeys.onboardingLevelChoosePathTitle);
+  String get onboardingLevelChoosePathSubtitle =>
+      _string(LocaleKeys.onboardingLevelChoosePathSubtitle);
+  String get onboardingLevelAmateurSubtitle =>
+      _string(LocaleKeys.onboardingLevelAmateurSubtitle);
+  String get onboardingLevelAmateurDetail1 =>
+      _string(LocaleKeys.onboardingLevelAmateurDetail1);
+  String get onboardingLevelAmateurDetail2 =>
+      _string(LocaleKeys.onboardingLevelAmateurDetail2);
+  String get onboardingLevelSemiProSubtitle =>
+      _string(LocaleKeys.onboardingLevelSemiProSubtitle);
+  String get onboardingLevelSemiProDetail1 =>
+      _string(LocaleKeys.onboardingLevelSemiProDetail1);
+  String get onboardingLevelSemiProDetail2 =>
+      _string(LocaleKeys.onboardingLevelSemiProDetail2);
+  String get onboardingLevelProfessionalSubtitle =>
+      _string(LocaleKeys.onboardingLevelProfessionalSubtitle);
+  String get onboardingLevelProfessionalDetail1 =>
+      _string(LocaleKeys.onboardingLevelProfessionalDetail1);
+  String get onboardingLevelProfessionalDetail2 =>
+      _string(LocaleKeys.onboardingLevelProfessionalDetail2);
+  String get onboardingLevelWhyItMatters =>
+      _string(LocaleKeys.onboardingLevelWhyItMatters);
+  String onboardingDetailsProfileTitle(String level) => _string(
+    LocaleKeys.onboardingDetailsProfileTitle,
+  ).replaceFirst('{level}', level);
+  String get onboardingDetailsFillSubtitle =>
+      _string(LocaleKeys.onboardingDetailsFillSubtitle);
+  String get onboardingDetailsExperienceLabel =>
+      _string(LocaleKeys.onboardingDetailsExperienceLabel);
+  String get onboardingDetailsExperienceHint =>
+      _string(LocaleKeys.onboardingDetailsExperienceHint);
+  String get onboardingDetailsYearsSuffix =>
+      _string(LocaleKeys.onboardingDetailsYearsSuffix);
+  String get onboardingDetailsExperienceDesc =>
+      _string(LocaleKeys.onboardingDetailsExperienceDesc);
+  String get onboardingDetailsSkillsLabel =>
+      _string(LocaleKeys.onboardingDetailsSkillsLabel);
+  String get onboardingDetailsAddSkillHint =>
+      _string(LocaleKeys.onboardingDetailsAddSkillHint);
+  String get onboardingDetailsSuggestionsLabel =>
+      _string(LocaleKeys.onboardingDetailsSuggestionsLabel);
+  String get onboardingDetailsCompleteProfile =>
+      _string(LocaleKeys.onboardingDetailsCompleteProfile);
+  String get onboardingDetailsSelectSportLevelWarning =>
+      _string(LocaleKeys.onboardingDetailsSelectSportLevelWarning);
+  String get onboardingDetailsProfileCreatedSuccess =>
+      _string(LocaleKeys.onboardingDetailsProfileCreatedSuccess);
+  String get onboardingDetailsLevelFallback =>
+      _string(LocaleKeys.onboardingDetailsLevelFallback);
+  String get profileAvatarChooseGallery =>
+      _string(LocaleKeys.profileAvatarChooseGallery);
+  String get profileAvatarTakePhoto =>
+      _string(LocaleKeys.profileAvatarTakePhoto);
+  String get sportPreferencesSearchHint =>
+      _string(LocaleKeys.sportPreferencesSearchHint);
+  String get sportPreferencesLevelLabel =>
+      _string(LocaleKeys.sportPreferencesLevelLabel);
+  String get sportPreferencesExperienceHint =>
+      _string(LocaleKeys.sportPreferencesExperienceHint);
+  String get sportPreferencesAddSkillHint =>
+      _string(LocaleKeys.sportPreferencesAddSkillHint);
+  String get sportPreferencesSave => _string(LocaleKeys.sportPreferencesSave);
+  String get sportPreferencesSaving =>
+      _string(LocaleKeys.sportPreferencesSaving);
+  String get sportPreferencesSelectAtLeastOne =>
+      _string(LocaleKeys.sportPreferencesSelectAtLeastOne);
+  String get sportPreferencesUpdatedSuccess =>
+      _string(LocaleKeys.sportPreferencesUpdatedSuccess);
 
-  String nameAndAge(String name, int age) =>
-      _string(LocaleKeys.nameAge).replaceFirst('{name}', name).replaceFirst('{age}', age.toString());
+  String nameAndAge(String name, int age) => _string(
+    LocaleKeys.nameAge,
+  ).replaceFirst('{name}', name).replaceFirst('{age}', age.toString());
 
-  String sportAndLevel(String sport, String level) => _string(LocaleKeys.sportLevel)
-      .replaceFirst('{sport}', sport)
-      .replaceFirst('{level}', level);
+  String sportAndLevel(String sport, String level) => _string(
+    LocaleKeys.sportLevel,
+  ).replaceFirst('{sport}', sport).replaceFirst('{level}', level);
 
-  String formatDistanceKm(double value) =>
-      _string(LocaleKeys.distanceKm).replaceFirst('{value}', value.toStringAsFixed(1));
+  String formatDistanceKm(double value) => _string(
+    LocaleKeys.distanceKm,
+  ).replaceFirst('{value}', value.toStringAsFixed(1));
 
-  String formatRating(double value) =>
-      _string(LocaleKeys.rating).replaceFirst('{value}', value.toStringAsFixed(1));
+  String formatRating(double value) => _string(
+    LocaleKeys.rating,
+  ).replaceFirst('{value}', value.toStringAsFixed(1));
 
   String formatTodayAt(String time) =>
       _string(LocaleKeys.todayAt).replaceFirst('{time}', time);
 
-  String versionLabel(String version) => _string(LocaleKeys.version).replaceFirst('{version}', version);
+  String versionLabel(String version) =>
+      _string(LocaleKeys.version).replaceFirst('{version}', version);
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      AppLocalizations.supportedLocales.any((supported) => supported.languageCode == locale.languageCode);
+  bool isSupported(Locale locale) => AppLocalizations.supportedLocales.any(
+    (supported) => supported.languageCode == locale.languageCode,
+  );
 
   @override
-  Future<AppLocalizations> load(Locale locale) async => AppLocalizations(locale);
+  Future<AppLocalizations> load(Locale locale) async =>
+      AppLocalizations(locale);
 
   @override
-  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) => false;
+  bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) =>
+      false;
 }
 
 const Map<String, Map<String, String>> _localizedValues = {
@@ -341,7 +471,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.submitResult: 'Submit Result',
     LocaleKeys.dispute: 'Dispute?',
     LocaleKeys.toCourt: 'To Court',
-    LocaleKeys.disputeNote: 'Initiating a dispute will freeze the result and require evidence submission.',
+    LocaleKeys.disputeNote:
+        'Initiating a dispute will freeze the result and require evidence submission.',
     LocaleKeys.scoreConfirmNote: 'Score must be confirmed by opponent.',
     LocaleKeys.you: 'YOU',
     LocaleKeys.chats: 'Chats',
@@ -358,7 +489,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matched: 'Matched! Start chatting to set up.',
     LocaleKeys.aiAssistant: 'AI Assistant',
     LocaleKeys.aiComingSoon: 'Coming soon',
-    LocaleKeys.aiAssistantSubtitle: 'We will connect your personal fight-AI helper here.',
+    LocaleKeys.aiAssistantSubtitle:
+        'We will connect your personal fight-AI helper here.',
     LocaleKeys.madeWithCare: 'Made with care for you ❤️',
     LocaleKeys.language: 'Language',
     LocaleKeys.reputationExcellent: 'Excellent',
@@ -403,10 +535,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.phoneNumber: 'Phone Number',
     LocaleKeys.sendCode: 'Send Code',
     LocaleKeys.phoneEntryTitle: 'Let’s get you in the ring.',
-    LocaleKeys.phoneEntrySubtitle: 'Enter your phone number to verify your account and find sparring partners.',
-    LocaleKeys.termsAgree: 'By continuing, you agree to our Terms & Privacy Policy.',
+    LocaleKeys.phoneEntrySubtitle:
+        'Enter your phone number to verify your account and find sparring partners.',
+    LocaleKeys.termsAgree:
+        'By continuing, you agree to our Terms & Privacy Policy.',
     LocaleKeys.verificationTitle: 'Enter Verification Code',
-    LocaleKeys.verificationSubtitle: 'We sent a code to {phone}. Enter it below to continue.',
+    LocaleKeys.verificationSubtitle:
+        'We sent a code to {phone}. Enter it below to continue.',
     LocaleKeys.resendCode: 'Resend',
     LocaleKeys.verifyIdentity: 'Verify Identity',
     LocaleKeys.profileInfoTitle: 'Tell us about you',
@@ -423,13 +558,15 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.notifTitleInfo: 'Notification',
     LocaleKeys.notifTitleError: 'Error',
     LocaleKeys.errorNoConnectionTitle: 'No connection',
-    LocaleKeys.errorNoConnectionMessage: 'Check your internet connection and try again.',
+    LocaleKeys.errorNoConnectionMessage:
+        'Check your internet connection and try again.',
     LocaleKeys.errorTimeoutTitle: 'Server timeout',
     LocaleKeys.errorTimeoutMessage: 'Please try again later.',
     LocaleKeys.errorUnauthorizedTitle: 'Session expired',
     LocaleKeys.errorUnauthorizedMessage: 'Please sign in again.',
     LocaleKeys.errorForbiddenTitle: 'Access denied',
-    LocaleKeys.errorForbiddenMessage: 'You do not have permission to perform this action.',
+    LocaleKeys.errorForbiddenMessage:
+        'You do not have permission to perform this action.',
     LocaleKeys.errorNotFoundTitle: 'Not found',
     LocaleKeys.errorNotFoundMessage: 'Requested data was not found.',
     LocaleKeys.errorServerTitle: 'Server error',
@@ -449,7 +586,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.messengerActionBlockUser: 'Block user',
     LocaleKeys.messengerActionReport: 'Report',
     LocaleKeys.messengerDialogDeleteTitle: 'Delete chat?',
-    LocaleKeys.messengerDialogDeleteDesc: 'The dialog will be removed only for you.',
+    LocaleKeys.messengerDialogDeleteDesc:
+        'The dialog will be removed only for you.',
     LocaleKeys.messengerDialogDeleteConfirm: 'Delete',
     LocaleKeys.messengerDialogBlockTitle: 'Block user?',
     LocaleKeys.messengerDialogBlockDesc: 'You will stop receiving messages.',
@@ -474,7 +612,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchFiltersAgeValue: '{min}–{max} yrs',
     LocaleKeys.matchFiltersApply: 'Apply filters',
     LocaleKeys.matchFinishTitle: 'Swipes are over',
-    LocaleKeys.matchFinishSubtitle: 'Try changing filters or reset dislikes to see more.',
+    LocaleKeys.matchFinishSubtitle:
+        'Try changing filters or reset dislikes to see more.',
     LocaleKeys.matchResetDislikes: 'Reset dislikes',
     LocaleKeys.matchTryChangeFilters: 'Try changing filters',
     LocaleKeys.matchProfileDetailsTitle: 'Profile details',
@@ -483,6 +622,65 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchProfileRatingLabel: 'Rating',
     LocaleKeys.matchProfileSportsLabel: 'Sports',
     LocaleKeys.matchProfileLevelLabel: 'Level',
+    LocaleKeys.levelAmateur: 'Amateur',
+    LocaleKeys.levelSemiPro: 'Semi-Pro',
+    LocaleKeys.levelProfessional: 'Professional',
+    LocaleKeys.onboardingSportSelectionTitle: 'What do you play?',
+    LocaleKeys.onboardingSportSelectionSubtitle:
+        'Tap all that apply. You can add more later.',
+    LocaleKeys.onboardingSportSelectionSearchHint:
+        'Search disciplines (e.g. Boxing, Padel)',
+    LocaleKeys.onboardingSportSelectionInfo:
+        'Each selected sport creates a separate sparring profile.',
+    LocaleKeys.onboardingSportSelectionCreateProfiles:
+        'Create {count} profile(s)',
+    LocaleKeys.onboardingLevelChoosePathTitle: 'Choose your path',
+    LocaleKeys.onboardingLevelChoosePathSubtitle:
+        'Select your level to get the right matchups.',
+    LocaleKeys.onboardingLevelAmateurSubtitle: 'Start at ~800-1000 ELO',
+    LocaleKeys.onboardingLevelAmateurDetail1:
+        'Simple onboarding and instant access to matches.',
+    LocaleKeys.onboardingLevelAmateurDetail2:
+        'Best for casual players and newcomers.',
+    LocaleKeys.onboardingLevelSemiProSubtitle: 'Start at ~1100-1400 ELO',
+    LocaleKeys.onboardingLevelSemiProDetail1:
+        'For consistent training and local tournament experience.',
+    LocaleKeys.onboardingLevelSemiProDetail2:
+        'Balanced matchmaking with stronger opponents.',
+    LocaleKeys.onboardingLevelProfessionalSubtitle: 'Start at ~1500 ELO',
+    LocaleKeys.onboardingLevelProfessionalDetail1:
+        'Requires stronger competitive track record.',
+    LocaleKeys.onboardingLevelProfessionalDetail2:
+        'Manual moderation can be applied for access.',
+    LocaleKeys.onboardingLevelWhyItMatters:
+        'Accurate starting level improves fair matchmaking from day one.',
+    LocaleKeys.onboardingDetailsProfileTitle: '{level} Profile',
+    LocaleKeys.onboardingDetailsFillSubtitle:
+        'Fill in details to improve your match quality.',
+    LocaleKeys.onboardingDetailsExperienceLabel: 'Experience (Years)',
+    LocaleKeys.onboardingDetailsExperienceHint: 'e.g. 2',
+    LocaleKeys.onboardingDetailsYearsSuffix: 'Years',
+    LocaleKeys.onboardingDetailsExperienceDesc:
+        'Total time you have been practicing selected sports.',
+    LocaleKeys.onboardingDetailsSkillsLabel: 'Skills & Tags',
+    LocaleKeys.onboardingDetailsAddSkillHint: 'Add skill (e.g. Kickboxing)',
+    LocaleKeys.onboardingDetailsSuggestionsLabel: 'Suggestions',
+    LocaleKeys.onboardingDetailsCompleteProfile: 'Complete Profile',
+    LocaleKeys.onboardingDetailsSelectSportLevelWarning:
+        'Please select sports and level first.',
+    LocaleKeys.onboardingDetailsProfileCreatedSuccess:
+        'Profile created successfully',
+    LocaleKeys.onboardingDetailsLevelFallback: 'Sports',
+    LocaleKeys.profileAvatarChooseGallery: 'Choose from gallery',
+    LocaleKeys.profileAvatarTakePhoto: 'Take a photo',
+    LocaleKeys.sportPreferencesSearchHint: 'Search sports',
+    LocaleKeys.sportPreferencesLevelLabel: 'Level',
+    LocaleKeys.sportPreferencesExperienceHint: 'Experience years',
+    LocaleKeys.sportPreferencesAddSkillHint: 'Add skill tag',
+    LocaleKeys.sportPreferencesSave: 'Save',
+    LocaleKeys.sportPreferencesSaving: 'Saving...',
+    LocaleKeys.sportPreferencesSelectAtLeastOne: 'Select at least one sport.',
+    LocaleKeys.sportPreferencesUpdatedSuccess: 'Sport preferences updated',
   },
   'ru': {
     LocaleKeys.discovery: 'Поиск',
@@ -525,7 +723,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.sportPreferencesDesc: 'Бокс, муай тай, BJJ',
     LocaleKeys.matchHistory: 'История боёв',
     LocaleKeys.matchHistoryDesc: 'Прошлые спарринги и споры',
-    LocaleKeys.searchSettingsPlaceholder: 'Искать по настройкам, спорам, приватности…',
+    LocaleKeys.searchSettingsPlaceholder:
+        'Искать по настройкам, спорам, приватности…',
     LocaleKeys.account: 'Аккаунт',
     LocaleKeys.personalInfo: 'Личные данные',
     LocaleKeys.passwordSecurity: 'Пароль и безопасность',
@@ -568,7 +767,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matched: 'Матч! Напиши, чтобы договориться.',
     LocaleKeys.aiAssistant: 'AI-ассистент',
     LocaleKeys.aiComingSoon: 'Скоро',
-    LocaleKeys.aiAssistantSubtitle: 'Здесь будет подключен ваш персональный AI-ассистент.',
+    LocaleKeys.aiAssistantSubtitle:
+        'Здесь будет подключен ваш персональный AI-ассистент.',
     LocaleKeys.madeWithCare: 'Сделано с заботой для вас ❤️',
     LocaleKeys.language: 'Язык',
     LocaleKeys.reputationExcellent: 'Отлично',
@@ -613,10 +813,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.phoneNumber: 'Номер телефона',
     LocaleKeys.sendCode: 'Отправить код',
     LocaleKeys.phoneEntryTitle: 'Заходим на ринг.',
-    LocaleKeys.phoneEntrySubtitle: 'Укажи телефон, чтобы подтвердить аккаунт и найти спарринг-партнёров.',
-    LocaleKeys.termsAgree: 'Продолжая, вы соглашаетесь с Условиями и Политикой конфиденциальности.',
+    LocaleKeys.phoneEntrySubtitle:
+        'Укажи телефон, чтобы подтвердить аккаунт и найти спарринг-партнёров.',
+    LocaleKeys.termsAgree:
+        'Продолжая, вы соглашаетесь с Условиями и Политикой конфиденциальности.',
     LocaleKeys.verificationTitle: 'Введите код подтверждения',
-    LocaleKeys.verificationSubtitle: 'Мы отправили код на {phone}. Введите его ниже, чтобы продолжить.',
+    LocaleKeys.verificationSubtitle:
+        'Мы отправили код на {phone}. Введите его ниже, чтобы продолжить.',
     LocaleKeys.resendCode: 'Отправить ещё раз',
     LocaleKeys.verifyIdentity: 'Подтвердить личность',
     LocaleKeys.profileInfoTitle: 'Расскажи о себе',
@@ -633,21 +836,25 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.notifTitleInfo: 'Уведомление',
     LocaleKeys.notifTitleError: 'Ошибка',
     LocaleKeys.errorNoConnectionTitle: 'Нет соединения',
-    LocaleKeys.errorNoConnectionMessage: 'Проверьте подключение к интернету и попробуйте снова.',
+    LocaleKeys.errorNoConnectionMessage:
+        'Проверьте подключение к интернету и попробуйте снова.',
     LocaleKeys.errorTimeoutTitle: 'Сервер не отвечает',
     LocaleKeys.errorTimeoutMessage: 'Попробуйте повторить позже.',
     LocaleKeys.errorUnauthorizedTitle: 'Сессия истекла',
     LocaleKeys.errorUnauthorizedMessage: 'Пожалуйста, войдите снова.',
     LocaleKeys.errorForbiddenTitle: 'Нет доступа',
-    LocaleKeys.errorForbiddenMessage: 'Недостаточно прав для выполнения действия.',
+    LocaleKeys.errorForbiddenMessage:
+        'Недостаточно прав для выполнения действия.',
     LocaleKeys.errorNotFoundTitle: 'Не найдено',
     LocaleKeys.errorNotFoundMessage: 'Запрошенные данные не найдены.',
     LocaleKeys.errorServerTitle: 'Ошибка сервера',
-    LocaleKeys.errorServerMessage: 'Попробуйте позже или свяжитесь с поддержкой.',
+    LocaleKeys.errorServerMessage:
+        'Попробуйте позже или свяжитесь с поддержкой.',
     LocaleKeys.errorUnknownTitle: 'Ошибка',
     LocaleKeys.errorUnknownMessage: 'Что-то пошло не так. Попробуйте снова.',
     LocaleKeys.phoneNumberIncompleteTitle: 'Некорректный номер',
-    LocaleKeys.phoneNumberIncompleteMessage: 'Введите номер телефона полностью.',
+    LocaleKeys.phoneNumberIncompleteMessage:
+        'Введите номер телефона полностью.',
     LocaleKeys.verifyCodeIncompleteTitle: 'Код подтверждения',
     LocaleKeys.verifyCodeIncompleteMessage: 'Введите код полностью.',
     LocaleKeys.profileSavedMessage: 'Профиль сохранён',
@@ -684,7 +891,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchFiltersAgeValue: '{min}–{max} лет',
     LocaleKeys.matchFiltersApply: 'Применить фильтр',
     LocaleKeys.matchFinishTitle: 'Свайпы закончились',
-    LocaleKeys.matchFinishSubtitle: 'Попробуйте изменить фильтр или отменить дизлайки.',
+    LocaleKeys.matchFinishSubtitle:
+        'Попробуйте изменить фильтр или отменить дизлайки.',
     LocaleKeys.matchResetDislikes: 'Отменить дизлайки',
     LocaleKeys.matchTryChangeFilters: 'Попробуйте изменить фильтр',
     LocaleKeys.matchProfileDetailsTitle: 'Профиль',
@@ -693,6 +901,67 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchProfileRatingLabel: 'Рейтинг',
     LocaleKeys.matchProfileSportsLabel: 'Виды спорта',
     LocaleKeys.matchProfileLevelLabel: 'Уровень',
+    LocaleKeys.levelAmateur: 'Любитель',
+    LocaleKeys.levelSemiPro: 'Полупрофи',
+    LocaleKeys.levelProfessional: 'Профессионал',
+    LocaleKeys.onboardingSportSelectionTitle: 'Во что играешь?',
+    LocaleKeys.onboardingSportSelectionSubtitle:
+        'Выбери все подходящие. Позже можно добавить ещё.',
+    LocaleKeys.onboardingSportSelectionSearchHint:
+        'Поиск дисциплин (например, Бокс, Падел)',
+    LocaleKeys.onboardingSportSelectionInfo:
+        'Каждый выбранный вид спорта создаст отдельный профиль для спарринга.',
+    LocaleKeys.onboardingSportSelectionCreateProfiles:
+        'Создать профили: {count}',
+    LocaleKeys.onboardingLevelChoosePathTitle: 'Выбери свой путь',
+    LocaleKeys.onboardingLevelChoosePathSubtitle:
+        'Выбери уровень, чтобы получить подходящие матчи.',
+    LocaleKeys.onboardingLevelAmateurSubtitle: 'Старт с ~800-1000 ELO',
+    LocaleKeys.onboardingLevelAmateurDetail1:
+        'Простой онбординг и мгновенный доступ к матчам.',
+    LocaleKeys.onboardingLevelAmateurDetail2:
+        'Подходит новичкам и тем, кто играет для себя.',
+    LocaleKeys.onboardingLevelSemiProSubtitle: 'Старт с ~1100-1400 ELO',
+    LocaleKeys.onboardingLevelSemiProDetail1:
+        'Для регулярных тренировок и локальных турниров.',
+    LocaleKeys.onboardingLevelSemiProDetail2:
+        'Сбалансированный подбор с более сильными соперниками.',
+    LocaleKeys.onboardingLevelProfessionalSubtitle: 'Старт с ~1500 ELO',
+    LocaleKeys.onboardingLevelProfessionalDetail1:
+        'Требуется более высокий соревновательный уровень.',
+    LocaleKeys.onboardingLevelProfessionalDetail2:
+        'Для доступа может применяться ручная модерация.',
+    LocaleKeys.onboardingLevelWhyItMatters:
+        'Точный стартовый уровень делает матчмейкинг честнее с первого дня.',
+    LocaleKeys.onboardingDetailsProfileTitle: 'Профиль: {level}',
+    LocaleKeys.onboardingDetailsFillSubtitle:
+        'Заполни детали, чтобы повысить качество подбора.',
+    LocaleKeys.onboardingDetailsExperienceLabel: 'Опыт (лет)',
+    LocaleKeys.onboardingDetailsExperienceHint: 'например, 2',
+    LocaleKeys.onboardingDetailsYearsSuffix: 'лет',
+    LocaleKeys.onboardingDetailsExperienceDesc:
+        'Сколько лет ты занимаешься выбранными видами спорта.',
+    LocaleKeys.onboardingDetailsSkillsLabel: 'Навыки и теги',
+    LocaleKeys.onboardingDetailsAddSkillHint:
+        'Добавь навык (например, Кикбоксинг)',
+    LocaleKeys.onboardingDetailsSuggestionsLabel: 'Подсказки',
+    LocaleKeys.onboardingDetailsCompleteProfile: 'Завершить профиль',
+    LocaleKeys.onboardingDetailsSelectSportLevelWarning:
+        'Сначала выбери вид спорта и уровень.',
+    LocaleKeys.onboardingDetailsProfileCreatedSuccess: 'Профиль успешно создан',
+    LocaleKeys.onboardingDetailsLevelFallback: 'Спорт',
+    LocaleKeys.profileAvatarChooseGallery: 'Выбрать из галереи',
+    LocaleKeys.profileAvatarTakePhoto: 'Сделать фото',
+    LocaleKeys.sportPreferencesSearchHint: 'Поиск видов спорта',
+    LocaleKeys.sportPreferencesLevelLabel: 'Уровень',
+    LocaleKeys.sportPreferencesExperienceHint: 'Опыт в годах',
+    LocaleKeys.sportPreferencesAddSkillHint: 'Добавить тег навыка',
+    LocaleKeys.sportPreferencesSave: 'Сохранить',
+    LocaleKeys.sportPreferencesSaving: 'Сохранение...',
+    LocaleKeys.sportPreferencesSelectAtLeastOne:
+        'Выберите хотя бы один вид спорта.',
+    LocaleKeys.sportPreferencesUpdatedSuccess:
+        'Спортивные предпочтения обновлены',
   },
   'kk': {
     LocaleKeys.discovery: 'Іздеу',
@@ -760,7 +1029,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.submitResult: 'Нәтижені жіберу',
     LocaleKeys.dispute: 'Даудың бар ма?',
     LocaleKeys.toCourt: 'Сотқа',
-    LocaleKeys.disputeNote: 'Дауды бастау нәтижені тоқтатады және дәлелдер сұрайды.',
+    LocaleKeys.disputeNote:
+        'Дауды бастау нәтижені тоқтатады және дәлелдер сұрайды.',
     LocaleKeys.scoreConfirmNote: 'Есеп қарсылас тарапынан расталуы керек.',
     LocaleKeys.you: 'СІЗ',
     LocaleKeys.chats: 'Чаттар',
@@ -822,10 +1092,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.phoneNumber: 'Телефон нөмірі',
     LocaleKeys.sendCode: 'Код жіберу',
     LocaleKeys.phoneEntryTitle: 'Рингке кірейік.',
-    LocaleKeys.phoneEntrySubtitle: 'Аккаунтты растау және спарринг табу үшін нөмірді енгіз.',
-    LocaleKeys.termsAgree: 'Жалғастыру арқылы Шарттармен және Құпиялылық саясатымен келісесіз.',
+    LocaleKeys.phoneEntrySubtitle:
+        'Аккаунтты растау және спарринг табу үшін нөмірді енгіз.',
+    LocaleKeys.termsAgree:
+        'Жалғастыру арқылы Шарттармен және Құпиялылық саясатымен келісесіз.',
     LocaleKeys.verificationTitle: 'Растау кодын енгізіңіз',
-    LocaleKeys.verificationSubtitle: 'Код {phone} нөміріне жіберілді. Жалғастыру үшін енгізіңіз.',
+    LocaleKeys.verificationSubtitle:
+        'Код {phone} нөміріне жіберілді. Жалғастыру үшін енгізіңіз.',
     LocaleKeys.resendCode: 'Қайта жіберу',
     LocaleKeys.verifyIdentity: 'Тұлғаны растау',
     LocaleKeys.profileInfoTitle: 'Өзің туралы айт',
@@ -842,7 +1115,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.notifTitleInfo: 'Хабарлама',
     LocaleKeys.notifTitleError: 'Қате',
     LocaleKeys.errorNoConnectionTitle: 'Байланыс жоқ',
-    LocaleKeys.errorNoConnectionMessage: 'Интернетке қосылуды тексеріп, қайта көріңіз.',
+    LocaleKeys.errorNoConnectionMessage:
+        'Интернетке қосылуды тексеріп, қайта көріңіз.',
     LocaleKeys.errorTimeoutTitle: 'Сервер жауап бермейді',
     LocaleKeys.errorTimeoutMessage: 'Кейінірек қайталап көріңіз.',
     LocaleKeys.errorUnauthorizedTitle: 'Сеанс аяқталды',
@@ -893,7 +1167,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchFiltersAgeValue: '{min}–{max} жас',
     LocaleKeys.matchFiltersApply: 'Сүзгіні қолдану',
     LocaleKeys.matchFinishTitle: 'Свайптар аяқталды',
-    LocaleKeys.matchFinishSubtitle: 'Сүзгіні өзгертіп көріңіз немесе дизлайктарды қайтарыңыз.',
+    LocaleKeys.matchFinishSubtitle:
+        'Сүзгіні өзгертіп көріңіз немесе дизлайктарды қайтарыңыз.',
     LocaleKeys.matchResetDislikes: 'Дизлайктарды қайтару',
     LocaleKeys.matchTryChangeFilters: 'Сүзгіні өзгертіп көріңіз',
     LocaleKeys.matchProfileDetailsTitle: 'Профиль',
@@ -902,5 +1177,63 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matchProfileRatingLabel: 'Рейтинг',
     LocaleKeys.matchProfileSportsLabel: 'Спорт түрлері',
     LocaleKeys.matchProfileLevelLabel: 'Деңгейі',
+    LocaleKeys.levelAmateur: 'Әуесқой',
+    LocaleKeys.levelSemiPro: 'Жартылай кәсіпқой',
+    LocaleKeys.levelProfessional: 'Кәсіпқой',
+    LocaleKeys.onboardingSportSelectionTitle: 'Қай спортпен айналысасың?',
+    LocaleKeys.onboardingSportSelectionSubtitle:
+        'Сәйкес келетінінің бәрін таңда. Кейін тағы қоса аласың.',
+    LocaleKeys.onboardingSportSelectionSearchHint:
+        'Пәндерді іздеу (мысалы, Бокс, Падел)',
+    LocaleKeys.onboardingSportSelectionInfo:
+        'Таңдалған әр спорт түрі үшін бөлек спарринг профилі жасалады.',
+    LocaleKeys.onboardingSportSelectionCreateProfiles: '{count} профиль жасау',
+    LocaleKeys.onboardingLevelChoosePathTitle: 'Жолыңды таңда',
+    LocaleKeys.onboardingLevelChoosePathSubtitle:
+        'Дұрыс матчтар үшін деңгейіңді таңда.',
+    LocaleKeys.onboardingLevelAmateurSubtitle: 'Бастапқысы ~800-1000 ELO',
+    LocaleKeys.onboardingLevelAmateurDetail1:
+        'Оңай онбординг және матчтарға жылдам қолжеткізу.',
+    LocaleKeys.onboardingLevelAmateurDetail2:
+        'Жаңадан бастағандар мен әуесқойларға ыңғайлы.',
+    LocaleKeys.onboardingLevelSemiProSubtitle: 'Бастапқысы ~1100-1400 ELO',
+    LocaleKeys.onboardingLevelSemiProDetail1:
+        'Тұрақты жаттығу және жергілікті турнир тәжірибесі үшін.',
+    LocaleKeys.onboardingLevelSemiProDetail2:
+        'Күштірек қарсыластармен теңгерімді матчмейкинг.',
+    LocaleKeys.onboardingLevelProfessionalSubtitle: 'Бастапқысы ~1500 ELO',
+    LocaleKeys.onboardingLevelProfessionalDetail1:
+        'Жоғары жарыс тәжірибесі қажет.',
+    LocaleKeys.onboardingLevelProfessionalDetail2:
+        'Қолжеткізу үшін қолмен модерация қолданылуы мүмкін.',
+    LocaleKeys.onboardingLevelWhyItMatters:
+        'Деңгейді дұрыс бастау алғашқы күннен әділ матчмейкинг береді.',
+    LocaleKeys.onboardingDetailsProfileTitle: '{level} профилі',
+    LocaleKeys.onboardingDetailsFillSubtitle:
+        'Матч сапасын арттыру үшін мәліметтерді толтыр.',
+    LocaleKeys.onboardingDetailsExperienceLabel: 'Тәжірибе (жыл)',
+    LocaleKeys.onboardingDetailsExperienceHint: 'мысалы, 2',
+    LocaleKeys.onboardingDetailsYearsSuffix: 'Жыл',
+    LocaleKeys.onboardingDetailsExperienceDesc:
+        'Таңдалған спорт түрлерімен айналысқан жалпы уақытың.',
+    LocaleKeys.onboardingDetailsSkillsLabel: 'Дағдылар мен тегтер',
+    LocaleKeys.onboardingDetailsAddSkillHint: 'Дағды қосу (мысалы, Кикбоксинг)',
+    LocaleKeys.onboardingDetailsSuggestionsLabel: 'Ұсыныстар',
+    LocaleKeys.onboardingDetailsCompleteProfile: 'Профильді аяқтау',
+    LocaleKeys.onboardingDetailsSelectSportLevelWarning:
+        'Алдымен спорт пен деңгейді таңда.',
+    LocaleKeys.onboardingDetailsProfileCreatedSuccess: 'Профиль сәтті жасалды',
+    LocaleKeys.onboardingDetailsLevelFallback: 'Спорт',
+    LocaleKeys.profileAvatarChooseGallery: 'Галереядан таңдау',
+    LocaleKeys.profileAvatarTakePhoto: 'Фото түсіру',
+    LocaleKeys.sportPreferencesSearchHint: 'Спорт түрлерін іздеу',
+    LocaleKeys.sportPreferencesLevelLabel: 'Деңгей',
+    LocaleKeys.sportPreferencesExperienceHint: 'Тәжірибе (жыл)',
+    LocaleKeys.sportPreferencesAddSkillHint: 'Дағды тегін қосу',
+    LocaleKeys.sportPreferencesSave: 'Сақтау',
+    LocaleKeys.sportPreferencesSaving: 'Сақталуда...',
+    LocaleKeys.sportPreferencesSelectAtLeastOne:
+        'Кемінде бір спорт түрін таңдаңыз.',
+    LocaleKeys.sportPreferencesUpdatedSuccess: 'Спорт баптаулары жаңартылды',
   },
 };

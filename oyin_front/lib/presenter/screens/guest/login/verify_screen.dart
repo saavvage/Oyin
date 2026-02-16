@@ -52,17 +52,23 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 value: 0.66,
                 minHeight: 6,
                 backgroundColor: context.palette.badge,
-                valueColor: AlwaysStoppedAnimation<Color>(context.palette.primary),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  context.palette.primary,
+                ),
               ),
               32.vSpacing,
               Text(
                 l10n.verificationTitle,
-                style: Theme.of(context).textTheme.titleLarge?.weighted(FontWeight.w800),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.weighted(FontWeight.w800),
               ),
               12.vSpacing,
               Text(
                 l10n.verificationSubtitle(widget.phone),
-                style: Theme.of(context).textTheme.bodyLarge?.colored(context.palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.colored(context.palette.muted),
               ),
               28.vSpacing,
               _otpRow(context),
@@ -71,18 +77,24 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                 children: [
                   Text(
                     l10n.resendCode,
-                    style: Theme.of(context).textTheme.titleSmall?.colored(context.palette.primary),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall?.colored(context.palette.primary),
                   ),
                   8.hSpacing,
                   Text(
                     '(0:24)',
-                    style: Theme.of(context).textTheme.bodySmall?.colored(context.palette.muted),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.colored(context.palette.muted),
                   ),
                 ],
               ),
               const Spacer(),
               _PrimaryActionButton(
-                label: _isLoading ? '${l10n.verifyIdentity}...' : l10n.verifyIdentity,
+                label: _isLoading
+                    ? '${l10n.verifyIdentity}...'
+                    : l10n.verifyIdentity,
                 onPressed: _isLoading
                     ? null
                     : () async {
@@ -102,14 +114,23 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             phone: widget.phone,
                             code: code,
                           );
-                          await SessionStorage.setAccessToken(response.accessToken);
+                          await SessionStorage.setAccessToken(
+                            response.accessToken,
+                          );
+                          await PushNotificationsService.syncTokenWithBackend();
 
                           final user = response.user;
                           if (user.isNotEmpty) {
                             final name = (user['name'] ?? '').toString().trim();
-                            final parts = name.isNotEmpty ? name.split(' ') : <String>[];
-                            final firstName = parts.isNotEmpty ? parts.first : '';
-                            final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+                            final parts = name.isNotEmpty
+                                ? name.split(' ')
+                                : <String>[];
+                            final firstName = parts.isNotEmpty
+                                ? parts.first
+                                : '';
+                            final lastName = parts.length > 1
+                                ? parts.sublist(1).join(' ')
+                                : '';
 
                             DateTime? birthDate;
                             final rawBirth = user['birthDate'];
@@ -123,7 +144,8 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                                 lastName: lastName,
                                 email: (user['email'] ?? '').toString(),
                                 city: (user['city'] ?? '').toString(),
-                                phone: (user['phone'] ?? widget.phone).toString(),
+                                phone: (user['phone'] ?? widget.phone)
+                                    .toString(),
                                 birthDate: birthDate,
                               ),
                             );
@@ -133,12 +155,15 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           if (response.isNewUser) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (_) => ProfileInfoScreen(phone: widget.phone),
+                                builder: (_) =>
+                                    ProfileInfoScreen(phone: widget.phone),
                               ),
                             );
                           } else {
                             Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (_) => const NavShell()),
+                              MaterialPageRoute(
+                                builder: (_) => const NavShell(),
+                              ),
                             );
                           }
                         } catch (error) {
@@ -210,12 +235,16 @@ class _PrimaryActionButton extends StatelessWidget {
           backgroundColor: context.palette.primary,
           foregroundColor: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           elevation: 6,
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleMedium?.weighted(FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.weighted(FontWeight.w700),
         ),
       ),
     );

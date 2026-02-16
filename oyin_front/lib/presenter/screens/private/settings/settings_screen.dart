@@ -41,7 +41,9 @@ class _SettingsView extends StatelessWidget {
                 children: [
                   SettingsHeader(l10n: l10n),
                   12.vSpacing,
-                  SettingsSearchBar(placeholder: l10n.searchSettingsPlaceholder),
+                  SettingsSearchBar(
+                    placeholder: l10n.searchSettingsPlaceholder,
+                  ),
                   14.vSpacing,
                   SettingsUserTile(
                     name: state.userName,
@@ -63,14 +65,34 @@ class _SettingsView extends StatelessWidget {
                     publicVisibility: state.publicVisibility,
                     matchRequests: state.matchRequests,
                     disputeUpdates: state.disputeUpdates,
-                    onTogglePublicVisibility: context.read<SettingsCubit>().togglePublicVisibility,
-                    onToggleMatchRequests: context.read<SettingsCubit>().toggleMatchRequests,
-                    onToggleDisputeUpdates: context.read<SettingsCubit>().toggleDisputeUpdates,
+                    onTogglePublicVisibility: context
+                        .read<SettingsCubit>()
+                        .togglePublicVisibility,
+                    onToggleMatchRequests: context
+                        .read<SettingsCubit>()
+                        .toggleMatchRequests,
+                    onToggleDisputeUpdates: context
+                        .read<SettingsCubit>()
+                        .toggleDisputeUpdates,
                     onLocaleSelected: (code) {
                       context.read<SettingsCubit>().setLocale(code);
                       OyinApp.of(context).setLocale(Locale(code));
                     },
                     selectedLocale: state.selectedLocale,
+                  ),
+                  16.vSpacing,
+                  NotificationReminderCard(
+                    l10n: l10n,
+                    enabled: state.timedRemindersEnabled,
+                    intervalMinutes: state.timedRemindersIntervalMinutes,
+                    onToggle: (value) {
+                      context.read<SettingsCubit>().toggleTimedReminders(value);
+                    },
+                    onSelectInterval: (minutes) {
+                      context
+                          .read<SettingsCubit>()
+                          .setTimedReminderIntervalMinutes(minutes);
+                    },
                   ),
                   16.vSpacing,
                   SettingsLogoutFooter(l10n: l10n),
@@ -109,7 +131,9 @@ class _MatchFiltersCard extends StatelessWidget {
         children: [
           Text(
             l10n.matchFiltersTitle,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
           ),
           12.vSpacing,
           MatchFiltersForm(

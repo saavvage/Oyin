@@ -90,6 +90,8 @@ class ChatAttachmentDto {
 class ChatMessageDto {
   const ChatMessageDto({
     required this.id,
+    required this.threadId,
+    required this.senderId,
     required this.text,
     required this.isMine,
     required this.createdAt,
@@ -97,6 +99,8 @@ class ChatMessageDto {
   });
 
   final String id;
+  final String threadId;
+  final String senderId;
   final String text;
   final bool isMine;
   final DateTime createdAt;
@@ -108,16 +112,22 @@ class ChatMessageDto {
     if (rawAttachments is List) {
       for (final item in rawAttachments) {
         if (item is Map) {
-          attachments.add(ChatAttachmentDto.fromMap(item.cast<String, dynamic>()));
+          attachments.add(
+            ChatAttachmentDto.fromMap(item.cast<String, dynamic>()),
+          );
         }
       }
     }
 
     return ChatMessageDto(
       id: (map['id'] ?? '').toString(),
+      threadId: (map['threadId'] ?? '').toString(),
+      senderId: (map['senderId'] ?? '').toString(),
       text: (map['text'] ?? '').toString(),
       isMine: map['isMine'] == true,
-      createdAt: DateTime.tryParse((map['createdAt'] ?? '').toString()) ?? DateTime.now(),
+      createdAt:
+          DateTime.tryParse((map['createdAt'] ?? '').toString()) ??
+          DateTime.now(),
       attachments: attachments,
     );
   }
@@ -135,15 +145,22 @@ class ChatAttachmentInput {
   final String path;
 
   Map<String, dynamic> toMap() {
-    return {
-      'type': type,
-      'name': name,
-      'path': path,
-    };
+    return {'type': type, 'name': name, 'path': path};
   }
 }
 
 class ChatApi {
+  static Future<ChatThreadDto> createOrGetDirectThread(
+    String partnerUserId,
+  ) async {
+    final data = await ApiClient.instance.post(
+      ApiEndpoints.chatsCreateThread,
+      data: {'partnerUserId': partnerUserId},
+    );
+
+    return ChatThreadDto.fromMap((data as Map).cast<String, dynamic>());
+  }
+
   static Future<ChatThreadsResponse> getThreads() async {
     final data = await ApiClient.instance.get(ApiEndpoints.chatsThreads);
     return ChatThreadsResponse.fromMap((data as Map).cast<String, dynamic>());
@@ -155,9 +172,7 @@ class ChatApi {
   }) async {
     final data = await ApiClient.instance.get(
       ApiEndpoints.chatsMessages(threadId),
-      query: {
-        if (before != null) 'before': before.toIso8601String(),
-      },
+      query: {if (before != null) 'before': before.toIso8601String()},
     );
 
     if (data is! List) return const [];
@@ -195,9 +210,7 @@ class ChatApi {
   static Future<void> reportThread(String threadId, {String? reason}) async {
     await ApiClient.instance.post(
       ApiEndpoints.chatsReport(threadId),
-      data: {
-        if (reason != null && reason.isNotEmpty) 'reason': reason,
-      },
+      data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
     );
   }
 }

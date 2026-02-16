@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "134694938965",
+    "project_id": "oyin-e775b",
+    "storage_bucket": "oyin-e775b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134694938965:android:9ad258858434abdea2a7dc",
+        "android_client_info": {
+          "package_name": "com.example.oyin_front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU1iwZzPZzYqOH04sxdPRB5zFXoLWsB54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

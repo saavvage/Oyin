@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
 import '../messanger/messanger_screen.dart';
+import '../search/dispute_screen.dart';
 import 'cubit/_export.dart';
 import 'widgets/_export.dart';
 
@@ -23,6 +24,15 @@ class _ChatView extends StatelessWidget {
   const _ChatView();
 
   void _openChat(BuildContext context, ChatCard card) {
+    if (card.buttonKey == 'resolve') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const DisputeScreen(preferJuryDuty: true),
+        ),
+      );
+      return;
+    }
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => MessangerScreen(
@@ -65,10 +75,10 @@ class _ChatView extends StatelessWidget {
                   Text(
                     l10n.actionRequired.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1,
-                          color: palette.muted,
-                        ),
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                      color: palette.muted,
+                    ),
                   ),
                   10.vSpacing,
                   ...state.actionRequired.map(
@@ -81,10 +91,10 @@ class _ChatView extends StatelessWidget {
                   Text(
                     l10n.upcoming.toUpperCase(),
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1,
-                          color: palette.muted,
-                        ),
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1,
+                      color: palette.muted,
+                    ),
                   ),
                   10.vSpacing,
                   ...state.upcoming.map(

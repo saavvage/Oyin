@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../../app/localization/app_localizations.dart';
 import 'package:oyin_front/domain/export.dart';
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 import 'components.dart';
 
 class MatchProfileCard extends StatelessWidget {
@@ -24,25 +23,31 @@ class MatchProfileCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          AspectRatio(
-            aspectRatio: 2 / 3.2,
-            child: Ink.image(
-              // Placeholder remote image; replace with CDN/asset when backend ready.
-              image: NetworkImage(profile.imageUrl),
+          if (profile.imageUrl.isNotEmpty)
+            Image.network(
+              profile.imageUrl,
               fit: BoxFit.cover,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black54,
-                      Colors.black87,
-                    ],
-                  ),
-                ),
+              filterQuality: FilterQuality.high,
+              errorBuilder: (context, error, stackTrace) => Container(
+                color: palette.card,
+                alignment: Alignment.center,
+                child: Icon(Icons.broken_image_outlined, color: palette.muted),
+              ),
+            )
+          else
+            Container(
+              color: palette.card,
+              alignment: Alignment.center,
+              child: Icon(Icons.image_not_supported, color: palette.muted),
+            ),
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.transparent, Colors.black54, Colors.black87],
               ),
             ),
           ),
@@ -80,9 +85,9 @@ class MatchProfileCard extends StatelessWidget {
                     Text(
                       l10n.nameAndAge(profile.name, profile.age),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                          ),
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
                     ),
                     if (profile.verified) ...[
                       8.hSpacing,
@@ -98,9 +103,9 @@ class MatchProfileCard extends StatelessWidget {
                 Text(
                   l10n.sportAndLevel(profile.sport, profile.level),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: palette.muted,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: palette.muted,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 12.vSpacing,
                 Wrap(
@@ -109,7 +114,10 @@ class MatchProfileCard extends StatelessWidget {
                   children: profile.tags
                       .map(
                         (tag) => Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
                           decoration: BoxDecoration(
                             color: palette.surface.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(12),

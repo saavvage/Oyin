@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../app/app.dart';
 import '../login/phone_screen.dart';
@@ -27,7 +28,24 @@ class AuthEntryScreen extends StatelessWidget {
                   const Spacer(),
                   _LanguageMenuButton(),
                   12.hSpacing,
-                  Icon(Icons.help_outline, color: context.palette.muted),
+                  IconButton(
+                    onPressed: () {
+                      showFrostedInfoModal(
+                        context,
+                        title: 'Как начать',
+                        subtitle: 'Коротко про вход и старт в Oyin.',
+                        tips: const [
+                          'Войдите по номеру телефона и коду подтверждения.',
+                          'Заполните профиль, чтобы получать релевантные матчи.',
+                          'После входа доступны поиск, челленджи и суд по спорам.',
+                        ],
+                      );
+                    },
+                    icon: Icon(
+                      Icons.help_outline,
+                      color: context.palette.muted,
+                    ),
+                  ),
                 ],
               ),
               24.vSpacing,
@@ -35,12 +53,16 @@ class AuthEntryScreen extends StatelessWidget {
               24.vSpacing,
               Text(
                 l10n.onboardingTitle,
-                style: Theme.of(context).textTheme.titleLarge?.colored(Colors.white),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.colored(Colors.white),
               ),
               12.vSpacing,
               Text(
                 l10n.onboardingSubtitle,
-                style: Theme.of(context).textTheme.bodyLarge?.colored(context.palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.colored(context.palette.muted),
               ),
               const Spacer(),
               _PrimaryButton(
@@ -63,7 +85,9 @@ class AuthEntryScreen extends StatelessWidget {
               16.vSpacing,
               Text(
                 l10n.termsAgree,
-                style: Theme.of(context).textTheme.bodySmall?.colored(context.palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.colored(context.palette.muted),
               ),
             ],
           ),
@@ -85,9 +109,7 @@ class AuthEntryScreen extends StatelessWidget {
           8.hSpacing,
           Text(
             'Oyin',
-            style: Theme.of(context)
-                .textTheme
-                .titleSmall
+            style: Theme.of(context).textTheme.titleSmall
                 ?.colored(Colors.white)
                 .weighted(FontWeight.w800),
           ),
@@ -138,9 +160,7 @@ class AuthEntryScreen extends StatelessWidget {
                     8.hSpacing,
                     Text(
                       l10n.findPartners,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
+                      style: Theme.of(context).textTheme.titleMedium
                           ?.colored(Colors.white)
                           .weighted(FontWeight.w800),
                     ),
@@ -149,7 +169,9 @@ class AuthEntryScreen extends StatelessWidget {
                 10.vSpacing,
                 Text(
                   l10n.onboardingSubtitle,
-                  style: Theme.of(context).textTheme.bodyMedium?.colored(Colors.white70),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.colored(Colors.white70),
                 ),
                 const Spacer(),
                 Wrap(
@@ -200,12 +222,16 @@ class _PrimaryButton extends StatelessWidget {
           backgroundColor: context.palette.primary,
           foregroundColor: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           elevation: 6,
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleSmall?.weighted(FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleSmall?.weighted(FontWeight.w700),
         ),
       ),
     );
@@ -228,12 +254,11 @@ class _SecondaryButton extends StatelessWidget {
           foregroundColor: Colors.white,
           side: BorderSide(color: context.palette.primary.withOpacity(0.5)),
           padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
         ),
-        child: Text(
-          label,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        child: Text(label, style: Theme.of(context).textTheme.titleSmall),
       ),
     );
   }
@@ -243,7 +268,9 @@ class _LanguageMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final localeCode = Localizations.localeOf(context).languageCode.toUpperCase();
+    final localeCode = Localizations.localeOf(
+      context,
+    ).languageCode.toUpperCase();
     return Container(
       decoration: BoxDecoration(
         color: palette.card,
@@ -269,9 +296,9 @@ class _LanguageMenuButton extends StatelessWidget {
               Text(
                 localeCode,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ],
           ),
@@ -280,8 +307,14 @@ class _LanguageMenuButton extends StatelessWidget {
     );
   }
 
-  PopupMenuItem<Locale> _item(Locale locale, String flag, String name, BuildContext context) {
-    final isSelected = Localizations.localeOf(context).languageCode == locale.languageCode;
+  PopupMenuItem<Locale> _item(
+    Locale locale,
+    String flag,
+    String name,
+    BuildContext context,
+  ) {
+    final isSelected =
+        Localizations.localeOf(context).languageCode == locale.languageCode;
     final palette = context.palette;
     return PopupMenuItem(
       value: locale,
@@ -292,9 +325,9 @@ class _LanguageMenuButton extends StatelessWidget {
           Text(
             name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                ),
+              color: Colors.white,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            ),
           ),
           const Spacer(),
           if (isSelected) Icon(Icons.check, color: palette.primary),

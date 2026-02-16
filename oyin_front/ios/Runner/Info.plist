@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -24,6 +26,22 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Разрешите доступ к камере, чтобы снимать фото и видео-доказательства для матчей и споров.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Разрешите доступ к геолокации, чтобы находить ближайшие корты и показывать точную локацию матчей.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Разрешите доступ к микрофону, чтобы записывать голосовые сообщения и комментарии.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Разрешите сохранение медиа, чтобы сохранять файлы и материалы матчей на устройстве.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Разрешите доступ к фото и файлам, чтобы прикреплять доказательства и медиа в чаты и споры.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,9 +59,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

@@ -5,9 +5,10 @@ import '../../../../extensions/_export.dart';
 import '../../../../extensions/theme.dart';
 
 class MatchResultHeader extends StatelessWidget {
-  const MatchResultHeader({super.key, required this.l10n});
+  const MatchResultHeader({super.key, required this.l10n, this.onInfo});
 
   final AppLocalizations l10n;
+  final VoidCallback? onInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +26,21 @@ class MatchResultHeader extends StatelessWidget {
               Text(
                 'OYIN',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      letterSpacing: 1,
-                      color: palette.primary,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  letterSpacing: 1,
+                  color: palette.primary,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
               Text(
                 l10n.matchResult,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(color: palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelLarge?.copyWith(color: palette.muted),
               ),
             ],
           ),
         ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.info_outline),
-        ),
+        IconButton(onPressed: onInfo, icon: const Icon(Icons.info_outline)),
       ],
     );
   }

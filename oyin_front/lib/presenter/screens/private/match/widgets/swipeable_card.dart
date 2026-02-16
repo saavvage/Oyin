@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../domain/export.dart';
-import '../../../../extensions/_export.dart';
 import 'profile_card.dart';
 
 class SwipeController {
@@ -48,7 +47,8 @@ class SwipeableMatchCard extends StatefulWidget {
   State<SwipeableMatchCard> createState() => _SwipeableMatchCardState();
 }
 
-class _SwipeableMatchCardState extends State<SwipeableMatchCard> with SingleTickerProviderStateMixin {
+class _SwipeableMatchCardState extends State<SwipeableMatchCard>
+    with SingleTickerProviderStateMixin {
   static const double _swipeThreshold = 140;
 
   Offset _dragOffset = Offset.zero;
@@ -138,9 +138,10 @@ class _SwipeableMatchCardState extends State<SwipeableMatchCard> with SingleTick
 
   void _animateTo(Offset target, {VoidCallback? onCompleted}) {
     _isAnimating = true;
-    _animation = Tween<Offset>(begin: _dragOffset, end: target).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _animation = Tween<Offset>(
+      begin: _dragOffset,
+      end: target,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     _controller.forward(from: 0).whenComplete(() {
       _isAnimating = false;
       _animation = null;
@@ -156,8 +157,13 @@ class _SwipeableMatchCardState extends State<SwipeableMatchCard> with SingleTick
       builder: (context, constraints) {
         _cardSize = Size(constraints.maxWidth, constraints.maxHeight);
         final dx = _dragOffset.dx;
-        final rotation = _cardSize.width == 0 ? 0.0 : (dx / _cardSize.width) * 0.08;
-        final progress = (_dragOffset.dx.abs() / _swipeThreshold).clamp(0.0, 1.0);
+        final rotation = _cardSize.width == 0
+            ? 0.0
+            : (dx / _cardSize.width) * 0.08;
+        final progress = (_dragOffset.dx.abs() / _swipeThreshold).clamp(
+          0.0,
+          1.0,
+        );
         final isLike = dx > 0;
         final overlayColor = isLike ? Colors.greenAccent : Colors.redAccent;
         final overlayIcon = isLike ? Icons.check_circle : Icons.cancel;
@@ -167,23 +173,27 @@ class _SwipeableMatchCardState extends State<SwipeableMatchCard> with SingleTick
           onPanEnd: _onPanEnd,
           child: Transform.translate(
             offset: _dragOffset,
-            child: Transform.rotate(
-              angle: rotation,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  MatchProfileCard(
-                    profile: widget.profile,
-                    l10n: widget.l10n,
-                    onInfoTap: widget.onOpenDetails,
-                  ),
-                  if (progress > 0)
-                    Icon(
-                      overlayIcon,
-                      size: 84,
-                      color: overlayColor.withOpacity(progress),
+            child: SizedBox(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              child: Transform.rotate(
+                angle: rotation,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    MatchProfileCard(
+                      profile: widget.profile,
+                      l10n: widget.l10n,
+                      onInfoTap: widget.onOpenDetails,
                     ),
-                ],
+                    if (progress > 0)
+                      Icon(
+                        overlayIcon,
+                        size: 84,
+                        color: overlayColor.withOpacity(progress),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

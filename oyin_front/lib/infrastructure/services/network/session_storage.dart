@@ -29,16 +29,42 @@ class SessionStorage {
 
   static Future<MatchFilters> getMatchFilters() async {
     await init();
-    final distanceMin = _prefs!.getDouble(_Keys.matchDistanceMin) ?? MatchFilters.defaults.distanceKmMin;
-    final distanceMax = _prefs!.getDouble(_Keys.matchDistanceMax) ?? MatchFilters.defaults.distanceKmMax;
-    final ageMin = _prefs!.getInt(_Keys.matchAgeMin) ?? MatchFilters.defaults.ageMin;
-    final ageMax = _prefs!.getInt(_Keys.matchAgeMax) ?? MatchFilters.defaults.ageMax;
+    final distanceMin =
+        _prefs!.getDouble(_Keys.matchDistanceMin) ??
+        MatchFilters.defaults.distanceKmMin;
+    final distanceMax =
+        _prefs!.getDouble(_Keys.matchDistanceMax) ??
+        MatchFilters.defaults.distanceKmMax;
+    final ageMin =
+        _prefs!.getInt(_Keys.matchAgeMin) ?? MatchFilters.defaults.ageMin;
+    final ageMax =
+        _prefs!.getInt(_Keys.matchAgeMax) ?? MatchFilters.defaults.ageMax;
     return MatchFilters(
       distanceKmMin: distanceMin,
       distanceKmMax: distanceMax,
       ageMin: ageMin,
       ageMax: ageMax,
     );
+  }
+
+  static Future<void> setTimedReminderEnabled(bool enabled) async {
+    await init();
+    await _prefs!.setBool(_Keys.timedReminderEnabled, enabled);
+  }
+
+  static Future<bool> getTimedReminderEnabled() async {
+    await init();
+    return _prefs!.getBool(_Keys.timedReminderEnabled) ?? false;
+  }
+
+  static Future<void> setTimedReminderIntervalMinutes(int minutes) async {
+    await init();
+    await _prefs!.setInt(_Keys.timedReminderIntervalMinutes, minutes);
+  }
+
+  static Future<int> getTimedReminderIntervalMinutes() async {
+    await init();
+    return _prefs!.getInt(_Keys.timedReminderIntervalMinutes) ?? 60;
   }
 }
 
@@ -48,4 +74,7 @@ class _Keys {
   static const String matchDistanceMax = 'match_distance_max';
   static const String matchAgeMin = 'match_age_min';
   static const String matchAgeMax = 'match_age_max';
+  static const String timedReminderEnabled = 'timed_reminder_enabled';
+  static const String timedReminderIntervalMinutes =
+      'timed_reminder_interval_minutes';
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../infrastructure/export.dart';
 import '../presenter/extensions/theme.dart';
+import '../presenter/screens/guest/auth_entry/auth_entry_screen.dart';
 import '../presenter/screens/private/navbar/nav_shell.dart';
 import 'localization/app_localizations.dart';
 
@@ -16,6 +18,26 @@ class OyinApp extends StatefulWidget {
 
 class _OyinAppState extends State<OyinApp> {
   Locale _locale = AppLocalizations.supportedLocales.first;
+  bool _isSessionReady = false;
+  bool _isAuthorized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveSession();
+  }
+
+  Future<void> _resolveSession() async {
+    final token = await SessionStorage.getAccessToken();
+    if (token != null && token.isNotEmpty) {
+      await PushNotificationsService.syncTokenWithBackend();
+    }
+    if (!mounted) return;
+    setState(() {
+      _isAuthorized = token != null && token.isNotEmpty;
+      _isSessionReady = true;
+    });
+  }
 
   void setLocale(Locale locale) {
     if (AppLocalizations.supportedLocales.contains(locale)) {
@@ -32,7 +54,9 @@ class _OyinAppState extends State<OyinApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: AppTheme.dark,
-      home: const NavShell(),
+      home: !_isSessionReady
+          ? const Scaffold(body: Center(child: CircularProgressIndicator()))
+          : (_isAuthorized ? const NavShell() : const AuthEntryScreen()),
     );
   }
 }

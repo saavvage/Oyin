@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../infrastructure/services/network/chat_api.dart';
+import '../../../../../infrastructure/export.dart';
 import 'messanger_state.dart';
 
 class MessangerCubit extends Cubit<MessangerState> {
@@ -9,19 +11,23 @@ class MessangerCubit extends Cubit<MessangerState> {
     required String partnerName,
     required String partnerAvatarUrl,
   }) : super(
-          MessangerState(
-            partnerName: partnerName,
-            partnerAvatarUrl: partnerAvatarUrl,
-            messages: const [],
-            hasMore: true,
-            isLoadingMore: false,
-            isBlocked: false,
-          ),
-        );
+         MessangerState(
+           partnerName: partnerName,
+           partnerAvatarUrl: partnerAvatarUrl,
+           messages: const [],
+           hasMore: true,
+           isLoadingMore: false,
+           isBlocked: false,
+         ),
+       );
 
   final String chatId;
+  StreamSubscription<ChatMessageDto>? _realtimeSubscription;
+  bool _isRealtimeThreadJoined = false;
 
   Future<void> loadInitial() async {
+    await _ensureRealtimeConnected();
+
     try {
       final messages = await ChatApi.getMessages(chatId);
       emit(
@@ -31,12 +37,7 @@ class MessangerCubit extends Cubit<MessangerState> {
         ),
       );
     } catch (_) {
-      emit(
-        state.copyWith(
-          messages: _seedMessages(),
-          hasMore: false,
-        ),
-      );
+      emit(state.copyWith(messages: _seedMessages(), hasMore: false));
     }
   }
 
@@ -45,7 +46,9 @@ class MessangerCubit extends Cubit<MessangerState> {
     emit(state.copyWith(isLoadingMore: true));
 
     try {
-      final before = state.messages.isNotEmpty ? state.messages.last.createdAt : null;
+      final before = state.messages.isNotEmpty
+          ? state.messages.last.createdAt
+          : null;
       final older = await ChatApi.getMessages(chatId, before: before);
       final mapped = _mapMessages(older);
       emit(
@@ -66,7 +69,9 @@ class MessangerCubit extends Cubit<MessangerState> {
 
     try {
       final response = await ChatApi.sendMessage(chatId, text: trimmed);
-      emit(state.copyWith(messages: [_mapMessage(response), ...state.messages]));
+      emit(
+        state.copyWith(messages: [_mapMessage(response), ...state.messages]),
+      );
     } catch (_) {
       final local = ChatMessage(
         id: 'local_${DateTime.now().millisecondsSinceEpoch}',
@@ -90,7 +95,9 @@ class MessangerCubit extends Cubit<MessangerState> {
           ),
         ],
       );
-      emit(state.copyWith(messages: [_mapMessage(response), ...state.messages]));
+      emit(
+        state.copyWith(messages: [_mapMessage(response), ...state.messages]),
+      );
     } catch (_) {
       final local = ChatMessage(
         id: 'file_${DateTime.now().millisecondsSinceEpoch}',
@@ -130,6 +137,18 @@ class MessangerCubit extends Cubit<MessangerState> {
     } catch (_) {
       return false;
     }
+  }
+
+  @override
+  Future<void> close() async {
+    if (_isRealtimeThreadJoined) {
+      ChatSocketService.instance.leaveThread(chatId);
+      _isRealtimeThreadJoined = false;
+    }
+    await _realtimeSubscription?.cancel();
+    _realtimeSubscription = null;
+
+    return super.close();
   }
 
   List<ChatMessage> _mapMessages(List<ChatMessageDto> messages) {
@@ -175,6 +194,35 @@ class MessangerCubit extends Cubit<MessangerState> {
       case AttachmentType.file:
         return 'file';
     }
+  }
+
+  Future<void> _ensureRealtimeConnected() async {
+    try {
+      await ChatSocketService.instance.connect();
+
+      _realtimeSubscription ??= ChatSocketService.instance.messages.listen(
+        _onRealtimeMessage,
+      );
+
+      if (!_isRealtimeThreadJoined) {
+        ChatSocketService.instance.joinThread(chatId);
+        _isRealtimeThreadJoined = true;
+      }
+    } catch (_) {
+      // Realtime is optional. REST fallback should continue working.
+    }
+  }
+
+  void _onRealtimeMessage(ChatMessageDto dto) {
+    if (dto.threadId.isNotEmpty && dto.threadId != chatId) {
+      return;
+    }
+
+    if (state.messages.any((message) => message.id == dto.id)) {
+      return;
+    }
+
+    emit(state.copyWith(messages: [_mapMessage(dto), ...state.messages]));
   }
 
   List<ChatMessage> _seedMessages() {

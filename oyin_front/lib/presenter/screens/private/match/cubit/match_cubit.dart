@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:oyin_front/domain/export.dart';
@@ -6,29 +8,33 @@ import 'match_state.dart';
 
 class MatchCubit extends Cubit<MatchState> {
   MatchCubit()
-      : super(
-          MatchState(
-            profiles: const [],
-            nearbySelected: true,
-            timeMatchSelected: false,
-            isLoading: true,
-            isFinished: false,
-            filters: MatchFilters.defaults,
-            currentUserAvatarUrl: null,
-          ),
-        ) {
+    : super(
+        MatchState(
+          profiles: const [],
+          nearbySelected: true,
+          timeMatchSelected: false,
+          isLoading: true,
+          isFinished: false,
+          filters: MatchFilters.defaults,
+          currentUserAvatarUrl: null,
+        ),
+      ) {
     _loadInitial();
+    _startAutoRefresh();
   }
 
   int _requestId = 0;
+  Timer? _autoRefreshTimer;
   final Set<String> _seenIds = {};
   final List<MatchProfile> _dislikedProfiles = [];
   final List<MatchProfile> _testProfiles = _buildTestProfiles();
-  bool _useTestCards = true;
+  final bool _useTestCards = false;
 
-  void selectNearby() => emit(state.copyWith(nearbySelected: true, timeMatchSelected: false));
+  void selectNearby() =>
+      emit(state.copyWith(nearbySelected: true, timeMatchSelected: false));
 
-  void selectTimeMatch() => emit(state.copyWith(nearbySelected: false, timeMatchSelected: true));
+  void selectTimeMatch() =>
+      emit(state.copyWith(nearbySelected: false, timeMatchSelected: true));
 
   Future<void> _loadInitial() async {
     final filters = await SessionStorage.getMatchFilters();
@@ -46,7 +52,11 @@ class MatchCubit extends Cubit<MatchState> {
       final me = await UsersApi.getMe();
       final avatarUrl = me['avatarUrl']?.toString();
       if (!isClosed) {
-        emit(state.copyWith(currentUserAvatarUrl: avatarUrl?.isEmpty ?? true ? null : avatarUrl));
+        emit(
+          state.copyWith(
+            currentUserAvatarUrl: avatarUrl?.isEmpty ?? true ? null : avatarUrl,
+          ),
+        );
       }
     } catch (_) {
       // ignore avatar load errors; feed can continue
@@ -56,6 +66,7 @@ class MatchCubit extends Cubit<MatchState> {
   Future<void> _fetchFeed({
     MatchFilters? filters,
     bool showLoader = false,
+    bool append = false,
   }) async {
     final requestId = ++_requestId;
     if (showLoader) {
@@ -84,11 +95,19 @@ class MatchCubit extends Cubit<MatchState> {
     }
 
     if (!isClosed && requestId == _requestId) {
+      if (append && profiles.isEmpty) {
+        return;
+      }
+
+      final nextProfiles = append
+          ? <MatchProfile>[...state.profiles, ...profiles]
+          : profiles;
+
       emit(
         state.copyWith(
-          profiles: profiles,
+          profiles: nextProfiles,
           isLoading: false,
-          isFinished: profiles.isEmpty,
+          isFinished: nextProfiles.isEmpty,
         ),
       );
     }
@@ -163,6 +182,29 @@ class MatchCubit extends Cubit<MatchState> {
       _dislikedProfiles.clear();
     }
     await _fetchFeed(showLoader: true);
+  }
+
+  void _startAutoRefresh() {
+    _autoRefreshTimer?.cancel();
+    _autoRefreshTimer = Timer.periodic(const Duration(seconds: 8), (_) {
+      _autoRefreshTick();
+    });
+  }
+
+  Future<void> _autoRefreshTick() async {
+    if (isClosed || state.isLoading) {
+      return;
+    }
+
+    if (state.profiles.length <= 2 || state.isFinished) {
+      await _fetchFeed(showLoader: false, append: true);
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _autoRefreshTimer?.cancel();
+    return super.close();
   }
 
   List<MatchProfile> _dedupe(List<MatchProfile> incoming) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../../../../../app/localization/app_localizations.dart';
 
 class StoreScreen extends StatelessWidget {
@@ -32,14 +33,25 @@ class StoreScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: ListTile(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 title: Text(item),
                 trailing: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    AppNotifier.showMessage(
+                      context,
+                      'Запрос на покупку "$item" отправлен.',
+                      title: l10n.notifTitleSuccess,
+                      type: AppNotificationType.success,
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                   child: Text(l10n.walletBuy),
                 ),
