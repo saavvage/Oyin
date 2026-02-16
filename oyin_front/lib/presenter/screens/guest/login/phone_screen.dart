@@ -7,6 +7,7 @@ import '../../../utils/phone_mask.dart';
 import '../../../utils/validators.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import '../register/profile_info_screen.dart';
 import 'verify_screen.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
@@ -17,7 +18,6 @@ class PhoneLoginScreen extends StatefulWidget {
 }
 
 class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
-  bool _isLoading = false;
   final _phoneController = TextEditingController();
   PhoneCountry _country = kPhoneCountries.first;
   bool _isMasking = false;
@@ -25,7 +25,9 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   void _applyMask() {
     if (_isMasking) return;
     final raw = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    final limited = raw.length > _country.maxDigits ? raw.substring(0, _country.maxDigits) : raw;
+    final limited = raw.length > _country.maxDigits
+        ? raw.substring(0, _country.maxDigits)
+        : raw;
     final formatted = _formatByCountry(limited, _country.maxDigits);
 
     if (_phoneController.text != formatted) {
@@ -94,22 +96,30 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                 value: 0.33,
                 minHeight: 6,
                 backgroundColor: context.palette.badge,
-                valueColor: AlwaysStoppedAnimation<Color>(context.palette.primary),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  context.palette.primary,
+                ),
               ),
               28.vSpacing,
               Text(
                 l10n.phoneEntryTitle,
-                style: Theme.of(context).textTheme.titleLarge?.weighted(FontWeight.w800),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.weighted(FontWeight.w800),
               ),
               12.vSpacing,
               Text(
                 l10n.phoneEntrySubtitle,
-                style: Theme.of(context).textTheme.bodyLarge?.colored(context.palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.colored(context.palette.muted),
               ),
               32.vSpacing,
               Text(
                 l10n.phoneNumberLabel,
-                style: Theme.of(context).textTheme.titleSmall?.weighted(FontWeight.w700),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.weighted(FontWeight.w700),
               ),
               12.vSpacing,
               Row(
@@ -134,51 +144,91 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
               ),
               const Spacer(),
               _PrimaryActionButton(
-                label: _isLoading ? '${l10n.sendCode}...' : l10n.sendCode,
-                onPressed: _isLoading
-                    ? null
-                    : () async {
-                        final digits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-                        if (!Validators.isPhoneComplete(
-                          digitsOnly: digits,
-                          requiredLength: _country.maxDigits,
-                        )) {
-                          AppNotifier.showMessage(
-                            context,
-                            l10n.phoneNumberIncompleteMessage,
-                            title: l10n.phoneNumberIncompleteTitle,
-                            type: AppNotificationType.warning,
-                          );
-                          return;
-                        }
-                        final phone = '${_country.dialCode} ${formatPhoneDigits(digits)}';
-                        setState(() => _isLoading = true);
-                        try {
-                          await AuthApi.login(phone: phone);
-                          if (!mounted) return;
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => VerifyCodeScreen(phone: phone),
-                            ),
-                          );
-                        } catch (error) {
-                          if (!mounted) return;
-                          AppNotifier.showError(context, error);
-                        } finally {
-                          if (mounted) setState(() => _isLoading = false);
-                        }
-                      },
+                label: l10n.sendCode,
+                onPressed: () {
+                  final digits = _phoneController.text.replaceAll(
+                    RegExp(r'\D'),
+                    '',
+                  );
+                  if (!Validators.isPhoneComplete(
+                    digitsOnly: digits,
+                    requiredLength: _country.maxDigits,
+                  )) {
+                    AppNotifier.showMessage(
+                      context,
+                      l10n.phoneNumberIncompleteMessage,
+                      title: l10n.phoneNumberIncompleteTitle,
+                      type: AppNotificationType.warning,
+                    );
+                    return;
+                  }
+                  final phone =
+                      '${_country.dialCode} ${formatPhoneDigits(digits)}';
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          VerifyCodeScreen(phone: phone, autoSendCode: true),
+                    ),
+                  );
+                },
+              ),
+              8.vSpacing,
+              Center(
+                child: TextButton(
+                  onPressed: _skipForNow,
+                  child: Text(
+                    l10n.authSkipForNow,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: context.palette.muted,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
               12.vSpacing,
               Text(
                 l10n.termsAgree,
-                style: Theme.of(context).textTheme.bodySmall?.colored(context.palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.colored(context.palette.muted),
               ),
               8.vSpacing,
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _skipForNow() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(l10n.authSkipDialogTitle),
+          content: Text(l10n.authSkipDialogMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(l10n.messengerDialogCancel),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(l10n.authSkipDialogConfirm),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    await SessionStorage.setGuestMode(true);
+
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const ProfileInfoScreen()),
     );
   }
 }
@@ -205,18 +255,24 @@ class _CountrySelector extends StatelessWidget {
           dropdownColor: context.palette.card,
           borderRadius: BorderRadius.circular(12),
           underline: const SizedBox.shrink(),
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white70, size: 18),
+          icon: const Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: Colors.white70,
+            size: 18,
+          ),
           isExpanded: true,
           selectedItemBuilder: (context) => kPhoneCountries
               .map(
                 (c) => FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '${c.flag} ${c.dialCode}',
-                        style: Theme.of(context).textTheme.titleSmall?.colored(Colors.white),
-                      ),
-                    ),
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${c.flag} ${c.dialCode}',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.titleSmall?.colored(Colors.white),
+                  ),
+                ),
               )
               .toList(),
           items: kPhoneCountries
@@ -233,12 +289,15 @@ class _CountrySelector extends StatelessWidget {
                         4.hSpacing,
                         Text(
                           c.dialCode,
-                          style: Theme.of(context).textTheme.titleSmall?.colored(Colors.white),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleSmall?.colored(Colors.white),
                         ),
                         4.hSpacing,
                         Text(
                           c.code,
-                          style: Theme.of(context).textTheme.bodyMedium?.colored(context.palette.muted),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.colored(context.palette.muted),
                         ),
                       ],
                     ),
@@ -260,16 +319,12 @@ class _RoundedField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.keyboardType,
-    this.readOnly = false,
-    this.onTap,
     this.maxLength,
   });
 
   final TextEditingController controller;
   final String hintText;
   final TextInputType? keyboardType;
-  final bool readOnly;
-  final VoidCallback? onTap;
   final int? maxLength;
 
   @override
@@ -277,10 +332,14 @@ class _RoundedField extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      readOnly: readOnly,
-      onTap: onTap,
       maxLengthEnforcement: MaxLengthEnforcement.none,
-      buildCounter: (_, {required int currentLength, required bool isFocused, int? maxLength}) => null,
+      buildCounter:
+          (
+            _, {
+            required int currentLength,
+            required bool isFocused,
+            int? maxLength,
+          }) => null,
       inputFormatters: [
         FilteringTextInputFormatter.digitsOnly,
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
@@ -290,7 +349,10 @@ class _RoundedField extends StatelessWidget {
         filled: true,
         fillColor: context.palette.card,
         hintStyle: TextStyle(color: context.palette.muted),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide(color: context.palette.badge),
@@ -320,12 +382,16 @@ class _PrimaryActionButton extends StatelessWidget {
           backgroundColor: context.palette.primary,
           foregroundColor: Colors.black,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           elevation: 6,
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleMedium?.weighted(FontWeight.w700),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.weighted(FontWeight.w700),
         ),
       ),
     );

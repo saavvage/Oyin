@@ -308,6 +308,34 @@ class _SportDetailsScreenState extends State<SportDetailsScreen> {
     setState(() => _isLoading = true);
 
     try {
+      final isGuest = await SessionStorage.getGuestMode();
+      if (isGuest) {
+        final nameParts = widget.draft.name.trim().split(' ');
+        MockUserRepository.instance.save(
+          UserProfileM(
+            firstName: nameParts.isNotEmpty ? nameParts.first : '',
+            lastName: nameParts.length > 1
+                ? nameParts.sublist(1).join(' ')
+                : '',
+            email: widget.draft.email,
+            city: widget.draft.city,
+            phone: widget.draft.phone,
+            birthDate: widget.draft.birthDate,
+          ),
+        );
+
+        if (!mounted) return;
+        AppNotifier.showSuccess(
+          context,
+          l10n.onboardingDetailsLocalProfileCreatedSuccess,
+        );
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const NavShell()),
+          (route) => false,
+        );
+        return;
+      }
+
       await UsersApi.updateProfile(
         name: widget.draft.name.isNotEmpty ? widget.draft.name : 'New User',
         email: widget.draft.email,

@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import '../../guest/login/phone_screen.dart';
 import '../wallet/wallet_screen.dart';
 import 'cubit/_export.dart';
 import 'sport_preferences_screen.dart';
@@ -52,6 +54,8 @@ class _ProfileView extends StatelessWidget {
                     avatarUrl: state.avatarUrl,
                     onAvatarTap: () => _showAvatarActions(context),
                   ),
+                  12.vSpacing,
+                  _GuestPhoneVerificationCard(),
                   24.vSpacing,
                   ProfileStatsGrid(l10n: l10n, stats: state.stats),
                   16.vSpacing,
@@ -129,5 +133,69 @@ class _ProfileView extends StatelessWidget {
     if (updated == true && context.mounted) {
       await context.read<ProfileCubit>().refreshProfile();
     }
+  }
+}
+
+class _GuestPhoneVerificationCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+
+    return FutureBuilder<bool>(
+      future: SessionStorage.getGuestMode(),
+      builder: (context, snapshot) {
+        final isGuest = snapshot.data == true;
+        if (!isGuest) {
+          return const SizedBox.shrink();
+        }
+
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: palette.card,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: palette.primary.withValues(alpha: 0.3)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.profileVerifyPhoneTitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+              ),
+              6.vSpacing,
+              Text(
+                l10n.profileVerifyPhoneSubtitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: palette.muted),
+              ),
+              12.vSpacing,
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PhoneLoginScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: palette.primary,
+                    foregroundColor: Colors.black,
+                  ),
+                  child: Text(l10n.profileVerifyPhoneAction),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

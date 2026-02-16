@@ -29,12 +29,13 @@ class _OyinAppState extends State<OyinApp> {
 
   Future<void> _resolveSession() async {
     final token = await SessionStorage.getAccessToken();
+    final isGuest = await SessionStorage.getGuestMode();
     if (token != null && token.isNotEmpty) {
       await PushNotificationsService.syncTokenWithBackend();
     }
     if (!mounted) return;
     setState(() {
-      _isAuthorized = token != null && token.isNotEmpty;
+      _isAuthorized = isGuest || (token != null && token.isNotEmpty);
       _isSessionReady = true;
     });
   }

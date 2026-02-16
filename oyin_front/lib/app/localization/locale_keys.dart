@@ -269,9 +269,19 @@ class LocaleKeys {
       'onboarding_details_profile_created_success';
   static const onboardingDetailsLevelFallback =
       'onboarding_details_level_fallback';
+  static const onboardingDetailsLocalProfileCreatedSuccess =
+      'onboarding_details_local_profile_created_success';
 
   static const profileAvatarChooseGallery = 'profile_avatar_choose_gallery';
   static const profileAvatarTakePhoto = 'profile_avatar_take_photo';
+  static const profileVerifyPhoneTitle = 'profile_verify_phone_title';
+  static const profileVerifyPhoneSubtitle = 'profile_verify_phone_subtitle';
+  static const profileVerifyPhoneAction = 'profile_verify_phone_action';
+
+  static const authSkipForNow = 'auth_skip_for_now';
+  static const authSkipDialogTitle = 'auth_skip_dialog_title';
+  static const authSkipDialogMessage = 'auth_skip_dialog_message';
+  static const authSkipDialogConfirm = 'auth_skip_dialog_confirm';
 
   static const sportPreferencesSearchHint = 'sport_preferences_search_hint';
   static const sportPreferencesLevelLabel = 'sport_preferences_level_label';

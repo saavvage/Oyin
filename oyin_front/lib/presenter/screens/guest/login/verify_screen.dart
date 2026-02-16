@@ -9,9 +9,14 @@ import '../register/profile_info_screen.dart';
 import '../../private/navbar/nav_shell.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
-  const VerifyCodeScreen({super.key, required this.phone});
+  const VerifyCodeScreen({
+    super.key,
+    required this.phone,
+    this.autoSendCode = false,
+  });
 
   final String phone;
+  final bool autoSendCode;
 
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
@@ -19,7 +24,17 @@ class VerifyCodeScreen extends StatefulWidget {
 
 class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   bool _isLoading = false;
+  bool _isSendingCode = false;
+  bool _codeRequested = false;
   final _controllers = List.generate(6, (_) => TextEditingController());
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.autoSendCode) {
+      _sendCode(showError: false);
+    }
+  }
 
   @override
   void dispose() {
@@ -75,15 +90,20 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               16.vSpacing,
               Row(
                 children: [
-                  Text(
-                    l10n.resendCode,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleSmall?.colored(context.palette.primary),
+                  TextButton(
+                    onPressed: _isSendingCode ? null : () => _sendCode(),
+                    child: Text(
+                      _isSendingCode
+                          ? '${l10n.resendCode}...'
+                          : l10n.resendCode,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.titleSmall?.colored(context.palette.primary),
+                    ),
                   ),
                   8.hSpacing,
                   Text(
-                    '(0:24)',
+                    _codeRequested ? '(ok)' : '(...)',
                     style: Theme.of(
                       context,
                     ).textTheme.bodySmall?.colored(context.palette.muted),
@@ -110,6 +130,10 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         }
                         setState(() => _isLoading = true);
                         try {
+                          if (!_codeRequested) {
+                            await _sendCode(showError: false);
+                          }
+
                           final response = await AuthApi.verify(
                             phone: widget.phone,
                             code: code,
@@ -174,6 +198,19 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         }
                       },
               ),
+              8.vSpacing,
+              Center(
+                child: TextButton(
+                  onPressed: _isLoading ? null : _skipForNow,
+                  child: Text(
+                    l10n.authSkipForNow,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: context.palette.muted,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
               16.vSpacing,
             ],
           ),
@@ -215,6 +252,59 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
           ),
         );
       }),
+    );
+  }
+
+  Future<void> _sendCode({bool showError = true}) async {
+    if (_isSendingCode) return;
+    setState(() => _isSendingCode = true);
+    try {
+      await AuthApi.login(phone: widget.phone);
+      if (!mounted) return;
+      setState(() {
+        _codeRequested = true;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      if (showError) {
+        AppNotifier.showError(context, error);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSendingCode = false);
+      }
+    }
+  }
+
+  Future<void> _skipForNow() async {
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(l10n.authSkipDialogTitle),
+          content: Text(l10n.authSkipDialogMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(l10n.messengerDialogCancel),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(l10n.authSkipDialogConfirm),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    await SessionStorage.setGuestMode(true);
+
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => ProfileInfoScreen(phone: widget.phone)),
     );
   }
 }

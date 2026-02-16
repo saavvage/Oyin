@@ -343,10 +343,22 @@ class AppLocalizations {
       _string(LocaleKeys.onboardingDetailsProfileCreatedSuccess);
   String get onboardingDetailsLevelFallback =>
       _string(LocaleKeys.onboardingDetailsLevelFallback);
+  String get onboardingDetailsLocalProfileCreatedSuccess =>
+      _string(LocaleKeys.onboardingDetailsLocalProfileCreatedSuccess);
   String get profileAvatarChooseGallery =>
       _string(LocaleKeys.profileAvatarChooseGallery);
   String get profileAvatarTakePhoto =>
       _string(LocaleKeys.profileAvatarTakePhoto);
+  String get profileVerifyPhoneTitle =>
+      _string(LocaleKeys.profileVerifyPhoneTitle);
+  String get profileVerifyPhoneSubtitle =>
+      _string(LocaleKeys.profileVerifyPhoneSubtitle);
+  String get profileVerifyPhoneAction =>
+      _string(LocaleKeys.profileVerifyPhoneAction);
+  String get authSkipForNow => _string(LocaleKeys.authSkipForNow);
+  String get authSkipDialogTitle => _string(LocaleKeys.authSkipDialogTitle);
+  String get authSkipDialogMessage => _string(LocaleKeys.authSkipDialogMessage);
+  String get authSkipDialogConfirm => _string(LocaleKeys.authSkipDialogConfirm);
   String get sportPreferencesSearchHint =>
       _string(LocaleKeys.sportPreferencesSearchHint);
   String get sportPreferencesLevelLabel =>
@@ -671,8 +683,19 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.onboardingDetailsProfileCreatedSuccess:
         'Profile created successfully',
     LocaleKeys.onboardingDetailsLevelFallback: 'Sports',
+    LocaleKeys.onboardingDetailsLocalProfileCreatedSuccess:
+        'Local profile saved. Verify phone later in Profile.',
     LocaleKeys.profileAvatarChooseGallery: 'Choose from gallery',
     LocaleKeys.profileAvatarTakePhoto: 'Take a photo',
+    LocaleKeys.profileVerifyPhoneTitle: 'Phone not verified',
+    LocaleKeys.profileVerifyPhoneSubtitle:
+        'You are in guest mode. Verify your number to enable full online features.',
+    LocaleKeys.profileVerifyPhoneAction: 'Verify phone',
+    LocaleKeys.authSkipForNow: 'Skip for now',
+    LocaleKeys.authSkipDialogTitle: 'Continue without SMS?',
+    LocaleKeys.authSkipDialogMessage:
+        'You can create profile now and verify phone later in Profile settings.',
+    LocaleKeys.authSkipDialogConfirm: 'Continue without SMS',
     LocaleKeys.sportPreferencesSearchHint: 'Search sports',
     LocaleKeys.sportPreferencesLevelLabel: 'Level',
     LocaleKeys.sportPreferencesExperienceHint: 'Experience years',
@@ -904,7 +927,7 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.levelAmateur: 'Любитель',
     LocaleKeys.levelSemiPro: 'Полупрофи',
     LocaleKeys.levelProfessional: 'Профессионал',
-    LocaleKeys.onboardingSportSelectionTitle: 'Во что играешь?',
+    LocaleKeys.onboardingSportSelectionTitle: 'Чем занимаешься?',
     LocaleKeys.onboardingSportSelectionSubtitle:
         'Выбери все подходящие. Позже можно добавить ещё.',
     LocaleKeys.onboardingSportSelectionSearchHint:
@@ -912,7 +935,7 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.onboardingSportSelectionInfo:
         'Каждый выбранный вид спорта создаст отдельный профиль для спарринга.',
     LocaleKeys.onboardingSportSelectionCreateProfiles:
-        'Создать профили: {count}',
+        'Выбрано видов: {count}',
     LocaleKeys.onboardingLevelChoosePathTitle: 'Выбери свой путь',
     LocaleKeys.onboardingLevelChoosePathSubtitle:
         'Выбери уровень, чтобы получить подходящие матчи.',
@@ -950,8 +973,19 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Сначала выбери вид спорта и уровень.',
     LocaleKeys.onboardingDetailsProfileCreatedSuccess: 'Профиль успешно создан',
     LocaleKeys.onboardingDetailsLevelFallback: 'Спорт',
+    LocaleKeys.onboardingDetailsLocalProfileCreatedSuccess:
+        'Локальный профиль сохранён. Подтверди телефон позже в профиле.',
     LocaleKeys.profileAvatarChooseGallery: 'Выбрать из галереи',
     LocaleKeys.profileAvatarTakePhoto: 'Сделать фото',
+    LocaleKeys.profileVerifyPhoneTitle: 'Телефон не подтверждён',
+    LocaleKeys.profileVerifyPhoneSubtitle:
+        'Сейчас включён гостевой режим. Подтверди номер, чтобы открыть все онлайн-функции.',
+    LocaleKeys.profileVerifyPhoneAction: 'Подтвердить телефон',
+    LocaleKeys.authSkipForNow: 'Пропустить',
+    LocaleKeys.authSkipDialogTitle: 'Продолжить без СМС?',
+    LocaleKeys.authSkipDialogMessage:
+        'Ты сможешь создать профиль сейчас и подтвердить номер позже в настройках профиля.',
+    LocaleKeys.authSkipDialogConfirm: 'Продолжить без СМС',
     LocaleKeys.sportPreferencesSearchHint: 'Поиск видов спорта',
     LocaleKeys.sportPreferencesLevelLabel: 'Уровень',
     LocaleKeys.sportPreferencesExperienceHint: 'Опыт в годах',
@@ -1224,8 +1258,19 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Алдымен спорт пен деңгейді таңда.',
     LocaleKeys.onboardingDetailsProfileCreatedSuccess: 'Профиль сәтті жасалды',
     LocaleKeys.onboardingDetailsLevelFallback: 'Спорт',
+    LocaleKeys.onboardingDetailsLocalProfileCreatedSuccess:
+        'Жергілікті профиль сақталды. Телефонды кейін Профильде раста.',
     LocaleKeys.profileAvatarChooseGallery: 'Галереядан таңдау',
     LocaleKeys.profileAvatarTakePhoto: 'Фото түсіру',
+    LocaleKeys.profileVerifyPhoneTitle: 'Телефон расталмаған',
+    LocaleKeys.profileVerifyPhoneSubtitle:
+        'Қазір қонақ режимі қосулы. Барлық онлайн мүмкіндіктер үшін нөмірді раста.',
+    LocaleKeys.profileVerifyPhoneAction: 'Телефонды растау',
+    LocaleKeys.authSkipForNow: 'Қазір өткізу',
+    LocaleKeys.authSkipDialogTitle: 'SMS-сыз жалғастыру керек пе?',
+    LocaleKeys.authSkipDialogMessage:
+        'Профильді қазір толтыра аласың, телефонды кейін профиль баптауларында растайсың.',
+    LocaleKeys.authSkipDialogConfirm: 'SMS-сыз жалғастыру',
     LocaleKeys.sportPreferencesSearchHint: 'Спорт түрлерін іздеу',
     LocaleKeys.sportPreferencesLevelLabel: 'Деңгей',
     LocaleKeys.sportPreferencesExperienceHint: 'Тәжірибе (жыл)',

@@ -12,11 +12,30 @@ class SessionStorage {
   static Future<void> setAccessToken(String token) async {
     await init();
     await _prefs!.setString(_Keys.accessToken, token);
+    await _prefs!.setBool(_Keys.guestMode, false);
   }
 
   static Future<String?> getAccessToken() async {
     await init();
     return _prefs!.getString(_Keys.accessToken);
+  }
+
+  static Future<void> clearAccessToken() async {
+    await init();
+    await _prefs!.remove(_Keys.accessToken);
+  }
+
+  static Future<void> setGuestMode(bool enabled) async {
+    await init();
+    await _prefs!.setBool(_Keys.guestMode, enabled);
+    if (enabled) {
+      await _prefs!.remove(_Keys.accessToken);
+    }
+  }
+
+  static Future<bool> getGuestMode() async {
+    await init();
+    return _prefs!.getBool(_Keys.guestMode) ?? false;
   }
 
   static Future<void> setMatchFilters(MatchFilters filters) async {
@@ -70,6 +89,7 @@ class SessionStorage {
 
 class _Keys {
   static const String accessToken = 'access_token';
+  static const String guestMode = 'guest_mode';
   static const String matchDistanceMin = 'match_distance_min';
   static const String matchDistanceMax = 'match_distance_max';
   static const String matchAgeMin = 'match_age_min';
