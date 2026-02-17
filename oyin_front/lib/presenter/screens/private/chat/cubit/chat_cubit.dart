@@ -6,23 +6,25 @@ import '../../../../../infrastructure/services/network/chat_api.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit()
-      : super(
-          const ChatState(
-            activeTab: 0,
-            actionRequired: [],
-            upcoming: [],
-          ),
-        );
+    : super(const ChatState(activeTab: 0, actionRequired: [], upcoming: []));
 
   Future<void> loadThreads() async {
     try {
       final response = await ChatApi.getThreads();
-      emit(
-        state.copyWith(
-          actionRequired: response.actionRequired.map(_toCard).toList(),
-          upcoming: response.upcoming.map(_toCard).toList(),
-        ),
-      );
+      final actionRequired = response.actionRequired.map(_toCard).toList();
+      final upcoming = response.upcoming.map(_toCard).toList();
+
+      if (actionRequired.isEmpty && upcoming.isEmpty) {
+        emit(
+          state.copyWith(
+            actionRequired: _seedActionRequired(),
+            upcoming: _seedUpcoming(),
+          ),
+        );
+        return;
+      }
+
+      emit(state.copyWith(actionRequired: actionRequired, upcoming: upcoming));
     } catch (_) {
       emit(
         state.copyWith(
@@ -51,21 +53,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   List<ChatCard> _seedActionRequired() {
-    return const [
-      ChatCard(
-        id: 'local_action_1',
-        name: 'Sarah L.',
-        subtitle: 'Dispute started regarding the final set score. Please upload…',
-        avatarUrl:
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
-        statusKey: LocaleKeys.statusDisputeOpen,
-        timestamp: 'Mon',
-        badgeCount: null,
-        accent: 'red',
-        highlight: true,
-        buttonKey: 'resolve',
-      ),
-    ];
+    return const [];
   }
 
   List<ChatCard> _seedUpcoming() {
@@ -86,26 +74,14 @@ class ChatCubit extends Cubit<ChatState> {
       ChatCard(
         id: 'local_upcoming_2',
         name: 'Dmitry K.',
-        subtitle: 'I sent the location proposal. Let me know if that works for you.',
+        subtitle:
+            'I sent the location proposal. Let me know if that works for you.',
         avatarUrl:
-            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
         statusKey: LocaleKeys.statusDraftingContract,
         timestamp: 'Yesterday',
         badgeCount: null,
         accent: 'yellow',
-        highlight: false,
-        buttonKey: 'view',
-      ),
-      ChatCard(
-        id: 'local_upcoming_3',
-        name: 'Maria S.',
-        subtitle: 'Matched! Start chatting to set up.',
-        avatarUrl:
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
-        statusKey: LocaleKeys.statusMatched,
-        timestamp: '2d ago',
-        badgeCount: null,
-        accent: 'muted',
         highlight: false,
         buttonKey: null,
       ),

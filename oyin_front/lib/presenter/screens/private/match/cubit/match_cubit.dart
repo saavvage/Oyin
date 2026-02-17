@@ -28,7 +28,7 @@ class MatchCubit extends Cubit<MatchState> {
   final Set<String> _seenIds = {};
   final List<MatchProfile> _dislikedProfiles = [];
   final List<MatchProfile> _testProfiles = _buildTestProfiles();
-  final bool _useTestCards = false;
+  final bool _useTestCards = true;
 
   void selectNearby() =>
       emit(state.copyWith(nearbySelected: true, timeMatchSelected: false));
@@ -300,76 +300,6 @@ class MatchCubit extends Cubit<MatchState> {
         tags: ['Pace', 'Passing'],
         imageUrl:
             'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
-      ),
-      const MatchProfile(
-        id: 'test-6',
-        name: 'Sofia',
-        age: 27,
-        city: 'Almaty',
-        distanceKm: 2.1,
-        rating: 4.6,
-        sport: 'Boxing',
-        sports: ['Boxing'],
-        level: 'Amateur',
-        tags: ['Counter', 'Endurance'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
-      ),
-      const MatchProfile(
-        id: 'test-7',
-        name: 'Arman',
-        age: 26,
-        city: 'Astana',
-        distanceKm: 9.3,
-        rating: 4.3,
-        sport: 'Basketball',
-        sports: ['Basketball', 'Football'],
-        level: 'Semi-Pro',
-        tags: ['Teamplay', 'Sprint'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1200&q=80',
-      ),
-      const MatchProfile(
-        id: 'test-8',
-        name: 'Laura',
-        age: 23,
-        city: 'Pavlodar',
-        distanceKm: 15.8,
-        rating: 4.2,
-        sport: 'Tennis',
-        sports: ['Tennis', 'Badminton'],
-        level: 'Amateur',
-        tags: ['Serve', 'Spin'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=1200&q=80',
-      ),
-      const MatchProfile(
-        id: 'test-9',
-        name: 'Eldar',
-        age: 28,
-        city: 'Taraz',
-        distanceKm: 21.4,
-        rating: 4.7,
-        sport: 'MMA',
-        sports: ['MMA', 'Wrestling'],
-        level: 'Pro',
-        tags: ['Grappling', 'Control'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1541944743827-e04aa6427c33?auto=format&fit=crop&w=1200&q=80',
-      ),
-      const MatchProfile(
-        id: 'test-10',
-        name: 'Amina',
-        age: 30,
-        city: 'Kostanay',
-        distanceKm: 4.7,
-        rating: 4.5,
-        sport: 'Muay Thai',
-        sports: ['Muay Thai'],
-        level: 'Semi-Pro',
-        tags: ['Kicks', 'Timing'],
-        imageUrl:
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
       ),
     ];
   }

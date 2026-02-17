@@ -38,7 +38,9 @@ class _DisputeScreenState extends State<DisputeScreen> {
     try {
       DisputeDetailsDto? dispute;
 
-      if (widget.disputeId != null && widget.disputeId!.isNotEmpty) {
+      if (_isDemoDisputeId(widget.disputeId)) {
+        dispute = _buildDemoDispute(widget.disputeId!);
+      } else if (widget.disputeId != null && widget.disputeId!.isNotEmpty) {
         dispute = await DisputesApi.getById(widget.disputeId!);
       } else {
         final juryDuty = await DisputesApi.getJuryDuty();
@@ -48,6 +50,9 @@ class _DisputeScreenState extends State<DisputeScreen> {
       }
 
       dispute ??= await _fallbackMyDispute();
+      if (dispute == null && widget.preferJuryDuty) {
+        dispute = _buildDemoDispute('seed-dispute-default');
+      }
 
       if (!mounted) return;
       setState(() {
@@ -56,9 +61,17 @@ class _DisputeScreenState extends State<DisputeScreen> {
       });
     } catch (error) {
       if (!mounted) return;
-      setState(() {
-        _error = error.toString();
-      });
+      if (_isDemoDisputeId(widget.disputeId)) {
+        setState(() {
+          _dispute = _buildDemoDispute(widget.disputeId!);
+          _selectedMedia = 0;
+          _error = null;
+        });
+      } else {
+        setState(() {
+          _error = error.toString();
+        });
+      }
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -84,6 +97,17 @@ class _DisputeScreenState extends State<DisputeScreen> {
 
   Future<void> _vote(String side) async {
     if (_dispute == null || _isVoting) return;
+    if (_isDemoDisputeId(_dispute!.id)) {
+      final updated = _applyDemoVote(_dispute!, side);
+      setState(() => _dispute = updated);
+      AppNotifier.showSuccess(
+        context,
+        updated.status == 'RESOLVED'
+            ? '+50 karma (demo)'
+            : 'Голос учтён (demo)',
+      );
+      return;
+    }
 
     setState(() => _isVoting = true);
     try {
@@ -146,5 +170,206 @@ class _DisputeScreenState extends State<DisputeScreen> {
     if (side == 'PLAYER2') return dispute.player2.name;
     if (side == 'DRAW') return 'Draw';
     return 'Community';
+  }
+
+  bool _isDemoDisputeId(String? disputeId) {
+    if (disputeId == null || disputeId.isEmpty) return false;
+    return disputeId.startsWith('seed-dispute-');
+  }
+
+  DisputeDetailsDto _buildDemoDispute(String disputeId) {
+    final now = DateTime.now();
+    return DisputeDetailsDto(
+      id: disputeId,
+      displayId: '4920',
+      gameId: 'seed-game-4920',
+      status: 'VOTING',
+      sport: 'Tennis',
+      subject: 'Set 3 Tie-breaker Dispute',
+      locationLabel: 'Santa Monica, CA',
+      description:
+          'Final rally line call is contested. Please review slow-motion evidence.',
+      createdAt: now.subtract(const Duration(minutes: 18)),
+      resolvedAt: null,
+      rewardKarma: 50,
+      player1: const DisputePlayerSideDto(
+        id: 'seed-player-1',
+        name: 'John D.',
+        avatarUrl: 'https://i.pravatar.cc/200?img=12',
+        reliabilityScore: 91,
+      ),
+      player2: const DisputePlayerSideDto(
+        id: 'seed-player-2',
+        name: 'Sarah M.',
+        avatarUrl: 'https://i.pravatar.cc/200?img=47',
+        reliabilityScore: 84,
+      ),
+      plaintiff: const DisputeParticipantDto(
+        id: 'seed-player-1',
+        name: 'John D.',
+        avatarUrl: 'https://i.pravatar.cc/200?img=12',
+        statement:
+            'I clearly hit the line on the final serve. Slow-motion at 00:45 shows chalk flying up.',
+      ),
+      defendant: const DisputeParticipantDto(
+        id: 'seed-player-2',
+        name: 'Sarah M.',
+        avatarUrl: 'https://i.pravatar.cc/200?img=47',
+        statement:
+            'The ball was out by at least two inches. The mark in the second photo is from a previous rally.',
+      ),
+      evidence: const [
+        DisputeEvidenceDto(
+          id: 'seed-ev-1',
+          type: 'VIDEO',
+          url:
+              'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=1280&q=80',
+          thumbnailUrl:
+              'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?auto=format&fit=crop&w=1280&q=80',
+          durationLabel: '02:00',
+        ),
+        DisputeEvidenceDto(
+          id: 'seed-ev-2',
+          type: 'PHOTO',
+          url:
+              'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80',
+          thumbnailUrl:
+              'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80',
+          durationLabel: null,
+        ),
+        DisputeEvidenceDto(
+          id: 'seed-ev-3',
+          type: 'PHOTO',
+          url:
+              'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1200&q=80',
+          thumbnailUrl:
+              'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?auto=format&fit=crop&w=1200&q=80',
+          durationLabel: null,
+        ),
+      ],
+      voteSummary: const DisputeVoteSummaryDto(
+        total: 2,
+        requiredToResolve: 3,
+        player1: 1,
+        player2: 1,
+        draw: 0,
+      ),
+      hasVoted: false,
+      myVote: null,
+      canVote: true,
+      resolution: null,
+    );
+  }
+
+  DisputeDetailsDto _applyDemoVote(DisputeDetailsDto dispute, String side) {
+    var player1Votes = dispute.voteSummary.player1;
+    var player2Votes = dispute.voteSummary.player2;
+    var drawVotes = dispute.voteSummary.draw;
+
+    switch (side) {
+      case 'PLAYER1':
+        player1Votes += 1;
+        break;
+      case 'PLAYER2':
+        player2Votes += 1;
+        break;
+      case 'DRAW':
+        drawVotes += 1;
+        break;
+      default:
+        break;
+    }
+
+    final requiredVotes = dispute.voteSummary.requiredToResolve;
+    final totalVotes = player1Votes + player2Votes + drawVotes;
+
+    String status = dispute.status;
+    DateTime? resolvedAt = dispute.resolvedAt;
+    DisputeResolutionDto? resolution = dispute.resolution;
+
+    final hasPlayer1Winner = player1Votes >= requiredVotes;
+    final hasPlayer2Winner = player2Votes >= requiredVotes;
+    final hasDrawWinner = drawVotes >= requiredVotes;
+
+    if (hasPlayer1Winner || hasPlayer2Winner || hasDrawWinner) {
+      status = 'RESOLVED';
+      resolvedAt = DateTime.now();
+
+      final winningSide = hasPlayer1Winner
+          ? 'PLAYER1'
+          : hasPlayer2Winner
+          ? 'PLAYER2'
+          : 'DRAW';
+
+      final winner = winningSide == 'DRAW'
+          ? null
+          : (winningSide == 'PLAYER1'
+                ? DisputeResolutionPersonDto(
+                    id: dispute.player1.id,
+                    name: dispute.player1.name,
+                    avatarUrl: dispute.player1.avatarUrl,
+                  )
+                : DisputeResolutionPersonDto(
+                    id: dispute.player2.id,
+                    name: dispute.player2.name,
+                    avatarUrl: dispute.player2.avatarUrl,
+                  ));
+
+      final loser = winningSide == 'DRAW'
+          ? null
+          : (winningSide == 'PLAYER1'
+                ? DisputeResolutionPersonDto(
+                    id: dispute.player2.id,
+                    name: dispute.player2.name,
+                    avatarUrl: dispute.player2.avatarUrl,
+                  )
+                : DisputeResolutionPersonDto(
+                    id: dispute.player1.id,
+                    name: dispute.player1.name,
+                    avatarUrl: dispute.player1.avatarUrl,
+                  ));
+
+      resolution = DisputeResolutionDto(
+        winningSide: winningSide,
+        winner: winner,
+        loser: loser,
+        ratingImpact: const DisputeRatingImpactDto(
+          player1Before: 1250,
+          player1After: 1275,
+          player2Before: 1180,
+          player2After: 1155,
+        ),
+      );
+    }
+
+    return DisputeDetailsDto(
+      id: dispute.id,
+      displayId: dispute.displayId,
+      gameId: dispute.gameId,
+      status: status,
+      sport: dispute.sport,
+      subject: dispute.subject,
+      locationLabel: dispute.locationLabel,
+      description: dispute.description,
+      createdAt: dispute.createdAt,
+      resolvedAt: resolvedAt,
+      rewardKarma: dispute.rewardKarma,
+      player1: dispute.player1,
+      player2: dispute.player2,
+      plaintiff: dispute.plaintiff,
+      defendant: dispute.defendant,
+      evidence: dispute.evidence,
+      voteSummary: DisputeVoteSummaryDto(
+        total: totalVotes,
+        requiredToResolve: requiredVotes,
+        player1: player1Votes,
+        player2: player2Votes,
+        draw: drawVotes,
+      ),
+      hasVoted: true,
+      myVote: side,
+      canVote: false,
+      resolution: resolution,
+    );
   }
 }

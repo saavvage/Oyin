@@ -4,6 +4,7 @@ import '../../../../app/localization/app_localizations.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import 'dispute_screen.dart';
 import 'match_result_screen.dart';
 
 class ArenaScreen extends StatefulWidget {
@@ -93,6 +94,10 @@ class _ArenaScreenState extends State<ArenaScreen> {
 
   Future<void> _challenge(_Player player) async {
     if (_isChallenging) return;
+    if (_isDemoCourtPlayer(player)) {
+      _openDemoCourt(player);
+      return;
+    }
 
     setState(() => _isChallenging = true);
     try {
@@ -117,6 +122,19 @@ class _ArenaScreenState extends State<ArenaScreen> {
         setState(() => _isChallenging = false);
       }
     }
+  }
+
+  bool _isDemoCourtPlayer(_Player player) {
+    return player.rank <= 3 && player.userId.startsWith('seed-');
+  }
+
+  void _openDemoCourt(_Player player) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) =>
+            DisputeScreen(disputeId: 'seed-dispute-${player.userId}'),
+      ),
+    );
   }
 
   @override
