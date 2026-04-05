@@ -99,7 +99,57 @@ class GameResultResponse {
   }
 }
 
+class GameHistoryDto {
+  const GameHistoryDto({
+    required this.id,
+    required this.status,
+    required this.opponentName,
+    required this.opponentAvatarUrl,
+    required this.result,
+    required this.score,
+    required this.createdAt,
+    required this.disputeId,
+  });
+
+  final String id;
+  final String status;
+  final String opponentName;
+  final String opponentAvatarUrl;
+  final String result; // win, loss, draw, pending
+  final String? score;
+  final DateTime? createdAt;
+  final String? disputeId;
+
+  factory GameHistoryDto.fromMap(Map<String, dynamic> map, String myUserId) {
+    final player1 = (map['player1'] as Map?)?.cast<String, dynamic>() ?? {};
+    final player2 = (map['player2'] as Map?)?.cast<String, dynamic>() ?? {};
+    final isPlayer1 = (player1['id'] ?? '') == myUserId;
+    final opponent = isPlayer1 ? player2 : player1;
+    final scoreP1 = map['scorePlayer1']?.toString();
+
+    return GameHistoryDto(
+      id: (map['id'] ?? '').toString(),
+      status: (map['status'] ?? '').toString(),
+      opponentName: (opponent['name'] ?? 'Opponent').toString(),
+      opponentAvatarUrl: (opponent['avatarUrl'] ?? '').toString(),
+      result: (map['result'] ?? 'pending').toString(),
+      score: scoreP1,
+      createdAt: DateTime.tryParse((map['createdAt'] ?? '').toString()),
+      disputeId: map['disputeId']?.toString(),
+    );
+  }
+}
+
 class GamesApi {
+  static Future<List<GameHistoryDto>> getMyGames(String myUserId) async {
+    final data = await ApiClient.instance.get(ApiEndpoints.gamesMy);
+    if (data is! List) return const [];
+    return data
+        .whereType<Map>()
+        .map((e) => GameHistoryDto.fromMap(e.cast<String, dynamic>(), myUserId))
+        .toList();
+  }
+
   static Future<GameDetailsDto> getById(String gameId) async {
     final data = await ApiClient.instance.get(ApiEndpoints.gamesById(gameId));
     return GameDetailsDto.fromMap((data as Map).cast<String, dynamic>());

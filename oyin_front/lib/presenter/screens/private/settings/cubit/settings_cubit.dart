@@ -106,7 +106,35 @@ class SettingsCubit extends Cubit<SettingsState> {
     _loadMatchFilters();
     _loadTimedReminderSettings();
     _loadPushSettingsFromBackend();
+    _loadUserData();
   }
+
+  Future<void> _loadUserData() async {
+    try {
+      final data = await UsersApi.getMe();
+      if (isClosed) return;
+      final name = (data['name'] ?? '').toString();
+      final sportProfiles = data['sportProfiles'];
+      String subtitle = '';
+      String tag = '';
+      if (sportProfiles is List && sportProfiles.isNotEmpty) {
+        final first = sportProfiles.first;
+        if (first is Map) {
+          final sport = (first['sportType'] ?? '').toString();
+          final level = (first['level'] ?? '').toString();
+          subtitle = sport;
+          tag = level.toUpperCase();
+        }
+      }
+      emit(state.copyWith(
+        userName: name.isNotEmpty ? name : null,
+        userSubtitle: subtitle.isNotEmpty ? subtitle : null,
+        userTag: tag.isNotEmpty ? tag : null,
+      ));
+    } catch (_) {}
+  }
+
+  Future<void> refreshUserData() async => _loadUserData();
 
   Future<void> _loadMatchFilters() async {
     final filters = await SessionStorage.getMatchFilters();

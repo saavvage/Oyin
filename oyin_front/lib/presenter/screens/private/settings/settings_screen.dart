@@ -5,8 +5,10 @@ import 'package:oyin_front/domain/export.dart';
 import '../../../../app/app.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../match/widgets/filters_form.dart';
 import 'cubit/_export.dart';
+import 'edit_profile_screen.dart';
 import 'widgets/_export.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -79,6 +81,8 @@ class _SettingsView extends StatelessWidget {
                       OyinApp.of(context).setLocale(Locale(code));
                     },
                     selectedLocale: state.selectedLocale,
+                    onItemTap: (item) =>
+                        _onSettingsItemTap(context, item),
                   ),
                   16.vSpacing,
                   NotificationReminderCard(
@@ -103,6 +107,74 @@ class _SettingsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _onSettingsItemTap(
+      BuildContext context, SettingsItem item) async {
+    switch (item.icon) {
+      case 'person':
+        final updated = await Navigator.of(context).push<bool>(
+          MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+        );
+        if (updated == true && context.mounted) {
+          context.read<SettingsCubit>().refreshUserData();
+        }
+        break;
+      case 'lock':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.passwordSecurity,
+          subtitle: l10n.settingsAuthSubtitle,
+          tips: [l10n.settingsAuthTip1, l10n.settingsAuthTip2],
+        );
+        break;
+      case 'link':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.linkedAccounts,
+          subtitle: l10n.settingsLinkedSubtitle,
+          tips: [l10n.settingsLinkedTip],
+        );
+        break;
+      case 'shield':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.sparringPreferences,
+          subtitle: l10n.settingsMatchSubtitle,
+          tips: [l10n.settingsMatchTip1, l10n.settingsMatchTip2],
+        );
+        break;
+      case 'block':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.blockedUsers,
+          subtitle: l10n.settingsBlockedSubtitle,
+          tips: [l10n.settingsBlockedTip1, l10n.settingsBlockedTip2],
+        );
+        break;
+      case 'help':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.helpCenter,
+          subtitle: l10n.settingsHelpSubtitle,
+          tips: [l10n.settingsHelpTip1, l10n.settingsHelpTip2],
+        );
+        break;
+      case 'rules':
+        final l10n = AppLocalizations.of(context);
+        showFrostedInfoModal(
+          context,
+          title: l10n.fairPlayRules,
+          subtitle: l10n.settingsFairPlaySubtitle,
+          tips: [l10n.settingsFairPlayTip1, l10n.settingsFairPlayTip2, l10n.settingsFairPlayTip3, l10n.settingsFairPlayTip4],
+        );
+        break;
+    }
   }
 }
 

@@ -32,12 +32,12 @@ class AuthEntryScreen extends StatelessWidget {
                     onPressed: () {
                       showFrostedInfoModal(
                         context,
-                        title: 'Как начать',
-                        subtitle: 'Коротко про вход и старт в Oyin.',
-                        tips: const [
-                          'Войдите по номеру телефона и коду подтверждения.',
-                          'Заполните профиль, чтобы получать релевантные матчи.',
-                          'После входа доступны поиск, челленджи и суд по спорам.',
+                        title: l10n.infoAuthTitle,
+                        subtitle: l10n.infoAuthSubtitle,
+                        tips: [
+                          l10n.infoAuthTip1,
+                          l10n.infoAuthTip2,
+                          l10n.infoAuthTip3,
                         ],
                       );
                     },

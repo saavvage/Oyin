@@ -100,6 +100,8 @@ class AppLocalizations {
   String get searchMatches => _string(LocaleKeys.searchMatches);
   String get tabActiveMatches => _string(LocaleKeys.tabActiveMatches);
   String get tabArchived => _string(LocaleKeys.tabArchived);
+  String get tabDisputes => _string(LocaleKeys.tabDisputes);
+  String get noDisputes => _string(LocaleKeys.noDisputes);
   String get actionRequired => _string(LocaleKeys.actionRequired);
   String get upcoming => _string(LocaleKeys.upcoming);
   String get resolveDispute => _string(LocaleKeys.resolveDispute);
@@ -375,6 +377,98 @@ class AppLocalizations {
   String get sportPreferencesUpdatedSuccess =>
       _string(LocaleKeys.sportPreferencesUpdatedSuccess);
 
+  // Info modals
+  String get infoChatTitle => _string(LocaleKeys.infoChatTitle);
+  String get infoChatSubtitle => _string(LocaleKeys.infoChatSubtitle);
+  String get infoChatTip1 => _string(LocaleKeys.infoChatTip1);
+  String get infoChatTip2 => _string(LocaleKeys.infoChatTip2);
+  String get infoChatTip3 => _string(LocaleKeys.infoChatTip3);
+  String get infoAiSubtitle => _string(LocaleKeys.infoAiSubtitle);
+  String get infoAiTip1 => _string(LocaleKeys.infoAiTip1);
+  String get infoAiTip2 => _string(LocaleKeys.infoAiTip2);
+  String get infoMatchSubtitle => _string(LocaleKeys.infoMatchSubtitle);
+  String get infoMatchTip1 => _string(LocaleKeys.infoMatchTip1);
+  String get infoMatchTip2 => _string(LocaleKeys.infoMatchTip2);
+  String get infoMatchTip3 => _string(LocaleKeys.infoMatchTip3);
+  String get infoDisputeTitle => _string(LocaleKeys.infoDisputeTitle);
+  String get infoDisputeSubtitle => _string(LocaleKeys.infoDisputeSubtitle);
+  String get infoDisputeTip1 => _string(LocaleKeys.infoDisputeTip1);
+  String get infoDisputeTip2 => _string(LocaleKeys.infoDisputeTip2);
+  String get infoDisputeTip3 => _string(LocaleKeys.infoDisputeTip3);
+  String get infoResultTitle => _string(LocaleKeys.infoResultTitle);
+  String get infoResultSubtitle => _string(LocaleKeys.infoResultSubtitle);
+  String get infoResultTip1 => _string(LocaleKeys.infoResultTip1);
+  String get infoResultTip2 => _string(LocaleKeys.infoResultTip2);
+  String get infoResultTip3 => _string(LocaleKeys.infoResultTip3);
+  String get infoNextMatchTip1 => _string(LocaleKeys.infoNextMatchTip1);
+  String get infoNextMatchTip2 => _string(LocaleKeys.infoNextMatchTip2);
+  String get infoNextMatchTip3 => _string(LocaleKeys.infoNextMatchTip3);
+  String get infoAuthTitle => _string(LocaleKeys.infoAuthTitle);
+  String get infoAuthSubtitle => _string(LocaleKeys.infoAuthSubtitle);
+  String get infoAuthTip1 => _string(LocaleKeys.infoAuthTip1);
+  String get infoAuthTip2 => _string(LocaleKeys.infoAuthTip2);
+  String get infoAuthTip3 => _string(LocaleKeys.infoAuthTip3);
+  String get settingsAuthSubtitle => _string(LocaleKeys.settingsAuthSubtitle);
+  String get settingsAuthTip1 => _string(LocaleKeys.settingsAuthTip1);
+  String get settingsAuthTip2 => _string(LocaleKeys.settingsAuthTip2);
+  String get settingsLinkedSubtitle => _string(LocaleKeys.settingsLinkedSubtitle);
+  String get settingsLinkedTip => _string(LocaleKeys.settingsLinkedTip);
+  String get settingsMatchSubtitle => _string(LocaleKeys.settingsMatchSubtitle);
+  String get settingsMatchTip1 => _string(LocaleKeys.settingsMatchTip1);
+  String get settingsMatchTip2 => _string(LocaleKeys.settingsMatchTip2);
+  String get settingsBlockedSubtitle => _string(LocaleKeys.settingsBlockedSubtitle);
+  String get settingsBlockedTip1 => _string(LocaleKeys.settingsBlockedTip1);
+  String get settingsBlockedTip2 => _string(LocaleKeys.settingsBlockedTip2);
+  String get settingsHelpSubtitle => _string(LocaleKeys.settingsHelpSubtitle);
+  String get settingsHelpTip1 => _string(LocaleKeys.settingsHelpTip1);
+  String get settingsHelpTip2 => _string(LocaleKeys.settingsHelpTip2);
+  String get settingsFairPlaySubtitle => _string(LocaleKeys.settingsFairPlaySubtitle);
+  String get settingsFairPlayTip1 => _string(LocaleKeys.settingsFairPlayTip1);
+  String get settingsFairPlayTip2 => _string(LocaleKeys.settingsFairPlayTip2);
+  String get settingsFairPlayTip3 => _string(LocaleKeys.settingsFairPlayTip3);
+  String get settingsFairPlayTip4 => _string(LocaleKeys.settingsFairPlayTip4);
+
+  // Notifications / messages
+  String get nameRequired => _string(LocaleKeys.nameRequired);
+  String get profileUpdated => _string(LocaleKeys.profileUpdated);
+  String get enterScoreBoth => _string(LocaleKeys.enterScoreBoth);
+  String get resultConfirmed => _string(LocaleKeys.resultConfirmed);
+  String get scoreConflict => _string(LocaleKeys.scoreConflict);
+  String get resultSentWaiting => _string(LocaleKeys.resultSentWaiting);
+  String get disputeNotAvailable => _string(LocaleKeys.disputeNotAvailable);
+  String get disputeNotAvailableTitle => _string(LocaleKeys.disputeNotAvailableTitle);
+  String get addDisputeComment => _string(LocaleKeys.addDisputeComment);
+  String get validationTitle => _string(LocaleKeys.validationTitle);
+  String get karmaDemo => _string(LocaleKeys.karmaDemo);
+  String get voteCountedDemo => _string(LocaleKeys.voteCountedDemo);
+  String get enterValidEmail => _string(LocaleKeys.enterValidEmail);
+  String itemPurchased(String name) => _string(LocaleKeys.itemPurchased).replaceFirst('{name}', name);
+  String coinsSent(int coins, String name) => _string(LocaleKeys.coinsSent).replaceFirst('{coins}', coins.toString()).replaceFirst('{name}', name);
+
+  // Buttons
+  String get save => _string(LocaleKeys.save);
+  String get sendToCourt => _string(LocaleKeys.sendToCourt);
+  String get noEvidence => _string(LocaleKeys.noEvidence);
+  String get retry => _string(LocaleKeys.retry);
+  String get refresh => _string(LocaleKeys.refresh);
+  String voteFor(String name) => _string(LocaleKeys.voteFor).replaceFirst('{name}', name);
+  String get cannotDetermine => _string(LocaleKeys.cannotDetermine);
+  String get returnToDashboard => _string(LocaleKeys.returnToDashboard);
+  String get ok => _string(LocaleKeys.ok);
+  String get pickScore => _string(LocaleKeys.pickScore);
+  String get draw => _string(LocaleKeys.draw);
+  String get coinsLabel => _string(LocaleKeys.coinsLabel);
+
+  // Form labels
+  String get disputeCommentLabel => _string(LocaleKeys.disputeCommentLabel);
+  String get plaintiffStatementLabel => _string(LocaleKeys.plaintiffStatementLabel);
+  String get defendantStatementLabel => _string(LocaleKeys.defendantStatementLabel);
+  String get evidenceLinkLabel => _string(LocaleKeys.evidenceLinkLabel);
+  String get openDispute => _string(LocaleKeys.openDispute);
+  String get disputeLoadFailed => _string(LocaleKeys.disputeLoadFailed);
+  String get noActiveDisputes => _string(LocaleKeys.noActiveDisputes);
+  String get noActiveDisputesDesc => _string(LocaleKeys.noActiveDisputesDesc);
+
   String nameAndAge(String name, int age) => _string(
     LocaleKeys.nameAge,
   ).replaceFirst('{name}', name).replaceFirst('{age}', age.toString());
@@ -492,6 +586,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.searchMatches: 'Search matches...',
     LocaleKeys.tabActiveMatches: 'Active Matches',
     LocaleKeys.tabArchived: 'Archived',
+    LocaleKeys.tabDisputes: 'Disputes',
+    LocaleKeys.noDisputes: 'No disputes yet',
     LocaleKeys.actionRequired: 'Action Required',
     LocaleKeys.upcoming: 'Upcoming',
     LocaleKeys.resolveDispute: 'Resolve Dispute',
@@ -704,6 +800,95 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.sportPreferencesSaving: 'Saving...',
     LocaleKeys.sportPreferencesSelectAtLeastOne: 'Select at least one sport.',
     LocaleKeys.sportPreferencesUpdatedSuccess: 'Sport preferences updated',
+    // Info modals
+    LocaleKeys.infoChatTitle: 'What to do here',
+    LocaleKeys.infoChatSubtitle: 'What to do on this screen',
+    LocaleKeys.infoChatTip1: 'Action Required cards need your attention first.',
+    LocaleKeys.infoChatTip2: 'Tap Resolve Dispute to open an active dispute and vote.',
+    LocaleKeys.infoChatTip3: 'Tap a card to open the chat with the player.',
+    LocaleKeys.infoAiSubtitle: 'Module is being prepared for launch.',
+    LocaleKeys.infoAiTip1: 'Match preparation recommendations and dispute analysis will appear here.',
+    LocaleKeys.infoAiTip2: 'For now, tips on evidence and fair play are available.',
+    LocaleKeys.infoMatchSubtitle: 'Tips for quick matching',
+    LocaleKeys.infoMatchTip1: 'Swipe right if you are ready to arrange a training session.',
+    LocaleKeys.infoMatchTip2: 'Tap the info card to view the full player profile.',
+    LocaleKeys.infoMatchTip3: 'Change distance and age filters if you run out of cards.',
+    LocaleKeys.infoDisputeTitle: 'How the court works',
+    LocaleKeys.infoDisputeSubtitle: 'Vote based on evidence only.',
+    LocaleKeys.infoDisputeTip1: 'First watch the video and photos, then read the statements.',
+    LocaleKeys.infoDisputeTip2: 'Your vote is counted once and cannot be changed.',
+    LocaleKeys.infoDisputeTip3: 'After 3 matching votes the dispute is closed automatically.',
+    LocaleKeys.infoResultTitle: 'How to submit a result',
+    LocaleKeys.infoResultSubtitle: 'The final score must be confirmed by both sides.',
+    LocaleKeys.infoResultTip1: 'Tap a player card and select their final score.',
+    LocaleKeys.infoResultTip2: 'After submitting, the other player must send a matching result.',
+    LocaleKeys.infoResultTip3: 'If scores differ, open a dispute via "To Court".',
+    LocaleKeys.infoNextMatchTip1: 'Check the meeting place and time in advance.',
+    LocaleKeys.infoNextMatchTip2: 'If plans change, notify your opponent in the chat.',
+    LocaleKeys.infoNextMatchTip3: 'After the match, don\'t forget to submit the final result.',
+    LocaleKeys.infoAuthTitle: 'How to start',
+    LocaleKeys.infoAuthSubtitle: 'Brief intro to login and getting started in Oyin.',
+    LocaleKeys.infoAuthTip1: 'Log in with your phone number and verification code.',
+    LocaleKeys.infoAuthTip2: 'Fill in your profile to get relevant matches.',
+    LocaleKeys.infoAuthTip3: 'After login, search, challenges and dispute court are available.',
+    // Settings info
+    LocaleKeys.settingsAuthSubtitle: 'Phone-based authentication is used.',
+    LocaleKeys.settingsAuthTip1: 'Your account is secured by phone verification.',
+    LocaleKeys.settingsAuthTip2: 'No password is required — OTP codes are sent to your phone.',
+    LocaleKeys.settingsLinkedSubtitle: 'No linked accounts yet.',
+    LocaleKeys.settingsLinkedTip: 'Social account linking is coming soon.',
+    LocaleKeys.settingsMatchSubtitle: 'Configure your sparring settings.',
+    LocaleKeys.settingsMatchTip1: 'Use match filters above to set distance and age range.',
+    LocaleKeys.settingsMatchTip2: 'Sport preferences can be changed in your profile.',
+    LocaleKeys.settingsBlockedSubtitle: 'No blocked users.',
+    LocaleKeys.settingsBlockedTip1: 'You can block users from the chat screen.',
+    LocaleKeys.settingsBlockedTip2: 'Blocked users cannot send you messages or challenges.',
+    LocaleKeys.settingsHelpSubtitle: 'Need help?',
+    LocaleKeys.settingsHelpTip1: 'Contact support via the chat or email.',
+    LocaleKeys.settingsHelpTip2: 'Check the FAQ section for common questions.',
+    LocaleKeys.settingsFairPlaySubtitle: 'Fair play keeps the community strong.',
+    LocaleKeys.settingsFairPlayTip1: 'Always report accurate match results.',
+    LocaleKeys.settingsFairPlayTip2: 'Disputes are resolved by community jury votes.',
+    LocaleKeys.settingsFairPlayTip3: 'Repeated false reports lower your reliability score.',
+    LocaleKeys.settingsFairPlayTip4: 'High karma earns store rewards.',
+    // Notifications
+    LocaleKeys.nameRequired: 'Name is required',
+    LocaleKeys.profileUpdated: 'Profile updated',
+    LocaleKeys.enterScoreBoth: 'Enter score for both players.',
+    LocaleKeys.resultConfirmed: 'Result confirmed. Match complete.',
+    LocaleKeys.scoreConflict: 'Scores don\'t match. You can open a dispute via "{toCourt}".',
+    LocaleKeys.resultSentWaiting: 'Result sent. Waiting for the other player to confirm.',
+    LocaleKeys.disputeNotAvailable: 'Dispute is available after CONFLICT status or if already created.',
+    LocaleKeys.disputeNotAvailableTitle: 'Not available yet',
+    LocaleKeys.addDisputeComment: 'Add a comment to the dispute.',
+    LocaleKeys.validationTitle: 'Validation',
+    LocaleKeys.karmaDemo: '+50 karma (demo)',
+    LocaleKeys.voteCountedDemo: 'Vote counted (demo)',
+    LocaleKeys.enterValidEmail: 'Please enter a valid email address',
+    LocaleKeys.itemPurchased: '{name} purchased!',
+    LocaleKeys.coinsSent: '{coins} coins sent to {name}',
+    // Buttons
+    LocaleKeys.save: 'Save',
+    LocaleKeys.sendToCourt: 'Send to court',
+    LocaleKeys.noEvidence: 'No evidence attached',
+    LocaleKeys.retry: 'Retry',
+    LocaleKeys.refresh: 'Refresh',
+    LocaleKeys.voteFor: 'Vote {name}',
+    LocaleKeys.cannotDetermine: 'Cannot determine / Draw',
+    LocaleKeys.returnToDashboard: 'Return to dashboard',
+    LocaleKeys.ok: 'OK',
+    LocaleKeys.pickScore: 'Pick score',
+    LocaleKeys.draw: 'Draw',
+    LocaleKeys.coinsLabel: 'coins',
+    // Form labels
+    LocaleKeys.disputeCommentLabel: 'Dispute comment *',
+    LocaleKeys.plaintiffStatementLabel: 'Plaintiff statement (optional)',
+    LocaleKeys.defendantStatementLabel: 'Defendant statement (optional)',
+    LocaleKeys.evidenceLinkLabel: 'Link to video/photo evidence (optional)',
+    LocaleKeys.openDispute: 'Open dispute',
+    LocaleKeys.disputeLoadFailed: 'Failed to load dispute',
+    LocaleKeys.noActiveDisputes: 'No active disputes available',
+    LocaleKeys.noActiveDisputesDesc: 'When a dispute is opened, it will appear here for review.',
   },
   'ru': {
     LocaleKeys.discovery: 'Поиск',
@@ -781,6 +966,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.searchMatches: 'Поиск матчей...',
     LocaleKeys.tabActiveMatches: 'Активные',
     LocaleKeys.tabArchived: 'Архив',
+    LocaleKeys.tabDisputes: 'Споры',
+    LocaleKeys.noDisputes: 'Споров пока нет',
     LocaleKeys.actionRequired: 'Требуют действий',
     LocaleKeys.upcoming: 'Скоро',
     LocaleKeys.resolveDispute: 'Решить спор',
@@ -996,6 +1183,95 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Выберите хотя бы один вид спорта.',
     LocaleKeys.sportPreferencesUpdatedSuccess:
         'Спортивные предпочтения обновлены',
+    // Info modals
+    LocaleKeys.infoChatTitle: 'Что делать',
+    LocaleKeys.infoChatSubtitle: 'Что делать на этом экране',
+    LocaleKeys.infoChatTip1: 'Карточки с Action Required требуют вашего действия в первую очередь.',
+    LocaleKeys.infoChatTip2: 'Нажмите Resolve Dispute, чтобы перейти к открытому спору и проголосовать.',
+    LocaleKeys.infoChatTip3: 'Обычный тап по карточке открывает диалог с игроком.',
+    LocaleKeys.infoAiSubtitle: 'Модуль готовится к запуску.',
+    LocaleKeys.infoAiTip1: 'Здесь будут рекомендации по подготовке к матчу и разборы споров.',
+    LocaleKeys.infoAiTip2: 'На первом этапе доступны подсказки по доказательствам и fair-play.',
+    LocaleKeys.infoMatchSubtitle: 'Подсказки для быстрого матчинга',
+    LocaleKeys.infoMatchTip1: 'Используйте свайп вправо, если готовы договориться о тренировке.',
+    LocaleKeys.infoMatchTip2: 'Нажимайте на карточку инфо, чтобы посмотреть полный профиль игрока.',
+    LocaleKeys.infoMatchTip3: 'Меняйте фильтры по расстоянию и возрасту, если карточки закончились.',
+    LocaleKeys.infoDisputeTitle: 'Как работает суд',
+    LocaleKeys.infoDisputeSubtitle: 'Голосуйте только по доказательствам.',
+    LocaleKeys.infoDisputeTip1: 'Сначала смотрите видео и фото, потом читайте заявления сторон.',
+    LocaleKeys.infoDisputeTip2: 'Голос учитывается один раз и изменить его нельзя.',
+    LocaleKeys.infoDisputeTip3: 'После 3 совпадающих голосов спор закрывается автоматически.',
+    LocaleKeys.infoResultTitle: 'Как отправить результат',
+    LocaleKeys.infoResultSubtitle: 'Финальный счёт должен подтвердиться обеими сторонами.',
+    LocaleKeys.infoResultTip1: 'Нажмите на карточку игрока и выберите его итоговый счёт.',
+    LocaleKeys.infoResultTip2: 'После отправки второй игрок должен отправить совпадающий результат.',
+    LocaleKeys.infoResultTip3: 'Если данные расходятся, открывайте спор через «В суд».',
+    LocaleKeys.infoNextMatchTip1: 'Проверьте место и время встречи заранее.',
+    LocaleKeys.infoNextMatchTip2: 'Если планы изменились, предупредите соперника в чате.',
+    LocaleKeys.infoNextMatchTip3: 'После матча не забудьте отправить итоговый результат.',
+    LocaleKeys.infoAuthTitle: 'Как начать',
+    LocaleKeys.infoAuthSubtitle: 'Коротко про вход и старт в Oyin.',
+    LocaleKeys.infoAuthTip1: 'Войдите по номеру телефона и коду подтверждения.',
+    LocaleKeys.infoAuthTip2: 'Заполните профиль, чтобы получать релевантные матчи.',
+    LocaleKeys.infoAuthTip3: 'После входа доступны поиск, челленджи и суд по спорам.',
+    // Settings info
+    LocaleKeys.settingsAuthSubtitle: 'Используется аутентификация по телефону.',
+    LocaleKeys.settingsAuthTip1: 'Ваш аккаунт защищён верификацией по телефону.',
+    LocaleKeys.settingsAuthTip2: 'Пароль не нужен — OTP-коды отправляются на ваш телефон.',
+    LocaleKeys.settingsLinkedSubtitle: 'Привязанных аккаунтов пока нет.',
+    LocaleKeys.settingsLinkedTip: 'Привязка соцсетей скоро появится.',
+    LocaleKeys.settingsMatchSubtitle: 'Настройте параметры спарринга.',
+    LocaleKeys.settingsMatchTip1: 'Используйте фильтры матчей для настройки расстояния и возраста.',
+    LocaleKeys.settingsMatchTip2: 'Спортивные предпочтения можно изменить в профиле.',
+    LocaleKeys.settingsBlockedSubtitle: 'Заблокированных пользователей нет.',
+    LocaleKeys.settingsBlockedTip1: 'Заблокировать можно из экрана чата.',
+    LocaleKeys.settingsBlockedTip2: 'Заблокированные не могут отправлять сообщения и вызовы.',
+    LocaleKeys.settingsHelpSubtitle: 'Нужна помощь?',
+    LocaleKeys.settingsHelpTip1: 'Свяжитесь с поддержкой через чат или email.',
+    LocaleKeys.settingsHelpTip2: 'Загляните в FAQ для ответов на частые вопросы.',
+    LocaleKeys.settingsFairPlaySubtitle: 'Честная игра — основа сообщества.',
+    LocaleKeys.settingsFairPlayTip1: 'Всегда указывайте точные результаты матчей.',
+    LocaleKeys.settingsFairPlayTip2: 'Споры разрешаются голосованием жюри.',
+    LocaleKeys.settingsFairPlayTip3: 'Повторные ложные жалобы снижают рейтинг надёжности.',
+    LocaleKeys.settingsFairPlayTip4: 'Высокая карма даёт бонусы в магазине.',
+    // Notifications
+    LocaleKeys.nameRequired: 'Имя обязательно',
+    LocaleKeys.profileUpdated: 'Профиль обновлён',
+    LocaleKeys.enterScoreBoth: 'Укажите счёт для обоих игроков.',
+    LocaleKeys.resultConfirmed: 'Результат подтверждён. Матч завершён.',
+    LocaleKeys.scoreConflict: 'Счёт не совпал. Можно открыть спор через кнопку «{toCourt}».',
+    LocaleKeys.resultSentWaiting: 'Результат отправлен. Ждём подтверждение второго игрока.',
+    LocaleKeys.disputeNotAvailable: 'Спор можно открыть после статуса CONFLICT или если спор уже создан.',
+    LocaleKeys.disputeNotAvailableTitle: 'Пока недоступно',
+    LocaleKeys.addDisputeComment: 'Добавьте комментарий к спору.',
+    LocaleKeys.validationTitle: 'Проверка',
+    LocaleKeys.karmaDemo: '+50 карма (демо)',
+    LocaleKeys.voteCountedDemo: 'Голос учтён (демо)',
+    LocaleKeys.enterValidEmail: 'Введите корректный адрес электронной почты',
+    LocaleKeys.itemPurchased: '{name} куплен!',
+    LocaleKeys.coinsSent: '{coins} монет отправлено {name}',
+    // Buttons
+    LocaleKeys.save: 'Сохранить',
+    LocaleKeys.sendToCourt: 'Отправить в суд',
+    LocaleKeys.noEvidence: 'Доказательства не прикреплены',
+    LocaleKeys.retry: 'Повторить',
+    LocaleKeys.refresh: 'Обновить',
+    LocaleKeys.voteFor: 'За {name}',
+    LocaleKeys.cannotDetermine: 'Невозможно определить / Ничья',
+    LocaleKeys.returnToDashboard: 'Вернуться на главную',
+    LocaleKeys.ok: 'OK',
+    LocaleKeys.pickScore: 'Выберите счёт',
+    LocaleKeys.draw: 'Ничья',
+    LocaleKeys.coinsLabel: 'монет',
+    // Form labels
+    LocaleKeys.disputeCommentLabel: 'Комментарий к спору *',
+    LocaleKeys.plaintiffStatementLabel: 'Заявление истца (необязательно)',
+    LocaleKeys.defendantStatementLabel: 'Заявление ответчика (необязательно)',
+    LocaleKeys.evidenceLinkLabel: 'Ссылка на видео/фото доказательства (необязательно)',
+    LocaleKeys.openDispute: 'Открыть спор',
+    LocaleKeys.disputeLoadFailed: 'Не удалось загрузить спор',
+    LocaleKeys.noActiveDisputes: 'Нет активных споров',
+    LocaleKeys.noActiveDisputesDesc: 'Когда спор будет открыт, он появится здесь для рассмотрения.',
   },
   'kk': {
     LocaleKeys.discovery: 'Іздеу',
@@ -1072,6 +1348,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.searchMatches: 'Матчтарды іздеу...',
     LocaleKeys.tabActiveMatches: 'Белсенді',
     LocaleKeys.tabArchived: 'Архив',
+    LocaleKeys.tabDisputes: 'Даулар',
+    LocaleKeys.noDisputes: 'Даулар әлі жоқ',
     LocaleKeys.actionRequired: 'Әрекет қажет',
     LocaleKeys.upcoming: 'Жақында',
     LocaleKeys.resolveDispute: 'Дауды шешу',
@@ -1280,5 +1558,94 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.sportPreferencesSelectAtLeastOne:
         'Кемінде бір спорт түрін таңдаңыз.',
     LocaleKeys.sportPreferencesUpdatedSuccess: 'Спорт баптаулары жаңартылды',
+    // Info modals
+    LocaleKeys.infoChatTitle: 'Не істеу керек',
+    LocaleKeys.infoChatSubtitle: 'Бұл экранда не істеу керек',
+    LocaleKeys.infoChatTip1: 'Action Required карточкалары алдымен сіздің назарыңызды қажет етеді.',
+    LocaleKeys.infoChatTip2: 'Resolve Dispute басып ашық дауға өтіп дауыс беріңіз.',
+    LocaleKeys.infoChatTip3: 'Карточканы басып ойыншымен чат ашыңыз.',
+    LocaleKeys.infoAiSubtitle: 'Модуль іске қосуға дайындалуда.',
+    LocaleKeys.infoAiTip1: 'Матчқа дайындық бойынша ұсыныстар мен дау талдаулар мұнда болады.',
+    LocaleKeys.infoAiTip2: 'Алғашқы кезеңде дәлелдемелер мен fair-play кеңестері қолжетімді.',
+    LocaleKeys.infoMatchSubtitle: 'Жылдам матчинг кеңестері',
+    LocaleKeys.infoMatchTip1: 'Жаттығу ұйымдастыруға дайын болсаңыз оңға сырғытыңыз.',
+    LocaleKeys.infoMatchTip2: 'Ойыншының толық профилін көру үшін инфо карточкасын басыңыз.',
+    LocaleKeys.infoMatchTip3: 'Карточкалар біткенде қашықтық пен жас фильтрлерін өзгертіңіз.',
+    LocaleKeys.infoDisputeTitle: 'Сот қалай жұмыс істейді',
+    LocaleKeys.infoDisputeSubtitle: 'Тек дәлелдемелер бойынша дауыс беріңіз.',
+    LocaleKeys.infoDisputeTip1: 'Алдымен бейне мен фотоларды қараңыз, содан кейін мәлімдемелерді оқыңыз.',
+    LocaleKeys.infoDisputeTip2: 'Дауысыңыз бір рет есептеледі және өзгертуге болмайды.',
+    LocaleKeys.infoDisputeTip3: '3 сәйкес дауыстан кейін дау автоматты түрде жабылады.',
+    LocaleKeys.infoResultTitle: 'Нәтижені қалай жіберу',
+    LocaleKeys.infoResultSubtitle: 'Соңғы есеп екі тарап бекітуі керек.',
+    LocaleKeys.infoResultTip1: 'Ойыншы карточкасын басып оның соңғы есебін таңдаңыз.',
+    LocaleKeys.infoResultTip2: 'Жібергеннен кейін екінші ойыншы сәйкес нәтиже жіберуі керек.',
+    LocaleKeys.infoResultTip3: 'Деректер сәйкес келмесе «Сотқа» арқылы дау ашыңыз.',
+    LocaleKeys.infoNextMatchTip1: 'Кездесу орны мен уақытын алдын ала тексеріңіз.',
+    LocaleKeys.infoNextMatchTip2: 'Жоспар өзгерсе, қарсыласыңызды чатта ескертіңіз.',
+    LocaleKeys.infoNextMatchTip3: 'Матчтан кейін соңғы нәтижені жіберуді ұмытпаңыз.',
+    LocaleKeys.infoAuthTitle: 'Қалай бастау',
+    LocaleKeys.infoAuthSubtitle: 'Oyin-ға кіру және бастау туралы қысқаша.',
+    LocaleKeys.infoAuthTip1: 'Телефон нөмірі мен растау коды арқылы кіріңіз.',
+    LocaleKeys.infoAuthTip2: 'Сәйкес матчтар алу үшін профиліңізді толтырыңыз.',
+    LocaleKeys.infoAuthTip3: 'Кіргеннен кейін іздеу, челленджер мен дау соты қолжетімді.',
+    // Settings info
+    LocaleKeys.settingsAuthSubtitle: 'Телефон арқылы аутентификация қолданылады.',
+    LocaleKeys.settingsAuthTip1: 'Аккаунтыңыз телефон верификациясымен қорғалған.',
+    LocaleKeys.settingsAuthTip2: 'Құпиясөз қажет емес — OTP кодтар телефоныңызға жіберіледі.',
+    LocaleKeys.settingsLinkedSubtitle: 'Байланысқан аккаунттар жоқ.',
+    LocaleKeys.settingsLinkedTip: 'Әлеуметтік желі байланысы жақында қолжетімді болады.',
+    LocaleKeys.settingsMatchSubtitle: 'Спарринг баптауларын конфигурациялаңыз.',
+    LocaleKeys.settingsMatchTip1: 'Қашықтық пен жас диапазонын орнату үшін матч фильтрлерін пайдаланыңыз.',
+    LocaleKeys.settingsMatchTip2: 'Спорт баптауларын профильде өзгертуге болады.',
+    LocaleKeys.settingsBlockedSubtitle: 'Бұғатталған пайдаланушылар жоқ.',
+    LocaleKeys.settingsBlockedTip1: 'Чат экранынан пайдаланушыларды бұғаттай аласыз.',
+    LocaleKeys.settingsBlockedTip2: 'Бұғатталған пайдаланушылар хабарлама мен челлендж жібере алмайды.',
+    LocaleKeys.settingsHelpSubtitle: 'Көмек қажет пе?',
+    LocaleKeys.settingsHelpTip1: 'Чат немесе email арқылы қолдау қызметіне хабарласыңыз.',
+    LocaleKeys.settingsHelpTip2: 'Жиі қойылатын сұрақтар үшін FAQ бөлімін қараңыз.',
+    LocaleKeys.settingsFairPlaySubtitle: 'Әділ ойын қоғамдастықтың негізі.',
+    LocaleKeys.settingsFairPlayTip1: 'Матч нәтижелерін дәл көрсетіңіз.',
+    LocaleKeys.settingsFairPlayTip2: 'Даулар қауымдастық қазылар дауысымен шешіледі.',
+    LocaleKeys.settingsFairPlayTip3: 'Қайталанатын жалған шағымдар сенімділік рейтингін төмендетеді.',
+    LocaleKeys.settingsFairPlayTip4: 'Жоғары карма дүкенде бонустар береді.',
+    // Notifications
+    LocaleKeys.nameRequired: 'Аты міндетті',
+    LocaleKeys.profileUpdated: 'Профиль жаңартылды',
+    LocaleKeys.enterScoreBoth: 'Екі ойыншы үшін есепті көрсетіңіз.',
+    LocaleKeys.resultConfirmed: 'Нәтиже расталды. Матч аяқталды.',
+    LocaleKeys.scoreConflict: 'Есеп сәйкес келмеді. «{toCourt}» арқылы дау ашуға болады.',
+    LocaleKeys.resultSentWaiting: 'Нәтиже жіберілді. Екінші ойыншының растауын күтеміз.',
+    LocaleKeys.disputeNotAvailable: 'CONFLICT мәртебесінен кейін немесе дау жасалған болса дау ашуға болады.',
+    LocaleKeys.disputeNotAvailableTitle: 'Әлі қолжетімді емес',
+    LocaleKeys.addDisputeComment: 'Дауға пікір қосыңыз.',
+    LocaleKeys.validationTitle: 'Тексеру',
+    LocaleKeys.karmaDemo: '+50 карма (демо)',
+    LocaleKeys.voteCountedDemo: 'Дауыс есептелді (демо)',
+    LocaleKeys.enterValidEmail: 'Жарамды электрондық пошта мекенжайын енгізіңіз',
+    LocaleKeys.itemPurchased: '{name} сатып алынды!',
+    LocaleKeys.coinsSent: '{coins} монета {name} жіберілді',
+    // Buttons
+    LocaleKeys.save: 'Сақтау',
+    LocaleKeys.sendToCourt: 'Сотқа жіберу',
+    LocaleKeys.noEvidence: 'Дәлелдемелер тіркелмеген',
+    LocaleKeys.retry: 'Қайталау',
+    LocaleKeys.refresh: 'Жаңарту',
+    LocaleKeys.voteFor: '{name} үшін',
+    LocaleKeys.cannotDetermine: 'Анықтау мүмкін емес / Тең',
+    LocaleKeys.returnToDashboard: 'Басты бетке оралу',
+    LocaleKeys.ok: 'OK',
+    LocaleKeys.pickScore: 'Есепті таңдаңыз',
+    LocaleKeys.draw: 'Тең',
+    LocaleKeys.coinsLabel: 'монета',
+    // Form labels
+    LocaleKeys.disputeCommentLabel: 'Дауға пікір *',
+    LocaleKeys.plaintiffStatementLabel: 'Талапкер мәлімдемесі (міндетті емес)',
+    LocaleKeys.defendantStatementLabel: 'Жауапкер мәлімдемесі (міндетті емес)',
+    LocaleKeys.evidenceLinkLabel: 'Бейне/фото дәлелдемелерге сілтеме (міндетті емес)',
+    LocaleKeys.openDispute: 'Дау ашу',
+    LocaleKeys.disputeLoadFailed: 'Дауды жүктеу мүмкін болмады',
+    LocaleKeys.noActiveDisputes: 'Белсенді даулар жоқ',
+    LocaleKeys.noActiveDisputesDesc: 'Дау ашылғанда, ол мұнда қарау үшін пайда болады.',
   },
 };

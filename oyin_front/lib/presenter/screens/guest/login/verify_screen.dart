@@ -11,12 +11,16 @@ import '../../private/navbar/nav_shell.dart';
 class VerifyCodeScreen extends StatefulWidget {
   const VerifyCodeScreen({
     super.key,
-    required this.phone,
+    this.phone,
+    this.email,
     this.autoSendCode = false,
   });
 
-  final String phone;
+  final String? phone;
+  final String? email;
   final bool autoSendCode;
+
+  String get displayIdentifier => email ?? phone ?? '';
 
   @override
   State<VerifyCodeScreen> createState() => _VerifyCodeScreenState();
@@ -80,7 +84,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
               ),
               12.vSpacing,
               Text(
-                l10n.verificationSubtitle(widget.phone),
+                l10n.verificationSubtitle(widget.displayIdentifier),
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.colored(context.palette.muted),
@@ -134,10 +138,15 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             await _sendCode(showError: false);
                           }
 
-                          final response = await AuthApi.verify(
-                            phone: widget.phone,
-                            code: code,
-                          );
+                          final response = widget.email != null
+                              ? await AuthApi.verifyEmail(
+                                  email: widget.email!,
+                                  code: code,
+                                )
+                              : await AuthApi.verify(
+                                  phone: widget.phone!,
+                                  code: code,
+                                );
                           await SessionStorage.setAccessToken(
                             response.accessToken,
                           );
@@ -168,7 +177,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                                 lastName: lastName,
                                 email: (user['email'] ?? '').toString(),
                                 city: (user['city'] ?? '').toString(),
-                                phone: (user['phone'] ?? widget.phone)
+                                phone: (user['phone'] ?? widget.phone ?? '')
                                     .toString(),
                                 birthDate: birthDate,
                               ),
@@ -180,7 +189,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) =>
-                                    ProfileInfoScreen(phone: widget.phone),
+                                    ProfileInfoScreen(phone: widget.phone ?? ''),
                               ),
                             );
                           } else {
@@ -259,7 +268,11 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     if (_isSendingCode) return;
     setState(() => _isSendingCode = true);
     try {
-      await AuthApi.login(phone: widget.phone);
+      if (widget.email != null) {
+        await AuthApi.loginWithEmail(email: widget.email!);
+      } else {
+        await AuthApi.login(phone: widget.phone!);
+      }
       if (!mounted) return;
       setState(() {
         _codeRequested = true;
@@ -304,7 +317,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
 
     if (!mounted) return;
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => ProfileInfoScreen(phone: widget.phone)),
+      MaterialPageRoute(builder: (_) => ProfileInfoScreen(phone: widget.phone ?? '')),
     );
   }
 }

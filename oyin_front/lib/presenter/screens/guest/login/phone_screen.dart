@@ -19,8 +19,10 @@ class PhoneLoginScreen extends StatefulWidget {
 
 class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   final _phoneController = TextEditingController();
+  final _emailController = TextEditingController();
   PhoneCountry _country = kPhoneCountries.first;
   bool _isMasking = false;
+  bool _useEmail = false;
 
   void _applyMask() {
     if (_isMasking) return;
@@ -64,6 +66,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
   void dispose() {
     _phoneController.removeListener(_applyMask);
     _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -115,37 +118,87 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                 ).textTheme.bodyLarge?.colored(context.palette.muted),
               ),
               32.vSpacing,
-              Text(
-                l10n.phoneNumberLabel,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.weighted(FontWeight.w700),
-              ),
+              if (!_useEmail) ...[
+                Text(
+                  l10n.phoneNumberLabel,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.weighted(FontWeight.w700),
+                ),
+                12.vSpacing,
+                Row(
+                  children: [
+                    _CountrySelector(
+                      value: _country,
+                      onChanged: (value) => setState(() {
+                        _country = value;
+                        _applyMask();
+                      }),
+                    ),
+                    12.hSpacing,
+                    Expanded(
+                      child: _RoundedField(
+                        controller: _phoneController,
+                        hintText: '(___) ___-____',
+                        keyboardType: TextInputType.phone,
+                        maxLength: _country.maxDigits,
+                      ),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                Text(
+                  l10n.email,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.weighted(FontWeight.w700),
+                ),
+                12.vSpacing,
+                _RoundedField(
+                  controller: _emailController,
+                  hintText: 'your@email.com',
+                  keyboardType: TextInputType.emailAddress,
+                  digitsOnly: false,
+                ),
+              ],
               12.vSpacing,
-              Row(
-                children: [
-                  _CountrySelector(
-                    value: _country,
-                    onChanged: (value) => setState(() {
-                      _country = value;
-                      _applyMask();
-                    }),
-                  ),
-                  12.hSpacing,
-                  Expanded(
-                    child: _RoundedField(
-                      controller: _phoneController,
-                      hintText: '(___) ___-____',
-                      keyboardType: TextInputType.phone,
-                      maxLength: _country.maxDigits,
+              Center(
+                child: TextButton(
+                  onPressed: () => setState(() => _useEmail = !_useEmail),
+                  child: Text(
+                    _useEmail
+                        ? l10n.phoneNumberLabel
+                        : 'Email',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: context.palette.primary,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
+                ),
               ),
               const Spacer(),
               _PrimaryActionButton(
                 label: l10n.sendCode,
                 onPressed: () {
+                  if (_useEmail) {
+                    final email = _emailController.text.trim();
+                    if (email.isEmpty || !email.contains('@')) {
+                      AppNotifier.showMessage(
+                        context,
+                        l10n.enterValidEmail,
+                        title: l10n.email,
+                        type: AppNotificationType.warning,
+                      );
+                      return;
+                    }
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            VerifyCodeScreen(email: email, autoSendCode: true),
+                      ),
+                    );
+                    return;
+                  }
                   final digits = _phoneController.text.replaceAll(
                     RegExp(r'\D'),
                     '',
@@ -320,12 +373,14 @@ class _RoundedField extends StatelessWidget {
     required this.hintText,
     this.keyboardType,
     this.maxLength,
+    this.digitsOnly = true,
   });
 
   final TextEditingController controller;
   final String hintText;
   final TextInputType? keyboardType;
   final int? maxLength;
+  final bool digitsOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -341,7 +396,7 @@ class _RoundedField extends StatelessWidget {
             int? maxLength,
           }) => null,
       inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
+        if (digitsOnly) FilteringTextInputFormatter.digitsOnly,
         if (maxLength != null) LengthLimitingTextInputFormatter(maxLength),
       ],
       decoration: InputDecoration(

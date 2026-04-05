@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
@@ -100,11 +101,12 @@ class _DisputeScreenState extends State<DisputeScreen> {
     if (_isDemoDisputeId(_dispute!.id)) {
       final updated = _applyDemoVote(_dispute!, side);
       setState(() => _dispute = updated);
+      final l10n = AppLocalizations.of(context);
       AppNotifier.showSuccess(
         context,
         updated.status == 'RESOLVED'
-            ? '+50 karma (demo)'
-            : 'Голос учтён (demo)',
+            ? l10n.karmaDemo
+            : l10n.voteCountedDemo,
       );
       return;
     }

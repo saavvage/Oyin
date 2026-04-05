@@ -35,10 +35,17 @@ class ApiEndpoints {
       '/chats/threads/$threadId/report';
 
   // Games
-  static String gamesContract(String gameId) => '/games/$gameId/contract';
-  static String gamesAccept(String gameId) => '/games/$gameId/accept';
+  static const String gamesMy = '/games/my';
   static String gamesResult(String gameId) => '/games/$gameId/result';
   static String gamesById(String gameId) => '/games/$gameId';
+
+  // Wallet
+  static const String walletBalance = '/wallet/balance';
+  static const String walletDailyReward = '/wallet/daily-reward';
+  static const String walletTransfer = '/wallet/transfer';
+  static const String walletStore = '/wallet/store';
+  static const String walletStoreBuy = '/wallet/store/buy';
+  static const String walletHistory = '/wallet/history';
 
   // Disputes
   static const String disputesCreate = '/disputes';

@@ -15,11 +15,16 @@ class ChatSocketService {
   final StreamController<ChatMessageDto> _messagesController =
       StreamController<ChatMessageDto>.broadcast();
 
+  final StreamController<String> _activityController =
+      StreamController<String>.broadcast();
+
   io.Socket? _socket;
   bool _isConnecting = false;
   final Set<String> _joinedThreads = <String>{};
 
   Stream<ChatMessageDto> get messages => _messagesController.stream;
+
+  Stream<String> get threadActivity => _activityController.stream;
 
   Future<void> connect() async {
     if (_socket?.connected == true || _isConnecting) return;
@@ -71,6 +76,22 @@ class ChatSocketService {
       final parsed = _parseChatMessage(payload);
       if (parsed == null) return;
       _messagesController.add(parsed);
+    });
+
+    socket.on('thread:joined', (payload) {
+      debugPrint('[ChatWS] thread:joined -> $payload');
+    });
+
+    socket.on('thread:left', (payload) {
+      debugPrint('[ChatWS] thread:left -> $payload');
+    });
+
+    socket.on('thread:activity', (payload) {
+      debugPrint('[ChatWS] thread:activity -> $payload');
+      final threadId = (payload is Map) ? payload['threadId']?.toString() : null;
+      if (threadId != null) {
+        _activityController.add(threadId);
+      }
     });
 
     _socket = socket;

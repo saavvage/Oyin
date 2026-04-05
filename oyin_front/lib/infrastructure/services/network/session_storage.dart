@@ -85,6 +85,16 @@ class SessionStorage {
     await init();
     return _prefs!.getInt(_Keys.timedReminderIntervalMinutes) ?? 60;
   }
+
+  static Future<void> setLocale(String localeCode) async {
+    await init();
+    await _prefs!.setString(_Keys.locale, localeCode);
+  }
+
+  static Future<String?> getLocale() async {
+    await init();
+    return _prefs!.getString(_Keys.locale);
+  }
 }
 
 class _Keys {
@@ -97,4 +107,5 @@ class _Keys {
   static const String timedReminderEnabled = 'timed_reminder_enabled';
   static const String timedReminderIntervalMinutes =
       'timed_reminder_interval_minutes';
+  static const String locale = 'app_locale';
 }

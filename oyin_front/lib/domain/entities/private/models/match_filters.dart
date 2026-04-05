@@ -4,24 +4,28 @@ class MatchFilters {
     required this.distanceKmMax,
     required this.ageMin,
     required this.ageMax,
+    this.sport,
   });
 
   final double distanceKmMin;
   final double distanceKmMax;
   final int ageMin;
   final int ageMax;
+  final String? sport;
 
   MatchFilters copyWith({
     double? distanceKmMin,
     double? distanceKmMax,
     int? ageMin,
     int? ageMax,
+    String? sport,
   }) {
     return MatchFilters(
       distanceKmMin: distanceKmMin ?? this.distanceKmMin,
       distanceKmMax: distanceKmMax ?? this.distanceKmMax,
       ageMin: ageMin ?? this.ageMin,
       ageMax: ageMax ?? this.ageMax,
+      sport: sport ?? this.sport,
     );
   }
 

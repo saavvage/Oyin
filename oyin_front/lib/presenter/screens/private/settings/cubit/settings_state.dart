@@ -30,6 +30,9 @@ class SettingsState {
   final MatchFilters matchFilters;
 
   SettingsState copyWith({
+    String? userName,
+    String? userSubtitle,
+    String? userTag,
     bool? publicVisibility,
     bool? matchRequests,
     bool? disputeUpdates,
@@ -39,9 +42,9 @@ class SettingsState {
     MatchFilters? matchFilters,
   }) => SettingsState(
     searchPlaceholder: searchPlaceholder,
-    userName: userName,
-    userSubtitle: userSubtitle,
-    userTag: userTag,
+    userName: userName ?? this.userName,
+    userSubtitle: userSubtitle ?? this.userSubtitle,
+    userTag: userTag ?? this.userTag,
     sections: sections,
     publicVisibility: publicVisibility ?? this.publicVisibility,
     matchRequests: matchRequests ?? this.matchRequests,

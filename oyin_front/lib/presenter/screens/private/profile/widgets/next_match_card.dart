@@ -10,10 +10,12 @@ class NextMatchCard extends StatelessWidget {
   const NextMatchCard({super.key, required this.l10n, required this.match});
 
   final AppLocalizations l10n;
-  final NextMatch match;
+  final NextMatch? match;
 
   @override
   Widget build(BuildContext context) {
+    final m = match;
+    if (m == null) return const SizedBox.shrink();
     final palette = context.palette;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +61,7 @@ class NextMatchCard extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(match.opponentAvatar),
+                    backgroundImage: NetworkImage(m.opponentAvatar),
                     radius: 22,
                   ),
                   12.hSpacing,
@@ -74,7 +76,7 @@ class NextMatchCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        match.opponentName,
+                        m.opponentName,
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.w800),
                       ),
@@ -91,7 +93,7 @@ class NextMatchCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      l10n.statusConfirmed,
+                      m.statusLabel,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                         color: palette.primary,
                         fontWeight: FontWeight.w700,
@@ -106,7 +108,7 @@ class NextMatchCard extends StatelessWidget {
                   const Icon(Icons.calendar_today, size: 18),
                   8.hSpacing,
                   Text(
-                    match.dateLabel,
+                    m.dateLabel,
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -117,7 +119,7 @@ class NextMatchCard extends StatelessWidget {
                   const Icon(Icons.place, size: 18),
                   8.hSpacing,
                   Text(
-                    match.locationLabel,
+                    m.locationLabel,
                     style: Theme.of(
                       context,
                     ).textTheme.bodyMedium?.copyWith(color: palette.muted),
@@ -142,12 +144,12 @@ class NextMatchCard extends StatelessWidget {
                   onPressed: () {
                     showFrostedInfoModal(
                       context,
-                      title: '${l10n.nextMatch}: ${match.opponentName}',
-                      subtitle: '${match.dateLabel} • ${match.locationLabel}',
-                      tips: const [
-                        'Проверьте место и время встречи заранее.',
-                        'Если планы изменились, предупредите соперника в чате.',
-                        'После матча не забудьте отправить итоговый результат.',
+                      title: '${l10n.nextMatch}: ${m.opponentName}',
+                      subtitle: '${m.dateLabel} • ${m.locationLabel}',
+                      tips: [
+                        l10n.infoNextMatchTip1,
+                        l10n.infoNextMatchTip2,
+                        l10n.infoNextMatchTip3,
                       ],
                     );
                   },

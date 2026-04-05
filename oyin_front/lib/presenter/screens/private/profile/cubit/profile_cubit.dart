@@ -17,34 +17,25 @@ class ProfileCubit extends Cubit<ProfileState> {
     final user = MockUserRepository.instance.getOrDefault();
     final displayName = user.fullName.isNotEmpty
         ? user.fullName
-        : "Alex 'The Jab' Johnson";
-    final location = user.city.isNotEmpty ? user.city : 'San Francisco, CA';
-    final tagline = 'Boxing & Muay Thai';
+        : '';
+    final location = user.city.isNotEmpty ? user.city : '';
 
     return ProfileState(
-      avatarUrl:
-          'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80',
+      avatarUrl: '',
       name: displayName,
-      tagline: tagline,
+      tagline: '',
       email: user.email,
       location: location,
-      league: 'GOLD LEAGUE',
+      league: '',
       stats: const ProfileStats(
-        reputation: 4.9,
+        reputation: 0,
         reputationNoteKey: LocaleKeys.reputationExcellent,
-        record: '12W-3L',
-        matches: 15,
-        matchesDeltaValue: '2',
-        reliability: 98,
+        record: '0W-0L',
+        matches: 0,
+        matchesDeltaValue: '',
+        reliability: 0,
       ),
-      nextMatch: const NextMatch(
-        opponentName: 'Sarah K.',
-        opponentAvatar:
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80',
-        dateLabel: 'Today, 18:00',
-        locationLabel: 'Downtown Gym',
-        statusLabel: 'CONFIRMED',
-      ),
+      nextMatch: null,
       settingsItems: const [
         ProfileSettingItem(
           icon: 'availability',
@@ -73,12 +64,77 @@ class ProfileCubit extends Cubit<ProfileState> {
       final email = (data['email'] ?? state.email).toString();
       final city = (data['city'] ?? state.location).toString();
       final avatar = (data['avatarUrl'] ?? '').toString();
+      final reliability =
+          (data['reliabilityScore'] as num?)?.toInt() ?? state.stats.reliability;
       final sportProfiles = _extractSportProfiles(data['sportProfiles']);
 
       final safeName = name.isNotEmpty && name.toLowerCase() != 'new user'
           ? name
           : state.name;
       final tagline = _buildTagline(sportProfiles);
+
+      // Extract ELO rating for league calculation
+      int eloRating = 1000;
+      if (data['sportProfiles'] is List &&
+          (data['sportProfiles'] as List).isNotEmpty) {
+        eloRating = ((data['sportProfiles'] as List).first['eloRating'] as num?)
+                ?.toInt() ??
+            1000;
+      }
+      final league = _getLeague(eloRating);
+
+      // Load game stats
+      final myId = (data['id'] ?? '').toString();
+      var stats = state.stats;
+      NextMatch? nextMatch;
+      try {
+        final games = await GamesApi.getMyGames(myId);
+        int wins = 0;
+        int losses = 0;
+        int draws = 0;
+        for (final g in games) {
+          switch (g.result) {
+            case 'win':
+              wins++;
+              break;
+            case 'loss':
+              losses++;
+              break;
+            case 'draw':
+              draws++;
+              break;
+          }
+        }
+        final total = wins + losses + draws;
+        stats = ProfileStats(
+          reputation: reliability / 20.0, // 0-100 → 0-5
+          reputationNoteKey: reliability >= 80
+              ? LocaleKeys.reputationExcellent
+              : LocaleKeys.reputationExcellent,
+          record: '${wins}W-${losses}L',
+          matches: total,
+          matchesDeltaValue: '',
+          reliability: reliability,
+        );
+
+        // Find next upcoming match (PENDING or SCHEDULED)
+        final upcoming = games.where((g) =>
+            g.status == 'PENDING' || g.status == 'SCHEDULED').toList();
+        if (upcoming.isNotEmpty) {
+          final next = upcoming.first;
+          nextMatch = NextMatch(
+            opponentName: next.opponentName,
+            opponentAvatar: next.opponentAvatarUrl,
+            dateLabel: next.createdAt != null
+                ? '${next.createdAt!.day}.${next.createdAt!.month.toString().padLeft(2, '0')}'
+                : '',
+            locationLabel: '',
+            statusLabel: next.status == 'SCHEDULED' ? 'CONFIRMED' : next.status,
+          );
+        }
+      } catch (_) {
+        stats = state.stats.copyWith(reliability: reliability);
+      }
 
       emit(
         state.copyWith(
@@ -87,7 +143,10 @@ class ProfileCubit extends Cubit<ProfileState> {
           location: city.isNotEmpty ? city : state.location,
           avatarUrl: avatar.isNotEmpty ? avatar : state.avatarUrl,
           tagline: tagline,
+          league: league,
           sportProfiles: sportProfiles,
+          stats: stats,
+          nextMatch: nextMatch,
         ),
       );
     } catch (_) {}
@@ -134,6 +193,14 @@ class ProfileCubit extends Cubit<ProfileState> {
       );
     }
     return result;
+  }
+
+  static String _getLeague(int elo) {
+    if (elo >= 1800) return 'DIAMOND LEAGUE';
+    if (elo >= 1500) return 'PLATINUM LEAGUE';
+    if (elo >= 1200) return 'GOLD LEAGUE';
+    if (elo >= 900) return 'SILVER LEAGUE';
+    return 'BRONZE LEAGUE';
   }
 
   String _buildTagline(List<UserSportProfileView> profiles) {

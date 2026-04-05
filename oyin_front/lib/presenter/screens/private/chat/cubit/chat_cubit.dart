@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'chat_state.dart';
 import '../../../../../app/localization/locale_keys.dart';
 import '../../../../../infrastructure/services/network/chat_api.dart';
+import '../../../../../infrastructure/services/network/disputes_api.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit()
@@ -35,7 +36,22 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  void selectTab(int index) => emit(state.copyWith(activeTab: index));
+  Future<void> loadDisputes() async {
+    emit(state.copyWith(isLoadingDisputes: true));
+    try {
+      final disputes = await DisputesApi.getMyDisputes();
+      emit(state.copyWith(disputes: disputes, isLoadingDisputes: false));
+    } catch (_) {
+      emit(state.copyWith(disputes: const [], isLoadingDisputes: false));
+    }
+  }
+
+  void selectTab(int index) {
+    emit(state.copyWith(activeTab: index));
+    if (index == 1 && state.disputes.isEmpty && !state.isLoadingDisputes) {
+      loadDisputes();
+    }
+  }
 
   ChatCard _toCard(ChatThreadDto dto) {
     return ChatCard(

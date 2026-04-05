@@ -158,7 +158,7 @@ class _MatchResultView extends StatelessWidget {
       if (result == null) {
         AppNotifier.showMessage(
           context,
-          'Укажите счёт для обоих игроков.',
+          l10n.enterScoreBoth,
           title: l10n.notifTitleWarning,
           type: AppNotificationType.warning,
         );
@@ -167,15 +167,12 @@ class _MatchResultView extends StatelessWidget {
 
       switch (result.status) {
         case 'PLAYED':
-          AppNotifier.showSuccess(
-            context,
-            'Результат подтверждён. Матч завершён.',
-          );
+          AppNotifier.showSuccess(context, l10n.resultConfirmed);
           break;
         case 'CONFLICT':
           AppNotifier.showMessage(
             context,
-            'Счёт не совпал. Можно открыть спор через кнопку «${l10n.toCourt}».',
+            l10n.scoreConflict.replaceFirst('{toCourt}', l10n.toCourt),
             title: l10n.notifTitleInfo,
             type: AppNotificationType.info,
           );
@@ -183,7 +180,7 @@ class _MatchResultView extends StatelessWidget {
         default:
           AppNotifier.showMessage(
             context,
-            'Результат отправлен. Ждём подтверждение второго игрока.',
+            l10n.resultSentWaiting,
             title: l10n.notifTitleInfo,
             type: AppNotificationType.info,
           );
@@ -199,10 +196,11 @@ class _MatchResultView extends StatelessWidget {
     final state = cubit.state;
 
     if (!state.canOpenDispute && !(state.disputeId?.isNotEmpty ?? false)) {
+      final l10n = AppLocalizations.of(context);
       AppNotifier.showMessage(
         context,
-        'Спор можно открыть после статуса CONFLICT или если спор уже создан.',
-        title: 'Пока недоступно',
+        l10n.disputeNotAvailable,
+        title: l10n.disputeNotAvailableTitle,
         type: AppNotificationType.info,
       );
       return;
@@ -248,14 +246,15 @@ class _MatchResultView extends StatelessWidget {
   }
 
   static void _showInfo(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showFrostedInfoModal(
       context,
-      title: 'Как отправить результат',
-      subtitle: 'Финальный счёт должен подтвердиться обеими сторонами.',
-      tips: const [
-        'Нажмите на карточку игрока и выберите его итоговый счёт.',
-        'После отправки второй игрок должен отправить совпадающий результат.',
-        'Если данные расходятся, открывайте спор через «В суд».',
+      title: l10n.infoResultTitle,
+      subtitle: l10n.infoResultSubtitle,
+      tips: [
+        l10n.infoResultTip1,
+        l10n.infoResultTip2,
+        l10n.infoResultTip3,
       ],
     );
   }
@@ -281,7 +280,7 @@ class _MatchResultView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Выберите счёт',
+                  AppLocalizations.of(context).pickScore,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -354,7 +353,7 @@ class _MatchResultView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Открыть спор',
+                  AppLocalizations.of(context).openDispute,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -362,25 +361,25 @@ class _MatchResultView extends StatelessWidget {
                 12.vSpacing,
                 _SheetField(
                   controller: commentController,
-                  label: 'Комментарий к спору *',
+                  label: AppLocalizations.of(context).disputeCommentLabel,
                   minLines: 2,
                 ),
                 10.vSpacing,
                 _SheetField(
                   controller: plaintiffController,
-                  label: 'Заявление истца (опционально)',
+                  label: AppLocalizations.of(context).plaintiffStatementLabel,
                   minLines: 2,
                 ),
                 10.vSpacing,
                 _SheetField(
                   controller: defendantController,
-                  label: 'Заявление ответчика (опционально)',
+                  label: AppLocalizations.of(context).defendantStatementLabel,
                   minLines: 2,
                 ),
                 10.vSpacing,
                 _SheetField(
                   controller: evidenceController,
-                  label: 'Ссылка на видео/фото доказательства (опционально)',
+                  label: AppLocalizations.of(context).evidenceLinkLabel,
                 ),
                 14.vSpacing,
                 SizedBox(
@@ -389,10 +388,11 @@ class _MatchResultView extends StatelessWidget {
                     onPressed: () {
                       final comment = commentController.text.trim();
                       if (comment.isEmpty) {
+                        final l10n = AppLocalizations.of(context);
                         AppNotifier.showMessage(
                           context,
-                          'Добавьте комментарий к спору.',
-                          title: 'Проверка',
+                          l10n.addDisputeComment,
+                          title: l10n.validationTitle,
                           type: AppNotificationType.warning,
                         );
                         return;
@@ -415,7 +415,7 @@ class _MatchResultView extends StatelessWidget {
                         borderRadius: BorderRadius.circular(14),
                       ),
                     ),
-                    child: const Text('Отправить в суд'),
+                    child: Text(AppLocalizations.of(context).sendToCourt),
                   ),
                 ),
               ],

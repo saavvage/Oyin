@@ -9,5 +9,7 @@ export 'services/network/matchmaking_api.dart';
 export 'services/network/arena_api.dart';
 export 'services/network/games_api.dart';
 export 'services/network/disputes_api.dart';
+export 'services/network/wallet_api.dart';
 export 'services/notifications/push_notifications_service.dart';
+export 'services/location/location_service.dart';
 export 'services/realtime/chat_socket_service.dart';

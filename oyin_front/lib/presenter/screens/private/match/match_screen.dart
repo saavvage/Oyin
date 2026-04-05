@@ -107,11 +107,11 @@ class _MatchViewState extends State<_MatchView> {
     showFrostedInfoModal(
       context,
       title: l10n.info,
-      subtitle: 'Подсказки для быстрого матчинга',
-      tips: const [
-        'Используйте свайп вправо, если готовы договориться о тренировке.',
-        'Нажимайте на карточку инфо, чтобы посмотреть полный профиль игрока.',
-        'Меняйте фильтры по расстоянию и возрасту, если карточки закончились.',
+      subtitle: l10n.infoMatchSubtitle,
+      tips: [
+        l10n.infoMatchTip1,
+        l10n.infoMatchTip2,
+        l10n.infoMatchTip3,
       ],
     );
   }

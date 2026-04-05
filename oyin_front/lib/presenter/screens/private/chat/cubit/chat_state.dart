@@ -1,3 +1,5 @@
+import '../../../../../infrastructure/services/network/disputes_api.dart';
+
 class ChatCard {
   const ChatCard({
     required this.id,
@@ -29,20 +31,28 @@ class ChatState {
     required this.activeTab,
     required this.actionRequired,
     required this.upcoming,
+    this.disputes = const [],
+    this.isLoadingDisputes = false,
   });
 
-  final int activeTab; // 0 active, 1 archived
+  final int activeTab; // 0 active, 1 disputes
   final List<ChatCard> actionRequired;
   final List<ChatCard> upcoming;
+  final List<DisputeDetailsDto> disputes;
+  final bool isLoadingDisputes;
 
   ChatState copyWith({
     int? activeTab,
     List<ChatCard>? actionRequired,
     List<ChatCard>? upcoming,
+    List<DisputeDetailsDto>? disputes,
+    bool? isLoadingDisputes,
   }) =>
       ChatState(
         activeTab: activeTab ?? this.activeTab,
         actionRequired: actionRequired ?? this.actionRequired,
         upcoming: upcoming ?? this.upcoming,
+        disputes: disputes ?? this.disputes,
+        isLoadingDisputes: isLoadingDisputes ?? this.isLoadingDisputes,
       );
 }

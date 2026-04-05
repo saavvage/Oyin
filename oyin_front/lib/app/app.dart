@@ -30,19 +30,28 @@ class _OyinAppState extends State<OyinApp> {
   Future<void> _resolveSession() async {
     final token = await SessionStorage.getAccessToken();
     final isGuest = await SessionStorage.getGuestMode();
+    final savedLocale = await SessionStorage.getLocale();
     if (token != null && token.isNotEmpty) {
       await PushNotificationsService.syncTokenWithBackend();
+      LocationService.syncLocationWithBackend(); // fire and forget
     }
     if (!mounted) return;
     setState(() {
       _isAuthorized = isGuest || (token != null && token.isNotEmpty);
       _isSessionReady = true;
+      if (savedLocale != null && savedLocale.isNotEmpty) {
+        final locale = Locale(savedLocale);
+        if (AppLocalizations.supportedLocales.contains(locale)) {
+          _locale = locale;
+        }
+      }
     });
   }
 
   void setLocale(Locale locale) {
     if (AppLocalizations.supportedLocales.contains(locale)) {
       setState(() => _locale = locale);
+      SessionStorage.setLocale(locale.languageCode);
     }
   }
 

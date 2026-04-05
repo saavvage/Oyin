@@ -38,11 +38,11 @@ class ChatHeader extends StatelessWidget {
             showFrostedInfoModal(
               context,
               title: l10n.myGames,
-              subtitle: 'Что делать на этом экране',
-              tips: const [
-                'Карточки с Action Required требуют вашего действия в первую очередь.',
-                'Нажмите Resolve Dispute, чтобы перейти к открытому спору и проголосовать.',
-                'Обычный тап по карточке открывает диалог с игроком.',
+              subtitle: l10n.infoChatSubtitle,
+              tips: [
+                l10n.infoChatTip1,
+                l10n.infoChatTip2,
+                l10n.infoChatTip3,
               ],
             );
           },

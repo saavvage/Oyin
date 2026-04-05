@@ -2,24 +2,45 @@ import 'package:flutter/material.dart';
 
 import '../../../extensions/_export.dart';
 import '../../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/services/network/wallet_api.dart';
 import 'widgets/reward_sheet.dart';
 import 'transfer_screen.dart';
 import 'store_screen.dart';
 import 'history_screen.dart';
-import '../../../../../app/localization/app_localizations.dart';
 
-class WalletEntryButton extends StatelessWidget {
-  const WalletEntryButton({super.key, required this.balance});
+class WalletEntryButton extends StatefulWidget {
+  const WalletEntryButton({super.key});
 
-  final int balance;
+  @override
+  State<WalletEntryButton> createState() => _WalletEntryButtonState();
+}
+
+class _WalletEntryButtonState extends State<WalletEntryButton> {
+  int _balance = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBalance();
+  }
+
+  Future<void> _loadBalance() async {
+    try {
+      final data = await WalletApi.getBalance();
+      if (mounted) setState(() => _balance = data.balance);
+    } catch (_) {}
+  }
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
     final l10n = AppLocalizations.of(context);
     return ElevatedButton(
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => WalletScreen(balance: balance)));
+      onPressed: () async {
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const WalletScreen()),
+        );
+        _loadBalance();
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: palette.card,
@@ -34,7 +55,7 @@ class WalletEntryButton extends StatelessWidget {
           10.hSpacing,
           Expanded(
             child: Text(
-              l10n.walletBalance(balance.toString()),
+              l10n.walletBalance(_balance.toString()),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
@@ -45,10 +66,38 @@ class WalletEntryButton extends StatelessWidget {
   }
 }
 
-class WalletScreen extends StatelessWidget {
-  const WalletScreen({super.key, required this.balance});
+class WalletScreen extends StatefulWidget {
+  const WalletScreen({super.key});
 
-  final int balance;
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends State<WalletScreen> {
+  int _balance = 0;
+  int _streak = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final data = await WalletApi.getBalance();
+      if (mounted) {
+        setState(() {
+          _balance = data.balance;
+          _streak = data.dailyRewardStreak;
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,42 +111,50 @@ class WalletScreen extends StatelessWidget {
           children: [
             const Icon(Icons.monetization_on, color: Colors.amber),
             8.hSpacing,
-            Text(l10n.walletBalance(balance.toString())),
+            Text(l10n.walletBalance(_balance.toString())),
           ],
         ),
       ),
       backgroundColor: palette.background,
-      body: SafeArea(
-        bottom: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _ThreeActions(),
-              16.vSpacing,
-              _DailyRewardCard(),
-              16.vSpacing,
-            ],
-          ),
-        ),
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SafeArea(
+              bottom: false,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _ThreeActions(onReturn: _load),
+                    16.vSpacing,
+                    _DailyRewardCard(streak: _streak, onClaimed: _load),
+                    16.vSpacing,
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }
 
 class _ThreeActions extends StatelessWidget {
+  const _ThreeActions({required this.onReturn});
+
+  final VoidCallback onReturn;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Row(
       children: [
-        Expanded(child: _ActionBlock(label: l10n.walletTransfer, icon: Icons.send, onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TransferScreen()));
+        Expanded(child: _ActionBlock(label: l10n.walletTransfer, icon: Icons.send, onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TransferScreen()));
+          onReturn();
         })),
         10.hSpacing,
-        Expanded(child: _ActionBlock(label: l10n.walletStore, icon: Icons.storefront, onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const StoreScreen()));
+        Expanded(child: _ActionBlock(label: l10n.walletStore, icon: Icons.storefront, onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const StoreScreen()));
+          onReturn();
         })),
         10.hSpacing,
         Expanded(child: _ActionBlock(label: l10n.walletHistory, icon: Icons.history, onTap: () {
@@ -139,6 +196,11 @@ class _ActionBlock extends StatelessWidget {
 }
 
 class _DailyRewardCard extends StatelessWidget {
+  const _DailyRewardCard({required this.streak, required this.onClaimed});
+
+  final int streak;
+  final VoidCallback onClaimed;
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -185,64 +247,7 @@ class _DailyRewardCard extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => RewardSheet(parentContext: context),
-    );
-  }
-}
-
-class _StoreList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    final l10n = AppLocalizations.of(context);
-    final items = ['Gym pass', 'Equipment', 'Coach session', 'Energy drink'];
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: palette.card, borderRadius: BorderRadius.circular(14)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.walletStore, style: Theme.of(context).textTheme.titleMedium),
-          10.vSpacing,
-          ...items.map(
-            (i) => ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(i),
-              trailing: Text(l10n.walletBuy),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HistoryList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    final l10n = AppLocalizations.of(context);
-    final history = [
-      'Bought gym pass (-150)',
-      'Received daily reward (+20)',
-      'Transfer from Alex (+50)',
-    ];
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: palette.card, borderRadius: BorderRadius.circular(14)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.walletHistory, style: Theme.of(context).textTheme.titleMedium),
-          10.vSpacing,
-          ...history.map(
-            (h) => ListTile(
-              contentPadding: EdgeInsets.zero,
-              title: Text(h),
-            ),
-          ),
-        ],
-      ),
+      builder: (_) => RewardSheet(parentContext: context, streak: streak, onClaimed: onClaimed),
     );
   }
 }

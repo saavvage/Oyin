@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../app/localization/app_localizations.dart';
 import '../../../../../extensions/_export.dart';
 import '../../../../../../infrastructure/export.dart';
 
@@ -134,7 +135,7 @@ class DisputeVotesBar extends StatelessWidget {
           color: Colors.redAccent,
         ),
         10.hSpacing,
-        _VoteCounter(label: 'Draw', value: summary.draw, color: Colors.grey),
+        _VoteCounter(label: AppLocalizations.of(context).draw, value: summary.draw, color: Colors.grey),
       ],
     );
   }
@@ -220,7 +221,7 @@ class DisputeVoteButtons extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text('Vote $player1Name'),
+                child: Text(AppLocalizations.of(context).voteFor(player1Name)),
               ),
             ),
             10.hSpacing,
@@ -235,7 +236,7 @@ class DisputeVoteButtons extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text('Vote $player2Name'),
+                child: Text(AppLocalizations.of(context).voteFor(player2Name)),
               ),
             ),
           ],
@@ -251,7 +252,7 @@ class DisputeVoteButtons extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text('Cannot determine / Draw'),
+            child: Text(AppLocalizations.of(context).cannotDetermine),
           ),
         ),
       ],
@@ -322,7 +323,7 @@ class DisputeResolvedBlock extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Return to dashboard'),
+              child: Text(AppLocalizations.of(context).returnToDashboard),
             ),
           ),
         ],

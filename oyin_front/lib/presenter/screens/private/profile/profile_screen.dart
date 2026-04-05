@@ -9,6 +9,7 @@ import '../../../widgets/_export.dart';
 import '../../guest/login/phone_screen.dart';
 import '../wallet/wallet_screen.dart';
 import 'cubit/_export.dart';
+import 'match_history_screen.dart';
 import 'sport_preferences_screen.dart';
 import 'widgets/_export.dart';
 
@@ -59,7 +60,7 @@ class _ProfileView extends StatelessWidget {
                   24.vSpacing,
                   ProfileStatsGrid(l10n: l10n, stats: state.stats),
                   16.vSpacing,
-                  WalletEntryButton(balance: 350),
+                  const WalletEntryButton(),
                   20.vSpacing,
                   NextMatchCard(l10n: l10n, match: state.nextMatch),
                   20.vSpacing,
@@ -119,19 +120,25 @@ class _ProfileView extends StatelessWidget {
     ProfileSettingItem item,
     ProfileState state,
   ) async {
-    if (item.icon != 'sports') {
-      return;
-    }
-
-    final updated = await Navigator.of(context).push<bool>(
-      MaterialPageRoute(
-        builder: (_) =>
-            SportPreferencesScreen(initialProfiles: state.sportProfiles),
-      ),
-    );
-
-    if (updated == true && context.mounted) {
-      await context.read<ProfileCubit>().refreshProfile();
+    switch (item.icon) {
+      case 'sports':
+        final updated = await Navigator.of(context).push<bool>(
+          MaterialPageRoute(
+            builder: (_) =>
+                SportPreferencesScreen(initialProfiles: state.sportProfiles),
+          ),
+        );
+        if (updated == true && context.mounted) {
+          await context.read<ProfileCubit>().refreshProfile();
+        }
+        break;
+      case 'history':
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const MatchHistoryScreen()),
+        );
+        break;
+      default:
+        break;
     }
   }
 }

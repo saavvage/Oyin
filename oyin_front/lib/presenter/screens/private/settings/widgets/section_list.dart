@@ -18,6 +18,7 @@ class SettingsSectionList extends StatelessWidget {
     required this.onToggleDisputeUpdates,
     required this.onLocaleSelected,
     required this.selectedLocale,
+    this.onItemTap,
   });
 
   final AppLocalizations l10n;
@@ -30,6 +31,7 @@ class SettingsSectionList extends StatelessWidget {
   final ValueChanged<bool> onToggleDisputeUpdates;
   final ValueChanged<String> onLocaleSelected;
   final String selectedLocale;
+  final void Function(SettingsItem item)? onItemTap;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,9 @@ class SettingsSectionList extends StatelessWidget {
                         onTogglePublicVisibility: onTogglePublicVisibility,
                         onToggleMatchRequests: onToggleMatchRequests,
                         onToggleDisputeUpdates: onToggleDisputeUpdates,
+                        onTap: item.toggleKey == null && onItemTap != null
+                            ? () => onItemTap!(item)
+                            : null,
                       );
                     },
                   ),
@@ -91,6 +96,7 @@ class _SettingsTile extends StatelessWidget {
     required this.onTogglePublicVisibility,
     required this.onToggleMatchRequests,
     required this.onToggleDisputeUpdates,
+    this.onTap,
   });
 
   final AppLocalizations l10n;
@@ -101,6 +107,7 @@ class _SettingsTile extends StatelessWidget {
   final ValueChanged<bool> onTogglePublicVisibility;
   final ValueChanged<bool> onToggleMatchRequests;
   final ValueChanged<bool> onToggleDisputeUpdates;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -116,44 +123,47 @@ class _SettingsTile extends StatelessWidget {
       );
     }
 
-    return Container(
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: palette.card,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: palette.accent,
-              borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(top: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: palette.card,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: palette.accent,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: Colors.blueAccent),
             ),
-            child: Icon(icon, color: Colors.blueAccent),
-          ),
-          12.hSpacing,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _translateTitle(l10n, item.title),
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                if (item.subtitle.isNotEmpty) ...[
-                  4.vSpacing,
+            12.hSpacing,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    _translateSubtitle(l10n, item.subtitle),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
+                    _translateTitle(l10n, item.title),
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                   ),
+                  if (item.subtitle.isNotEmpty) ...[
+                    4.vSpacing,
+                    Text(
+                      _translateSubtitle(l10n, item.subtitle),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
+                    ),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
-          trailing,
-        ],
+            trailing,
+          ],
+        ),
       ),
     );
   }

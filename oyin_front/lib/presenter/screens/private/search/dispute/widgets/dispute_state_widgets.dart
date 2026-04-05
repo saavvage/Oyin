@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../app/localization/app_localizations.dart';
 import '../../../../../extensions/_export.dart';
 
 class DisputeErrorState extends StatelessWidget {
@@ -23,7 +24,7 @@ class DisputeErrorState extends StatelessWidget {
             const Icon(Icons.error_outline_rounded, size: 34),
             10.vSpacing,
             Text(
-              'Failed to load dispute',
+              AppLocalizations.of(context).disputeLoadFailed,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
@@ -31,7 +32,7 @@ class DisputeErrorState extends StatelessWidget {
             8.vSpacing,
             Text(message, textAlign: TextAlign.center),
             14.vSpacing,
-            ElevatedButton(onPressed: onRetry, child: const Text('Retry')),
+            ElevatedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context).retry)),
           ],
         ),
       ),
@@ -56,21 +57,21 @@ class DisputeEmptyState extends StatelessWidget {
             Icon(Icons.gavel_rounded, size: 38, color: palette.muted),
             10.vSpacing,
             Text(
-              'No active disputes available',
+              AppLocalizations.of(context).noActiveDisputes,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
             ),
             8.vSpacing,
             Text(
-              'When a dispute is opened, it will appear here for review.',
+              AppLocalizations.of(context).noActiveDisputesDesc,
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: palette.muted),
             ),
             14.vSpacing,
-            ElevatedButton(onPressed: onRetry, child: const Text('Refresh')),
+            ElevatedButton(onPressed: onRetry, child: Text(AppLocalizations.of(context).refresh)),
           ],
         ),
       ),

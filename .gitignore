@@ -1,3 +1,7 @@
+# Environment files (secrets, API keys, passwords)
+**/.env
+!**/.env.example
+
 # Miscellaneous
 *.class
 *.lock

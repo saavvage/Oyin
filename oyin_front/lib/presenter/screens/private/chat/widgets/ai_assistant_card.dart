@@ -77,10 +77,10 @@ class AiAssistantCard extends StatelessWidget {
               showFrostedInfoModal(
                 context,
                 title: l10n.aiAssistant,
-                subtitle: 'Модуль готовится к запуску.',
-                tips: const [
-                  'Здесь будут рекомендации по подготовке к матчу и разборы споров.',
-                  'На первом этапе доступны подсказки по доказательствам и fair-play.',
+                subtitle: l10n.infoAiSubtitle,
+                tips: [
+                  l10n.infoAiTip1,
+                  l10n.infoAiTip2,
                 ],
               );
             },

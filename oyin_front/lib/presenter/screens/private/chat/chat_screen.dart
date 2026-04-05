@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../messanger/messanger_screen.dart';
 import '../search/dispute_screen.dart';
@@ -66,47 +67,206 @@ class _ChatView extends StatelessWidget {
                   12.vSpacing,
                   ChatTabBar(
                     activeIndex: state.activeTab,
-                    tabs: [l10n.tabActiveMatches, l10n.tabArchived],
+                    tabs: [l10n.tabActiveMatches, l10n.tabDisputes],
                     onChanged: (i) => context.read<ChatCubit>().selectTab(i),
                   ),
                   16.vSpacing,
-                  AiAssistantCard(l10n: l10n),
-                  16.vSpacing,
-                  Text(
-                    l10n.actionRequired.toUpperCase(),
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
-                      color: palette.muted,
+                  if (state.activeTab == 0) ...[
+                    AiAssistantCard(l10n: l10n),
+                    16.vSpacing,
+                    Text(
+                      l10n.actionRequired.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                        color: palette.muted,
+                      ),
                     ),
-                  ),
-                  10.vSpacing,
-                  ...state.actionRequired.map(
-                    (card) => ChatListCard(
-                      card: card,
-                      onTap: () => _openChat(context, card),
+                    10.vSpacing,
+                    ...state.actionRequired.map(
+                      (card) => ChatListCard(
+                        card: card,
+                        onTap: () => _openChat(context, card),
+                      ),
                     ),
-                  ),
-                  14.vSpacing,
-                  Text(
-                    l10n.upcoming.toUpperCase(),
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1,
-                      color: palette.muted,
+                    14.vSpacing,
+                    Text(
+                      l10n.upcoming.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 1,
+                        color: palette.muted,
+                      ),
                     ),
-                  ),
-                  10.vSpacing,
-                  ...state.upcoming.map(
-                    (card) => ChatListCard(
-                      card: card,
-                      onTap: () => _openChat(context, card),
+                    10.vSpacing,
+                    ...state.upcoming.map(
+                      (card) => ChatListCard(
+                        card: card,
+                        onTap: () => _openChat(context, card),
+                      ),
                     ),
-                  ),
+                  ] else ...[
+                    _DisputesTab(
+                      disputes: state.disputes,
+                      isLoading: state.isLoadingDisputes,
+                      noDisputesLabel: l10n.noDisputes,
+                    ),
+                  ],
                 ],
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DisputesTab extends StatelessWidget {
+  const _DisputesTab({
+    required this.disputes,
+    required this.isLoading,
+    required this.noDisputesLabel,
+  });
+
+  final List<DisputeDetailsDto> disputes;
+  final bool isLoading;
+  final String noDisputesLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+
+    if (isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 40),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (disputes.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(Icons.gavel_rounded, size: 48, color: palette.muted),
+              const SizedBox(height: 12),
+              Text(
+                noDisputesLabel,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: palette.muted),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: disputes.map((d) => _DisputeCard(dispute: d)).toList(),
+    );
+  }
+}
+
+class _DisputeCard extends StatelessWidget {
+  const _DisputeCard({required this.dispute});
+
+  final DisputeDetailsDto dispute;
+
+  Color _statusColor(BuildContext context) {
+    final palette = context.palette;
+    switch (dispute.status) {
+      case 'OPEN':
+      case 'VOTING':
+        return Colors.orangeAccent;
+      case 'RESOLVED':
+        return Colors.greenAccent;
+      case 'CANCELLED':
+        return palette.muted;
+      default:
+        return palette.primary;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final statusColor = _statusColor(context);
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => DisputeScreen(disputeId: dispute.id),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: palette.card,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: palette.badge),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(Icons.gavel_rounded, color: statusColor, size: 22),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    dispute.subject.isNotEmpty
+                        ? dispute.subject
+                        : 'Dispute #${dispute.displayId}',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${dispute.sport} • ${dispute.locationLabel}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: palette.muted),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                dispute.status,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: statusColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -31,6 +31,7 @@ class MatchmakingApi {
         'distanceMax': filters.distanceKmMax,
         'ageMin': filters.ageMin,
         'ageMax': filters.ageMax,
+        if (filters.sport != null) 'sport': filters.sport,
       },
     );
 

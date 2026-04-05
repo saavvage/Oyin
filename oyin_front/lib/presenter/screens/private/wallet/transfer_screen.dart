@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/services/network/wallet_api.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
 
@@ -15,6 +16,21 @@ class TransferScreen extends StatefulWidget {
 class _TransferScreenState extends State<TransferScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _coinsController = TextEditingController();
+  int _balance = 0;
+  bool _isSending = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBalance();
+  }
+
+  Future<void> _loadBalance() async {
+    try {
+      final data = await WalletApi.getBalance();
+      if (mounted) setState(() => _balance = data.balance);
+    } catch (_) {}
+  }
 
   @override
   void dispose() {
@@ -23,14 +39,14 @@ class _TransferScreenState extends State<TransferScreen> {
     super.dispose();
   }
 
-  void _send(AppLocalizations l10n) {
+  Future<void> _send(AppLocalizations l10n) async {
     final phone = _phoneController.text.replaceAll(RegExp(r'\D'), '');
     final coins = int.tryParse(_coinsController.text.trim()) ?? 0;
 
     if (phone.length < 10) {
       AppNotifier.showMessage(
         context,
-        'Введите корректный номер получателя.',
+        l10n.notifTitleWarning,
         title: l10n.notifTitleWarning,
         type: AppNotificationType.warning,
       );
@@ -40,21 +56,42 @@ class _TransferScreenState extends State<TransferScreen> {
     if (coins <= 0) {
       AppNotifier.showMessage(
         context,
-        'Укажите количество монет больше 0.',
+        l10n.notifTitleWarning,
         title: l10n.notifTitleWarning,
         type: AppNotificationType.warning,
       );
       return;
     }
 
-    AppNotifier.showMessage(
-      context,
-      'Перевод на +$phone отправлен: $coins монет.',
-      title: l10n.notifTitleSuccess,
-      type: AppNotificationType.success,
-    );
+    setState(() => _isSending = true);
 
-    _coinsController.clear();
+    try {
+      final result = await WalletApi.transfer(phone: phone, amount: coins);
+      final recipientName = result['recipientName'] ?? phone;
+
+      if (!mounted) return;
+      setState(() {
+        _balance = (result['balance'] as num?)?.toInt() ?? _balance;
+        _isSending = false;
+      });
+
+      AppNotifier.showMessage(
+        context,
+        l10n.coinsSent(coins, recipientName),
+        title: l10n.notifTitleSuccess,
+        type: AppNotificationType.success,
+      );
+      _coinsController.clear();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isSending = false);
+      AppNotifier.showMessage(
+        context,
+        e.toString(),
+        title: l10n.notifTitleWarning,
+        type: AppNotificationType.warning,
+      );
+    }
   }
 
   @override
@@ -85,7 +122,7 @@ class _TransferScreenState extends State<TransferScreen> {
                   const Icon(Icons.monetization_on, color: Colors.amber),
                   8.hSpacing,
                   Text(
-                    l10n.walletBalance('350'),
+                    l10n.walletBalance(_balance.toString()),
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],
@@ -126,7 +163,7 @@ class _TransferScreenState extends State<TransferScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => _send(l10n),
+                  onPressed: _isSending ? null : () => _send(l10n),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
@@ -135,7 +172,9 @@ class _TransferScreenState extends State<TransferScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: Text(l10n.walletSend),
+                  child: _isSending
+                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      : Text(l10n.walletSend),
                 ),
               ),
             ],

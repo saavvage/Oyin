@@ -75,6 +75,8 @@ class LocaleKeys {
   static const searchMatches = 'search_matches';
   static const tabActiveMatches = 'tab_active_matches';
   static const tabArchived = 'tab_archived';
+  static const tabDisputes = 'tab_disputes';
+  static const noDisputes = 'no_disputes';
   static const actionRequired = 'action_required';
   static const upcoming = 'upcoming';
   static const resolveDispute = 'resolve_dispute';
@@ -295,4 +297,98 @@ class LocaleKeys {
       'sport_preferences_select_at_least_one';
   static const sportPreferencesUpdatedSuccess =
       'sport_preferences_updated_success';
+
+  // Info modals
+  static const infoChatTitle = 'info_chat_title';
+  static const infoChatSubtitle = 'info_chat_subtitle';
+  static const infoChatTip1 = 'info_chat_tip1';
+  static const infoChatTip2 = 'info_chat_tip2';
+  static const infoChatTip3 = 'info_chat_tip3';
+  static const infoAiSubtitle = 'info_ai_subtitle';
+  static const infoAiTip1 = 'info_ai_tip1';
+  static const infoAiTip2 = 'info_ai_tip2';
+  static const infoMatchSubtitle = 'info_match_subtitle';
+  static const infoMatchTip1 = 'info_match_tip1';
+  static const infoMatchTip2 = 'info_match_tip2';
+  static const infoMatchTip3 = 'info_match_tip3';
+  static const infoDisputeTitle = 'info_dispute_title';
+  static const infoDisputeSubtitle = 'info_dispute_subtitle';
+  static const infoDisputeTip1 = 'info_dispute_tip1';
+  static const infoDisputeTip2 = 'info_dispute_tip2';
+  static const infoDisputeTip3 = 'info_dispute_tip3';
+  static const infoResultTitle = 'info_result_title';
+  static const infoResultSubtitle = 'info_result_subtitle';
+  static const infoResultTip1 = 'info_result_tip1';
+  static const infoResultTip2 = 'info_result_tip2';
+  static const infoResultTip3 = 'info_result_tip3';
+  static const infoNextMatchTip1 = 'info_next_match_tip1';
+  static const infoNextMatchTip2 = 'info_next_match_tip2';
+  static const infoNextMatchTip3 = 'info_next_match_tip3';
+  static const infoAuthTitle = 'info_auth_title';
+  static const infoAuthSubtitle = 'info_auth_subtitle';
+  static const infoAuthTip1 = 'info_auth_tip1';
+  static const infoAuthTip2 = 'info_auth_tip2';
+  static const infoAuthTip3 = 'info_auth_tip3';
+
+  // Settings info modals
+  static const settingsAuthSubtitle = 'settings_auth_subtitle';
+  static const settingsAuthTip1 = 'settings_auth_tip1';
+  static const settingsAuthTip2 = 'settings_auth_tip2';
+  static const settingsLinkedSubtitle = 'settings_linked_subtitle';
+  static const settingsLinkedTip = 'settings_linked_tip';
+  static const settingsMatchSubtitle = 'settings_match_subtitle';
+  static const settingsMatchTip1 = 'settings_match_tip1';
+  static const settingsMatchTip2 = 'settings_match_tip2';
+  static const settingsBlockedSubtitle = 'settings_blocked_subtitle';
+  static const settingsBlockedTip1 = 'settings_blocked_tip1';
+  static const settingsBlockedTip2 = 'settings_blocked_tip2';
+  static const settingsHelpSubtitle = 'settings_help_subtitle';
+  static const settingsHelpTip1 = 'settings_help_tip1';
+  static const settingsHelpTip2 = 'settings_help_tip2';
+  static const settingsFairPlaySubtitle = 'settings_fair_play_subtitle';
+  static const settingsFairPlayTip1 = 'settings_fair_play_tip1';
+  static const settingsFairPlayTip2 = 'settings_fair_play_tip2';
+  static const settingsFairPlayTip3 = 'settings_fair_play_tip3';
+  static const settingsFairPlayTip4 = 'settings_fair_play_tip4';
+
+  // Notifications / messages
+  static const nameRequired = 'name_required';
+  static const profileUpdated = 'profile_updated';
+  static const enterScoreBoth = 'enter_score_both';
+  static const resultConfirmed = 'result_confirmed';
+  static const scoreConflict = 'score_conflict';
+  static const resultSentWaiting = 'result_sent_waiting';
+  static const disputeNotAvailable = 'dispute_not_available';
+  static const disputeNotAvailableTitle = 'dispute_not_available_title';
+  static const addDisputeComment = 'add_dispute_comment';
+  static const validationTitle = 'validation_title';
+  static const karmaDemo = 'karma_demo';
+  static const voteCountedDemo = 'vote_counted_demo';
+  static const enterValidEmail = 'enter_valid_email';
+  static const itemPurchased = 'item_purchased';
+  static const coinsSent = 'coins_sent';
+
+  // Buttons
+  static const save = 'save';
+  static const sendToCourt = 'send_to_court';
+  static const noEvidence = 'no_evidence';
+  static const retry = 'retry';
+  static const refresh = 'refresh';
+  static const voteFor = 'vote_for';
+  static const cannotDetermine = 'cannot_determine';
+  static const returnToDashboard = 'return_to_dashboard';
+  static const ok = 'ok';
+  static const pickScore = 'pick_score';
+  static const draw = 'draw';
+  static const coinsLabel = 'coins_label';
+
+  // Form labels
+  static const disputeCommentLabel = 'dispute_comment_label';
+  static const plaintiffStatementLabel = 'plaintiff_statement_label';
+  static const defendantStatementLabel = 'defendant_statement_label';
+  static const evidenceLinkLabel = 'evidence_link_label';
+  static const openDispute = 'open_dispute';
+  static const disputeLoadFailed = 'dispute_load_failed';
+  static const noActiveDisputes = 'no_active_disputes';
+  static const noActiveDisputesDesc = 'no_active_disputes_desc';
 }

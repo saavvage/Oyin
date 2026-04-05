@@ -20,7 +20,14 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     loadGame();
   }
 
+  bool get _isDemoGame => state.gameId.startsWith('demo-game-');
+
   Future<void> loadGame() async {
+    if (_isDemoGame) {
+      emit(state.copyWith(isLoading: false, statusLabel: 'PENDING'));
+      return;
+    }
+
     emit(state.copyWith(isLoading: true, clearError: true));
 
     try {
@@ -61,6 +68,25 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     final myScore = state.isCurrentUserPlayer1 ? left : right;
     final opponentScore = state.isCurrentUserPlayer1 ? right : left;
 
+    if (_isDemoGame) {
+      emit(state.copyWith(isSubmitting: true, clearError: true));
+      await Future.delayed(const Duration(milliseconds: 500));
+      final status = myScore == opponentScore ? 'PLAYED' : 'PLAYED';
+      emit(state.copyWith(
+        isSubmitting: false,
+        statusLabel: status,
+        title: 'Result Confirmed',
+        dateLabel: 'Completed',
+      ));
+      return GameResultResponse(
+        success: true,
+        gameId: state.gameId,
+        status: status,
+        scoresMatch: true,
+        game: null,
+      );
+    }
+
     emit(state.copyWith(isSubmitting: true, clearError: true));
 
     try {
@@ -95,6 +121,18 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   }) async {
     if (state.isCreatingDispute) {
       return state.disputeId;
+    }
+
+    if (_isDemoGame) {
+      emit(state.copyWith(isCreatingDispute: true, clearError: true));
+      await Future.delayed(const Duration(milliseconds: 400));
+      final demoDisputeId = 'seed-dispute-${state.gameId}';
+      emit(state.copyWith(
+        isCreatingDispute: false,
+        disputeId: demoDisputeId,
+        statusLabel: 'DISPUTED',
+      ));
+      return demoDisputeId;
     }
 
     emit(state.copyWith(isCreatingDispute: true, clearError: true));
@@ -140,6 +178,8 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   }
 
   Future<String?> _resolveMyDisputeId() async {
+    if (_isDemoGame) return state.disputeId;
+
     try {
       final disputes = await DisputesApi.getMyDisputes();
       final target = disputes.cast<DisputeDetailsDto?>().firstWhere(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../app/localization/app_localizations.dart';
 import '../../../../../infrastructure/export.dart';
 import '../../../../extensions/_export.dart';
 import '../../../../widgets/_export.dart';
@@ -130,7 +131,7 @@ class DisputeContent extends StatelessWidget {
                     child: Container(
                       color: palette.card,
                       child: selected == null
-                          ? const Center(child: Text('No evidence attached'))
+                          ? Center(child: Text(AppLocalizations.of(context).noEvidence))
                           : Stack(
                               children: [
                                 Positioned.fill(
@@ -271,14 +272,15 @@ class DisputeContent extends StatelessWidget {
   }
 
   void _showInfo(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     showFrostedInfoModal(
       context,
-      title: 'Как работает суд',
-      subtitle: 'Голосуйте только по доказательствам.',
-      tips: const [
-        'Сначала смотрите видео и фото, потом читайте заявления сторон.',
-        'Голос учитывается один раз и изменить его нельзя.',
-        'После 3 совпадающих голосов спор закрывается автоматически.',
+      title: l10n.infoDisputeTitle,
+      subtitle: l10n.infoDisputeSubtitle,
+      tips: [
+        l10n.infoDisputeTip1,
+        l10n.infoDisputeTip2,
+        l10n.infoDisputeTip3,
       ],
     );
   }

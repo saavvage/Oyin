@@ -6,10 +6,23 @@ class AuthApi {
     await ApiClient.instance.post(ApiEndpoints.authLogin, data: {'phone': phone});
   }
 
+  static Future<void> loginWithEmail({required String email}) async {
+    await ApiClient.instance.post(ApiEndpoints.authLogin, data: {'email': email});
+  }
+
   static Future<AuthVerifyResponse> verify({required String phone, required String code}) async {
     final data = await ApiClient.instance.post(
       ApiEndpoints.authVerify,
       data: {'phone': phone, 'code': code},
+    );
+
+    return AuthVerifyResponse.fromMap(data as Map<String, dynamic>);
+  }
+
+  static Future<AuthVerifyResponse> verifyEmail({required String email, required String code}) async {
+    final data = await ApiClient.instance.post(
+      ApiEndpoints.authVerify,
+      data: {'email': email, 'code': code},
     );
 
     return AuthVerifyResponse.fromMap(data as Map<String, dynamic>);
