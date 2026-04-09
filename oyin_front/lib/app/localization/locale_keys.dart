@@ -87,6 +87,13 @@ class LocaleKeys {
   static const aiAssistant = 'ai_assistant';
   static const aiComingSoon = 'ai_coming_soon';
   static const aiAssistantSubtitle = 'ai_assistant_subtitle';
+  static const aiOnline = 'ai_online';
+  static const aiOffline = 'ai_offline';
+  static const aiMessageHint = 'ai_message_hint';
+  static const aiWelcomeMessage = 'ai_welcome_message';
+  static const aiSuggestion1 = 'ai_suggestion_1';
+  static const aiSuggestion2 = 'ai_suggestion_2';
+  static const aiSuggestion3 = 'ai_suggestion_3';
   static const language = 'language';
   static const reputationExcellent = 'reputation_excellent';
   static const matchesDeltaThisMonth = 'matches_delta_this_month';

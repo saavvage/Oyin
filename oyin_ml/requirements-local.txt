@@ -1,0 +1,17 @@
+# Optional dependencies for local Gemma model support
+# Install only if you want to use local models as fallback
+
+# For GGUF models (Recommended - faster, smaller memory)
+llama-cpp-python>=0.2.0
+
+# For Hugging Face models (Optional - if not using GGUF)
+torch>=2.0.0
+transformers>=4.35.0
+accelerate>=0.20.0
+sentencepiece>=0.1.99
+
+
+
+
+
+

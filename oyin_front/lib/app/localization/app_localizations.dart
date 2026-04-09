@@ -112,6 +112,13 @@ class AppLocalizations {
   String get aiAssistant => _string(LocaleKeys.aiAssistant);
   String get aiComingSoon => _string(LocaleKeys.aiComingSoon);
   String get aiAssistantSubtitle => _string(LocaleKeys.aiAssistantSubtitle);
+  String get aiOnline => _string(LocaleKeys.aiOnline);
+  String get aiOffline => _string(LocaleKeys.aiOffline);
+  String get aiMessageHint => _string(LocaleKeys.aiMessageHint);
+  String get aiWelcomeMessage => _string(LocaleKeys.aiWelcomeMessage);
+  String get aiSuggestion1 => _string(LocaleKeys.aiSuggestion1);
+  String get aiSuggestion2 => _string(LocaleKeys.aiSuggestion2);
+  String get aiSuggestion3 => _string(LocaleKeys.aiSuggestion3);
   String get madeWithCare => _string(LocaleKeys.madeWithCare);
   String get language => _string(LocaleKeys.language);
   String get reputationExcellent => _string(LocaleKeys.reputationExcellent);
@@ -598,7 +605,15 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.aiAssistant: 'AI Assistant',
     LocaleKeys.aiComingSoon: 'Coming soon',
     LocaleKeys.aiAssistantSubtitle:
-        'We will connect your personal fight-AI helper here.',
+        'Get AI-powered sports tips and advice.',
+    LocaleKeys.aiOnline: 'Online',
+    LocaleKeys.aiOffline: 'Offline',
+    LocaleKeys.aiMessageHint: 'Ask me anything about sports...',
+    LocaleKeys.aiWelcomeMessage:
+        'Ask me about warm-ups, injury prevention, technique tips, or match preparation.',
+    LocaleKeys.aiSuggestion1: 'How to warm up?',
+    LocaleKeys.aiSuggestion2: 'Injury prevention tips',
+    LocaleKeys.aiSuggestion3: 'Match preparation',
     LocaleKeys.madeWithCare: 'Made with care for you ❤️',
     LocaleKeys.language: 'Language',
     LocaleKeys.reputationExcellent: 'Excellent',
@@ -978,7 +993,15 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.aiAssistant: 'AI-ассистент',
     LocaleKeys.aiComingSoon: 'Скоро',
     LocaleKeys.aiAssistantSubtitle:
-        'Здесь будет подключен ваш персональный AI-ассистент.',
+        'Получите AI-советы по спорту и тренировкам.',
+    LocaleKeys.aiOnline: 'Онлайн',
+    LocaleKeys.aiOffline: 'Не в сети',
+    LocaleKeys.aiMessageHint: 'Спросите что-нибудь о спорте...',
+    LocaleKeys.aiWelcomeMessage:
+        'Спросите меня о разминке, профилактике травм, технике или подготовке к матчу.',
+    LocaleKeys.aiSuggestion1: 'Как размяться?',
+    LocaleKeys.aiSuggestion2: 'Профилактика травм',
+    LocaleKeys.aiSuggestion3: 'Подготовка к матчу',
     LocaleKeys.madeWithCare: 'Сделано с заботой для вас ❤️',
     LocaleKeys.language: 'Язык',
     LocaleKeys.reputationExcellent: 'Отлично',
@@ -1359,7 +1382,15 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.matched: 'Матч! Жоспарлау үшін жазыңыз.',
     LocaleKeys.aiAssistant: 'AI-ассистент',
     LocaleKeys.aiComingSoon: 'Жақында',
-    LocaleKeys.aiAssistantSubtitle: 'Мұнда сіздің жеке fight-AI қосылады.',
+    LocaleKeys.aiAssistantSubtitle: 'Спорт бойынша AI-кеңестер алыңыз.',
+    LocaleKeys.aiOnline: 'Онлайн',
+    LocaleKeys.aiOffline: 'Офлайн',
+    LocaleKeys.aiMessageHint: 'Спорт туралы сұрақ қойыңыз...',
+    LocaleKeys.aiWelcomeMessage:
+        'Жаттығу, жарақаттанудың алдын алу, техника немесе матчқа дайындық туралы сұраңыз.',
+    LocaleKeys.aiSuggestion1: 'Қалай жылыну керек?',
+    LocaleKeys.aiSuggestion2: 'Жарақаттанудың алдын алу',
+    LocaleKeys.aiSuggestion3: 'Матчқа дайындық',
     LocaleKeys.madeWithCare: 'Сіз үшін қамқорлықпен жасалды ❤️',
     LocaleKeys.language: 'Тіл',
     LocaleKeys.reputationExcellent: 'Өте жақсы',
