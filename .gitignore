@@ -2,6 +2,18 @@
 **/.env
 !**/.env.example
 
+# Python
+**/venv/
+**/__pycache__/
+*.pyc
+
+# ML models and data (too large for git)
+oyin_ml/models/
+oyin_ml/chroma_db/
+
+# macOS
+.DS_Store
+
 # Miscellaneous
 *.class
 *.lock
