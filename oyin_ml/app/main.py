@@ -60,9 +60,19 @@ def check_rate_limit(user_id: str) -> bool:
     return True
 
 
-@app.get("/health", response_model=HealthResponse)
+@app.get("/health")
 async def health_check():
-    return HealthResponse(status="healthy", version="1.0.0")
+    from app.services.llm_service import llm_service
+    backend = "none"
+    if llm_service._local_available:
+        backend = "local_gguf"
+    elif llm_service._vastai_available:
+        backend = "vastai"
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "inference_backend": backend,
+    }
 
 
 @app.post("/chat", response_model=ChatResponse)

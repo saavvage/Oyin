@@ -1,4 +1,3 @@
-import google.generativeai as genai
 from app.config import get_settings
 import logging
 
@@ -6,145 +5,102 @@ logger = logging.getLogger(__name__)
 
 
 class LLMService:
+    """
+    LLM inference with two-tier fallback:
+      1. Local GGUF model (primary — fast, no network)
+      2. Vast.ai remote server (fallback — your model on rented GPU)
+    """
+
     def __init__(self):
         self.settings = get_settings()
-        self.use_local = self.settings.use_local_model
-        self.fallback_enabled = self.settings.model_fallback_enabled
         self.local_service = None
-        self.model = None
-        self.embedding_model = None
-        
-        if not self.use_local and self.settings.gemini_api_key:
-            try:
-                genai.configure(api_key=self.settings.gemini_api_key)
-                self.model = genai.GenerativeModel('models/gemini-2.0-flash')
-                self.embedding_model = 'models/embedding-001'
-                logger.info("Using Gemini API for LLM")
-            except Exception as e:
-                logger.warning(f"Failed to initialize Gemini: {e}")
-                if self.fallback_enabled:
-                    self._initialize_local_fallback()
-        else:
-            self._initialize_local_fallback()
-        
-    def _initialize_local_fallback(self):
-        """Initialize local Gemma model as fallback"""
+        self.vastai_service = None
+
+        self._initialize_local()
+        self._initialize_vastai()
+
+    def _initialize_local(self):
         try:
             from app.services.local_llm_service import get_local_llm_service
             self.local_service = get_local_llm_service(self.settings.local_model_path)
             if self.local_service.is_available:
-                logger.info("Local Gemma model available as fallback")
-                self.use_local = True
+                logger.info("Local GGUF model available (primary)")
             else:
-                logger.info("Local model not available. Download Gemma to models/gemma/ for offline usage")
+                logger.info("Local GGUF model not found — will use Vast.ai")
         except Exception as e:
-            logger.warning(f"Could not initialize local fallback: {e}")
-    
+            logger.warning(f"Could not initialize local model: {e}")
+
+    def _initialize_vastai(self):
+        try:
+            from app.services.vastai_service import get_vastai_service
+            self.vastai_service = get_vastai_service()
+            if self.vastai_service.is_available:
+                logger.info("Vast.ai server available (fallback)")
+            elif self.settings.vastai_api_url:
+                logger.warning("Vast.ai URL configured but server not reachable")
+            else:
+                logger.info("No Vast.ai URL configured")
+        except Exception as e:
+            logger.warning(f"Could not initialize Vast.ai service: {e}")
+
+    @property
+    def _local_available(self) -> bool:
+        return self.local_service is not None and self.local_service.is_available
+
+    @property
+    def _vastai_available(self) -> bool:
+        return self.vastai_service is not None and self.vastai_service.is_available
+
     def generate_response(self, prompt: str) -> str:
-        if self.use_local and self.local_service and self.local_service.is_available:
+        # 1) Try local GGUF
+        if self._local_available:
             try:
                 response = self.local_service.generate_response(prompt)
                 if response:
                     return response
             except Exception as e:
-                logger.error(f"Error with local model: {e}")
-        
-        if self.model is not None:
+                logger.error(f"Local model error: {e}")
+
+        # 2) Try Vast.ai
+        if self._vastai_available:
             try:
-                response = self.model.generate_content(prompt)
-                return response.text
+                response = self.vastai_service.generate_response(prompt)
+                if response:
+                    return response
             except Exception as e:
-                logger.error(f"Error generating response with Gemini: {e}")
-                
-                if self.fallback_enabled and not self.use_local:
-                    logger.info("Attempting fallback to local model...")
-                    if self.local_service is None:
-                        self._initialize_local_fallback()
-                    
-                    if self.local_service and self.local_service.is_available:
-                        try:
-                            response = self.local_service.generate_response(prompt)
-                            if response:
-                                logger.info("Successfully used local fallback")
-                                return response
-                        except Exception as local_e:
-                            logger.error(f"Local fallback also failed: {local_e}")
-        
-        return "I apologize, but I'm having trouble processing your request right now. Please try again in a moment."
-    
+                logger.error(f"Vast.ai error: {e}")
+        elif self.vastai_service and self.settings.vastai_api_url:
+            # Re-check in case server came back online
+            self.vastai_service.invalidate_cache()
+            if self.vastai_service.is_available:
+                try:
+                    response = self.vastai_service.generate_response(prompt)
+                    if response:
+                        return response
+                except Exception as e:
+                    logger.error(f"Vast.ai retry error: {e}")
+
+        return (
+            "I'm sorry, the AI service is currently unavailable. "
+            "Please try again later."
+        )
+
     def generate_embeddings(self, texts: list[str]) -> list[list[float]]:
-        if self.use_local and self.local_service and self.local_service.is_available:
-            try:
-                embeddings = self.local_service.generate_embeddings(texts)
-                if embeddings:
-                    return embeddings
-            except Exception as e:
-                logger.error(f"Error with local embeddings: {e}")
-        
+        """Generate embeddings using sentence-transformers (runs locally)."""
         try:
-            embeddings = []
-            for text in texts:
-                result = genai.embed_content(
-                    model=self.embedding_model,
-                    content=text,
-                    task_type="retrieval_document"
-                )
-                embeddings.append(result['embedding'])
-            return embeddings
-        except Exception as e:
-            logger.error(f"Error generating embeddings with Gemini: {e}")
-            
-            if self.fallback_enabled and not self.use_local:
-                logger.info("Attempting embedding fallback to local model...")
-                if self.local_service is None:
-                    self._initialize_local_fallback()
-                
-                if self.local_service:
-                    try:
-                        embeddings = self.local_service.generate_embeddings(texts)
-                        if embeddings:
-                            logger.info("Successfully used local embeddings")
-                            return embeddings
-                    except Exception as local_e:
-                        logger.error(f"Local embedding fallback failed: {local_e}")
-            
+            from sentence_transformers import SentenceTransformer
+            model = SentenceTransformer('all-MiniLM-L6-v2')
+            embeddings = model.encode(texts)
+            return embeddings.tolist()
+        except ImportError:
+            logger.error("sentence-transformers not installed. Run: pip install sentence-transformers")
             raise
-    
+        except Exception as e:
+            logger.error(f"Embedding generation error: {e}")
+            raise
+
     def generate_query_embedding(self, query: str) -> list[float]:
-        if self.use_local and self.local_service and self.local_service.is_available:
-            try:
-                embeddings = self.local_service.generate_embeddings([query])
-                if embeddings:
-                    return embeddings[0]
-            except Exception as e:
-                logger.error(f"Error with local query embedding: {e}")
-        
-        try:
-            result = genai.embed_content(
-                model=self.embedding_model,
-                content=query,
-                task_type="retrieval_query"
-            )
-            return result['embedding']
-        except Exception as e:
-            logger.error(f"Error generating query embedding with Gemini: {e}")
-            
-            if self.fallback_enabled and not self.use_local:
-                logger.info("Attempting query embedding fallback...")
-                if self.local_service is None:
-                    self._initialize_local_fallback()
-                
-                if self.local_service:
-                    try:
-                        embeddings = self.local_service.generate_embeddings([query])
-                        if embeddings:
-                            logger.info("Successfully used local query embedding")
-                            return embeddings[0]
-                    except Exception as local_e:
-                        logger.error(f"Local query embedding fallback failed: {local_e}")
-            
-            raise
+        return self.generate_embeddings([query])[0]
 
 
 llm_service = LLMService()
-

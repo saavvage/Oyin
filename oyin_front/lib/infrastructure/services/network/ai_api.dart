@@ -78,7 +78,7 @@ class AiApi {
       BaseOptions(
         baseUrl: ApiConfig.aiBaseUrl,
         connectTimeout: const Duration(seconds: 15),
-        receiveTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 120),
       ),
     );
 

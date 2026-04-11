@@ -4,12 +4,14 @@
 
 # Python
 **/venv/
+**/.venv/
 **/__pycache__/
 *.pyc
 
 # ML models and data (too large for git)
 oyin_ml/models/
 oyin_ml/chroma_db/
+oyin_ml/tt-referee/
 
 # macOS
 .DS_Store
@@ -133,3 +135,7 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+
+
+
+.claude/

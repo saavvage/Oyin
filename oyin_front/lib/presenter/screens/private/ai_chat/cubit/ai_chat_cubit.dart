@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../infrastructure/export.dart';
@@ -67,7 +68,8 @@ class AiChatCubit extends Cubit<AiChatState> {
         ..add(aiMsg);
 
       emit(state.copyWith(messages: updated, isSending: false));
-    } catch (_) {
+    } catch (e) {
+      debugPrint('[AiChatCubit] sendMessage error: $e');
       final errorMsg = AiMessage(
         id: 'ai_error_${DateTime.now().millisecondsSinceEpoch}',
         text: 'Failed to get a response. Please try again.',

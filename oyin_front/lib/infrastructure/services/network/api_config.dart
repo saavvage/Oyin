@@ -10,8 +10,9 @@ class ApiConfig {
     return '$trimmed/api';
   }
 
+  /// AI endpoints now go through the NestJS backend at /api/ai
   static String get aiBaseUrl {
-    final raw = dotenv.env['AI_BASE_URL'] ?? 'http://10.0.2.2:8000';
-    return raw.endsWith('/') ? raw.substring(0, raw.length - 1) : raw;
+    final base = baseUrl; // already ends with /api
+    return '$base/ai';
   }
 }
