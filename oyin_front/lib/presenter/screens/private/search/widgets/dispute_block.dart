@@ -88,9 +88,7 @@ class DisputeBlock extends StatelessWidget {
         ),
         12.vSpacing,
         Text(
-          enabled
-              ? l10n.disputeNote
-              : 'Кнопка станет активна, если результат оспорен (CONFLICT/DISPUTED).',
+          enabled ? l10n.disputeNote : l10n.disputeNotAvailable,
           textAlign: TextAlign.center,
           style: Theme.of(
             context,

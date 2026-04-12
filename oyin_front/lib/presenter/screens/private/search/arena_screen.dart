@@ -96,7 +96,7 @@ class _ArenaScreenState extends State<ArenaScreen> {
 
     // For demo/seed players, open MatchResultScreen directly without API call
     if (player.userId.startsWith('seed-')) {
-      Navigator.of(context).push(
+      Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
           builder: (_) => MatchResultScreen(
             gameId: 'demo-game-${player.userId}',
@@ -114,7 +114,7 @@ class _ArenaScreenState extends State<ArenaScreen> {
       final response = await ArenaApi.challenge(targetId: player.userId);
       if (!mounted) return;
 
-      Navigator.of(context).push(
+      Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
           builder: (_) => MatchResultScreen(
             gameId: response.gameId,

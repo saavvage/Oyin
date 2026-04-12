@@ -22,6 +22,10 @@ class LocaleKeys {
   static const profile = 'profile';
   static const settings = 'settings';
   static const leagueGold = 'league_gold';
+  static const leagueBronze = 'league_bronze';
+  static const leagueSilver = 'league_silver';
+  static const leaguePlatinum = 'league_platinum';
+  static const leagueDiamond = 'league_diamond';
   static const location = 'location';
   static const performanceStats = 'performance_stats';
   static const reputation = 'reputation';
@@ -37,6 +41,29 @@ class LocaleKeys {
   static const settingsHistory = 'settings_history';
   static const availability = 'availability';
   static const availabilityDesc = 'availability_desc';
+  static const availabilityLocation = 'availability_location';
+  static const availabilityLocationHint = 'availability_location_hint';
+  static const availabilityWeeklySchedule = 'availability_weekly_schedule';
+  static const availabilitySelectAll = 'availability_select_all';
+  static const availabilityWeekdays = 'availability_weekdays';
+  static const availabilityWeekends = 'availability_weekends';
+  static const availabilityTimeMorning = 'availability_time_morning';
+  static const availabilityTimeDay = 'availability_time_day';
+  static const availabilityTimeEvening = 'availability_time_evening';
+  static const availabilityDayMon = 'availability_day_mon';
+  static const availabilityDayTue = 'availability_day_tue';
+  static const availabilityDayWed = 'availability_day_wed';
+  static const availabilityDayThu = 'availability_day_thu';
+  static const availabilityDayFri = 'availability_day_fri';
+  static const availabilityDaySat = 'availability_day_sat';
+  static const availabilityDaySun = 'availability_day_sun';
+  static const availabilitySupportInfo = 'availability_support_info';
+  static const availabilityHelpFaq = 'availability_help_faq';
+  static const aboutUs = 'about_us';
+  static const availabilityFindPartners = 'availability_find_partners';
+  static const availabilitySaved = 'availability_saved';
+  static const availabilityLoadFailed = 'availability_load_failed';
+  static const availabilityProfileRequired = 'availability_profile_required';
   static const sportPreferences = 'sport_preferences';
   static const sportPreferencesDesc = 'sport_preferences_desc';
   static const matchHistory = 'match_history';
@@ -304,6 +331,41 @@ class LocaleKeys {
       'sport_preferences_select_at_least_one';
   static const sportPreferencesUpdatedSuccess =
       'sport_preferences_updated_success';
+  static const rankWithValue = 'rank_with_value';
+
+  // Sports
+  static const sportBoxing = 'sport_boxing';
+  static const sportMuayThai = 'sport_muay_thai';
+  static const sportBjj = 'sport_bjj';
+  static const sportTennis = 'sport_tennis';
+  static const sportPadel = 'sport_padel';
+  static const sportBasketball = 'sport_basketball';
+  static const sportFootball = 'sport_football';
+  static const sportWrestling = 'sport_wrestling';
+  static const sportSwimming = 'sport_swimming';
+  static const sportRunning = 'sport_running';
+  static const sportMma = 'sport_mma';
+  static const sportKickboxing = 'sport_kickboxing';
+  static const sportVolleyball = 'sport_volleyball';
+  static const sportTableTennis = 'sport_table_tennis';
+
+  // Skill tags
+  static const skillTagStriking = 'skill_tag_striking';
+  static const skillTagCardio = 'skill_tag_cardio';
+  static const skillTagEndurance = 'skill_tag_endurance';
+  static const skillTagDefense = 'skill_tag_defense';
+  static const skillTagFootwork = 'skill_tag_footwork';
+  static const skillTagServe = 'skill_tag_serve';
+  static const skillTagAgility = 'skill_tag_agility';
+  static const skillTagTechnique = 'skill_tag_technique';
+  static const skillTagSpeed = 'skill_tag_speed';
+  static const skillTagClinch = 'skill_tag_clinch';
+  static const skillTagPower = 'skill_tag_power';
+  static const skillTagStamina = 'skill_tag_stamina';
+  static const skillTagPace = 'skill_tag_pace';
+  static const skillTagPassing = 'skill_tag_passing';
+  static const skillTagGrappling = 'skill_tag_grappling';
+  static const skillTagSouthpaw = 'skill_tag_southpaw';
 
   // Info modals
   static const infoChatTitle = 'info_chat_title';
@@ -374,6 +436,22 @@ class LocaleKeys {
   static const enterValidEmail = 'enter_valid_email';
   static const itemPurchased = 'item_purchased';
   static const coinsSent = 'coins_sent';
+  static const disputeHeader = 'dispute_header';
+  static const disputeEvidence = 'dispute_evidence';
+  static const disputeStatements = 'dispute_statements';
+  static const disputeRolePlaintiff = 'dispute_role_plaintiff';
+  static const disputeRoleDefendant = 'dispute_role_defendant';
+  static const disputeDefendantFallback = 'dispute_defendant_fallback';
+  static const disputeVoteAccepted = 'dispute_vote_accepted';
+  static const disputeVoteParticipantWait = 'dispute_vote_participant_wait';
+  static const disputeRewardEarned = 'dispute_reward_earned';
+  static const disputeRewardPending = 'dispute_reward_pending';
+  static const disputeRewardReviewPrompt = 'dispute_reward_review_prompt';
+  static const disputeRewardFinalVerdict = 'dispute_reward_final_verdict';
+  static const disputeResolvedFinalVerdict = 'dispute_resolved_final_verdict';
+  static const disputeResolvedWinner = 'dispute_resolved_winner';
+  static const disputeResolvedRatingImpact = 'dispute_resolved_rating_impact';
+  static const disputeWinnerCommunity = 'dispute_winner_community';
 
   // Buttons
   static const save = 'save';

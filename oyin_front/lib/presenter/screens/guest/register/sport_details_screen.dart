@@ -195,7 +195,7 @@ class _SportDetailsScreenState extends State<SportDetailsScreen> {
                         children: _skills
                             .map(
                               (skill) => Chip(
-                                label: Text(skill),
+                                label: Text(l10n.skillTag(skill)),
                                 deleteIcon: const Icon(Icons.close),
                                 onDeleted: () {
                                   setState(() {
@@ -233,7 +233,7 @@ class _SportDetailsScreenState extends State<SportDetailsScreen> {
                             children: _suggestedSkills
                                 .map(
                                   (skill) => ActionChip(
-                                    label: Text(skill),
+                                    label: Text(l10n.skillTag(skill)),
                                     onPressed: () {
                                       setState(() {
                                         _skills.add(skill);
@@ -321,6 +321,10 @@ class _SportDetailsScreenState extends State<SportDetailsScreen> {
             city: widget.draft.city,
             phone: widget.draft.phone,
             birthDate: widget.draft.birthDate,
+            selectedSports: widget.draft.selectedSports,
+            level: widget.draft.level ?? '',
+            experienceYears: experienceYears,
+            skills: _skills.toList(),
           ),
         );
 
@@ -365,6 +369,10 @@ class _SportDetailsScreenState extends State<SportDetailsScreen> {
           city: widget.draft.city,
           phone: widget.draft.phone,
           birthDate: widget.draft.birthDate,
+          selectedSports: widget.draft.selectedSports,
+          level: widget.draft.level ?? '',
+          experienceYears: experienceYears,
+          skills: _skills.toList(),
         ),
       );
 

@@ -85,9 +85,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
                       ),
                       itemCount: state.messages.length,
                       itemBuilder: (context, index) {
-                        return _MessageBubble(
-                          message: state.messages[index],
-                        );
+                        return _MessageBubble(message: state.messages[index]);
                       },
                     );
                   },
@@ -144,22 +142,19 @@ class _Header extends StatelessWidget {
               children: [
                 Text(
                   l10n.aiAssistant,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 BlocBuilder<AiChatCubit, AiChatState>(
                   builder: (context, state) {
                     return Text(
-                      state.isOnline
-                          ? l10n.aiOnline
-                          : l10n.aiOffline,
+                      state.isOnline ? l10n.aiOnline : l10n.aiOffline,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: state.isOnline
-                                ? palette.success
-                                : palette.danger,
-                          ),
+                        color: state.isOnline
+                            ? palette.success
+                            : palette.danger,
+                      ),
                     );
                   },
                 ),
@@ -193,28 +188,22 @@ class _EmptyState extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: palette.accent,
               ),
-              child: Icon(
-                Icons.smart_toy,
-                size: 48,
-                color: palette.primary,
-              ),
+              child: Icon(Icons.smart_toy, size: 48, color: palette.primary),
             ),
             20.vSpacing,
             Text(
               l10n.aiAssistant,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
-                  ?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
             ),
             8.vSpacing,
             Text(
               l10n.aiWelcomeMessage,
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: palette.muted),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: palette.muted),
             ),
             24.vSpacing,
             Wrap(
@@ -256,10 +245,9 @@ class _SuggestionChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: palette.primary),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: palette.primary),
         ),
       ),
     );
@@ -305,10 +293,9 @@ class _MessageBubble extends StatelessWidget {
                 12.hSpacing,
                 Text(
                   'Thinking...',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: palette.muted),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: palette.muted),
                 ),
               ],
             ),
@@ -318,8 +305,11 @@ class _MessageBubble extends StatelessWidget {
     }
 
     final isUser = message.isUser;
-    final bgColor =
-        isUser ? palette.primary : (message.isError ? palette.danger.withValues(alpha: 0.15) : palette.card);
+    final bgColor = isUser
+        ? palette.primary
+        : (message.isError
+              ? palette.danger.withValues(alpha: 0.15)
+              : palette.card);
     final textColor = isUser
         ? Colors.black
         : (message.isError ? palette.danger : Colors.white);
@@ -356,7 +346,8 @@ class _MessageBubble extends StatelessWidget {
                         6.hSpacing,
                         Text(
                           'AI Assistant',
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
                                 color: palette.primary,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -366,27 +357,26 @@ class _MessageBubble extends StatelessWidget {
                   ),
                 SelectableText(
                   message.text,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: textColor),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: textColor),
                 ),
                 6.vSpacing,
                 Text(
                   _formatTime(message.createdAt),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: isUser ? Colors.black54 : palette.muted,
-                      ),
+                    color: isUser ? Colors.black54 : palette.muted,
+                  ),
                 ),
                 if (message.sources != null && message.sources!.isNotEmpty) ...[
                   4.vSpacing,
                   Text(
                     'Sources: ${message.sources!.join(', ')}',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: palette.muted,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 10,
-                        ),
+                      color: palette.muted,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 10,
+                    ),
                   ),
                 ],
               ],
@@ -426,10 +416,7 @@ class _InputBar extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: palette.surface,
-        border: Border(top: BorderSide(color: palette.badge)),
-      ),
+      color: Colors.transparent,
       child: SafeArea(
         top: false,
         child: Row(
@@ -443,13 +430,10 @@ class _InputBar extends StatelessWidget {
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => onSend(),
                 decoration: InputDecoration(
-                  hintText: isOnline
-                      ? l10n.aiMessageHint
-                      : l10n.aiOffline,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: palette.muted),
+                  hintText: isOnline ? l10n.aiMessageHint : l10n.aiOffline,
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: palette.muted),
                   filled: true,
                   fillColor: palette.card,
                   contentPadding: const EdgeInsets.symmetric(
@@ -458,15 +442,15 @@ class _InputBar extends StatelessWidget {
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.badge),
+                    borderSide: BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.badge),
+                    borderSide: BorderSide.none,
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.primary),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),

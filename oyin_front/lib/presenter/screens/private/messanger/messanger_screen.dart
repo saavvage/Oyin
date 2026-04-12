@@ -26,7 +26,8 @@ class MessangerScreen extends StatefulWidget {
   State<MessangerScreen> createState() => _MessangerScreenState();
 }
 
-class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMixin {
+class _MessangerScreenState extends State<MessangerScreen>
+    with InfiniteScrollMixin {
   final TextEditingController _messageController = TextEditingController();
   late final MessangerCubit _cubit;
 
@@ -82,10 +83,9 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
                       return Center(
                         child: Text(
                           l10n.messengerStartConversation,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.colored(palette.muted),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.colored(palette.muted),
                         ),
                       );
                     }
@@ -93,13 +93,20 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
                     return ListView.builder(
                       controller: scrollController,
                       reverse: true,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      itemCount: state.messages.length + (state.isLoadingMore ? 1 : 0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      itemCount:
+                          state.messages.length + (state.isLoadingMore ? 1 : 0),
                       itemBuilder: (context, index) {
-                        if (state.isLoadingMore && index == state.messages.length) {
+                        if (state.isLoadingMore &&
+                            index == state.messages.length) {
                           return const Padding(
                             padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                            child: Center(
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
                           );
                         }
 
@@ -274,10 +281,17 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
     final l10n = AppLocalizations.of(context);
     Navigator.of(context).pop();
     final picker = ImagePicker();
-    final file = await picker.pickImage(source: ImageSource.camera, imageQuality: 85);
+    final file = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+    );
     if (file == null) return;
     await _cubit.sendAttachment(
-      MessageAttachment(type: AttachmentType.image, name: l10n.messengerAttachmentPhoto, path: file.path),
+      MessageAttachment(
+        type: AttachmentType.image,
+        name: l10n.messengerAttachmentPhoto,
+        path: file.path,
+      ),
     );
   }
 
@@ -308,7 +322,11 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
                     );
                     if (file == null) return;
                     await _cubit.sendAttachment(
-                      MessageAttachment(type: AttachmentType.image, name: l10n.messengerAttachmentPhoto, path: file.path),
+                      MessageAttachment(
+                        type: AttachmentType.image,
+                        name: l10n.messengerAttachmentPhoto,
+                        path: file.path,
+                      ),
                     );
                   },
                 ),
@@ -318,10 +336,16 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
                   title: l10n.messengerAttachmentVideo,
                   onTap: () async {
                     Navigator.of(context).pop();
-                    final file = await ImagePicker().pickVideo(source: ImageSource.gallery);
+                    final file = await ImagePicker().pickVideo(
+                      source: ImageSource.gallery,
+                    );
                     if (file == null) return;
                     await _cubit.sendAttachment(
-                      MessageAttachment(type: AttachmentType.video, name: l10n.messengerAttachmentVideo, path: file.path),
+                      MessageAttachment(
+                        type: AttachmentType.video,
+                        name: l10n.messengerAttachmentVideo,
+                        path: file.path,
+                      ),
                     );
                   },
                 ),
@@ -347,7 +371,8 @@ class _MessangerScreenState extends State<MessangerScreen> with InfiniteScrollMi
     );
   }
 
-  void _showSnack(String message, {
+  void _showSnack(
+    String message, {
     String? title,
     AppNotificationType type = AppNotificationType.info,
   }) {
@@ -387,10 +412,7 @@ class _Header extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage(avatarUrl),
-          ),
+          CircleAvatar(radius: 20, backgroundImage: NetworkImage(avatarUrl)),
           12.hSpacing,
           Expanded(
             child: Column(
@@ -398,11 +420,15 @@ class _Header extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: Theme.of(context).textTheme.titleSmall?.weighted(FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.weighted(FontWeight.w700),
                 ),
                 Text(
                   l10n.messengerOnline,
-                  style: Theme.of(context).textTheme.bodySmall?.colored(palette.muted),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.colored(palette.muted),
                 ),
               ],
             ),
@@ -449,7 +475,9 @@ class _MessageBubble extends StatelessWidget {
       child: Align(
         alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.74),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.74,
+          ),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
@@ -471,14 +499,16 @@ class _MessageBubble extends StatelessWidget {
                 if (message.text.isNotEmpty)
                   Text(
                     message.text,
-                    style: Theme.of(context).textTheme.bodyMedium?.colored(textColor),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.colored(textColor),
                   ),
                 6.vSpacing,
                 Text(
                   _formatTime(message.createdAt),
                   style: Theme.of(context).textTheme.bodySmall?.colored(
-                        isMine ? Colors.black54 : palette.muted,
-                      ),
+                    isMine ? Colors.black54 : palette.muted,
+                  ),
                 ),
               ],
             ),
@@ -533,7 +563,9 @@ class _AttachmentRow extends StatelessWidget {
               Flexible(
                 child: Text(
                   att.name,
-                  style: Theme.of(context).textTheme.bodySmall?.colored(Colors.white),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.colored(Colors.white),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -565,10 +597,7 @@ class _InputBar extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: palette.surface,
-        border: Border(top: BorderSide(color: palette.badge)),
-      ),
+      color: Colors.transparent,
       child: SafeArea(
         top: false,
         child: Row(
@@ -596,22 +625,29 @@ class _InputBar extends StatelessWidget {
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => onSend(),
                 decoration: InputDecoration(
-                  hintText: isBlocked ? l10n.messengerBlockedHint : l10n.messengerMessageHint,
-                  hintStyle: Theme.of(context).textTheme.bodySmall?.colored(palette.muted),
+                  hintText: isBlocked
+                      ? l10n.messengerBlockedHint
+                      : l10n.messengerMessageHint,
+                  hintStyle: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.colored(palette.muted),
                   filled: true,
                   fillColor: palette.card,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.badge),
+                    borderSide: BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.badge),
+                    borderSide: BorderSide.none,
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(22),
-                    borderSide: BorderSide(color: palette.primary),
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
@@ -671,7 +707,9 @@ class _SheetAction extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.bodyMedium?.weighted(FontWeight.w600),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.weighted(FontWeight.w600),
               ),
             ),
           ],

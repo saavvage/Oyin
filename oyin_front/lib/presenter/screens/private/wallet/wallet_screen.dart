@@ -37,7 +37,7 @@ class _WalletEntryButtonState extends State<WalletEntryButton> {
     final l10n = AppLocalizations.of(context);
     return ElevatedButton(
       onPressed: () async {
-        await Navigator.of(context).push(
+        await Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(builder: (_) => const WalletScreen()),
         );
         _loadBalance();

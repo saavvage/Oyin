@@ -23,7 +23,7 @@ class ProfileHeader extends StatelessWidget {
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(
+            Navigator.of(context, rootNavigator: true).push(
               MaterialPageRoute(builder: (_) => const SettingsScreen()),
             );
           },

@@ -48,9 +48,11 @@ class _SettingsView extends StatelessWidget {
                   ),
                   14.vSpacing,
                   SettingsUserTile(
-                    name: state.userName,
-                    subtitle: state.userSubtitle,
-                    tag: state.userTag,
+                    name: state.userName.isEmpty
+                        ? l10n.profile
+                        : state.userName,
+                    subtitle: _localizedUserSubtitle(state, l10n),
+                    tag: _localizedUserTag(state, l10n),
                   ),
                   16.vSpacing,
                   _MatchFiltersCard(
@@ -81,8 +83,7 @@ class _SettingsView extends StatelessWidget {
                       OyinApp.of(context).setLocale(Locale(code));
                     },
                     selectedLocale: state.selectedLocale,
-                    onItemTap: (item) =>
-                        _onSettingsItemTap(context, item),
+                    onItemTap: (item) => _onSettingsItemTap(context, item),
                   ),
                   16.vSpacing,
                   NotificationReminderCard(
@@ -110,7 +111,9 @@ class _SettingsView extends StatelessWidget {
   }
 
   Future<void> _onSettingsItemTap(
-      BuildContext context, SettingsItem item) async {
+    BuildContext context,
+    SettingsItem item,
+  ) async {
     switch (item.icon) {
       case 'person':
         final updated = await Navigator.of(context).push<bool>(
@@ -171,10 +174,31 @@ class _SettingsView extends StatelessWidget {
           context,
           title: l10n.fairPlayRules,
           subtitle: l10n.settingsFairPlaySubtitle,
-          tips: [l10n.settingsFairPlayTip1, l10n.settingsFairPlayTip2, l10n.settingsFairPlayTip3, l10n.settingsFairPlayTip4],
+          tips: [
+            l10n.settingsFairPlayTip1,
+            l10n.settingsFairPlayTip2,
+            l10n.settingsFairPlayTip3,
+            l10n.settingsFairPlayTip4,
+          ],
         );
         break;
     }
+  }
+
+  String _localizedUserSubtitle(SettingsState state, AppLocalizations l10n) {
+    final subtitle = state.userSubtitle.trim();
+    if (subtitle.isEmpty) {
+      return '';
+    }
+    return l10n.sportName(subtitle);
+  }
+
+  String _localizedUserTag(SettingsState state, AppLocalizations l10n) {
+    final tag = state.userTag.trim();
+    if (tag.isEmpty) {
+      return '';
+    }
+    return l10n.levelName(tag);
   }
 }
 

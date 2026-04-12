@@ -26,7 +26,7 @@ class _ChatView extends StatelessWidget {
 
   void _openChat(BuildContext context, ChatCard card) {
     if (card.buttonKey == 'resolve') {
-      Navigator.of(context).push(
+      Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
           builder: (_) => const DisputeScreen(preferJuryDuty: true),
         ),
@@ -34,7 +34,7 @@ class _ChatView extends StatelessWidget {
       return;
     }
 
-    Navigator.of(context).push(
+    Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
         builder: (_) => MessangerScreen(
           chatId: card.id,
@@ -53,7 +53,7 @@ class _ChatView extends StatelessWidget {
     return Scaffold(
       backgroundColor: palette.background,
       body: SafeArea(
-        bottom: false,
+        bottom: true,
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: BlocBuilder<ChatCubit, ChatState>(
@@ -198,7 +198,7 @@ class _DisputeCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
+        Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
             builder: (_) => DisputeScreen(disputeId: dispute.id),
           ),

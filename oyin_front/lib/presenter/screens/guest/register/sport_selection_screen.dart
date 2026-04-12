@@ -39,8 +39,11 @@ class _SportSelectionScreenState extends State<SportSelectionScreen> {
     final entries = kSportCatalog.where((item) {
       if (query.isEmpty) return true;
       final code = item.code.toLowerCase();
-      final label = item.label.toLowerCase();
-      return code.contains(query) || label.contains(query);
+      final localizedName = l10n.sportName(item.code).toLowerCase();
+      final fallbackName = sportLabelByCode(item.code).toLowerCase();
+      return code.contains(query) ||
+          localizedName.contains(query) ||
+          fallbackName.contains(query);
     }).toList();
 
     return Scaffold(
@@ -150,7 +153,7 @@ class _SportSelectionScreenState extends State<SportSelectionScreen> {
                             });
                           },
                           child: _SportTile(
-                            label: item.label,
+                            label: l10n.sportName(item.code),
                             icon: _iconForSport(item.code),
                             selected: selected,
                           ),

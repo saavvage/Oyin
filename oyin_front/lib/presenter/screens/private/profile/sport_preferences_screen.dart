@@ -60,7 +60,10 @@ class _SportPreferencesScreenState extends State<SportPreferencesScreen> {
     final query = _searchController.text.trim().toLowerCase();
     final sports = kSportCatalog.where((item) {
       if (query.isEmpty) return true;
-      return item.label.toLowerCase().contains(query) ||
+      final localizedName = l10n.sportName(item.code).toLowerCase();
+      final fallbackName = sportLabelByCode(item.code).toLowerCase();
+      return localizedName.contains(query) ||
+          fallbackName.contains(query) ||
           item.code.toLowerCase().contains(query);
     }).toList();
 
@@ -100,7 +103,7 @@ class _SportPreferencesScreenState extends State<SportPreferencesScreen> {
                       children: sports.map((sport) {
                         final selected = _selectedSports.contains(sport.code);
                         return FilterChip(
-                          label: Text(sport.label),
+                          label: Text(l10n.sportName(sport.code)),
                           selected: selected,
                           onSelected: (value) {
                             setState(() {
@@ -195,7 +198,7 @@ class _SportPreferencesScreenState extends State<SportPreferencesScreen> {
                         children: _skills
                             .map(
                               (skill) => Chip(
-                                label: Text(skill),
+                                label: Text(l10n.skillTag(skill)),
                                 onDeleted: () {
                                   setState(() => _skills.remove(skill));
                                 },

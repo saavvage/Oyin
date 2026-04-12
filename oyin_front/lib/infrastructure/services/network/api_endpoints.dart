@@ -13,6 +13,7 @@ class ApiEndpoints {
   static const String usersPushSettings = '/users/me/push-settings';
   static const String usersPushToken = '/users/me/push-token';
   static const String usersSportProfiles = '/users/me/sport-profiles';
+  static const String usersAvailability = '/users/me/availability';
   static const String usersAvatar = '/users/me/avatar';
 
   // Matchmaking

@@ -108,11 +108,7 @@ class _MatchViewState extends State<_MatchView> {
       context,
       title: l10n.info,
       subtitle: l10n.infoMatchSubtitle,
-      tips: [
-        l10n.infoMatchTip1,
-        l10n.infoMatchTip2,
-        l10n.infoMatchTip3,
-      ],
+      tips: [l10n.infoMatchTip1, l10n.infoMatchTip2, l10n.infoMatchTip3],
     );
   }
 
@@ -243,12 +239,12 @@ class _MatchViewState extends State<_MatchView> {
                 _InfoRow(
                   label: l10n.matchProfileSportsLabel,
                   value: profile.sports.isNotEmpty
-                      ? profile.sports.join(', ')
-                      : profile.sport,
+                      ? l10n.sportNames(profile.sports).join(', ')
+                      : l10n.sportName(profile.sport),
                 ),
                 _InfoRow(
                   label: l10n.matchProfileLevelLabel,
-                  value: profile.level,
+                  value: l10n.levelName(profile.level),
                 ),
                 if (profile.tags.isNotEmpty) ...[
                   16.vSpacing,
@@ -273,7 +269,7 @@ class _MatchViewState extends State<_MatchView> {
                               color: palette.surface,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Text(tag),
+                            child: Text(l10n.skillTag(tag)),
                           ),
                         )
                         .toList(),

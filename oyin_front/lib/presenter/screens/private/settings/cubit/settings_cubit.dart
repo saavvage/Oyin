@@ -10,9 +10,9 @@ class SettingsCubit extends Cubit<SettingsState> {
     : super(
         SettingsState(
           searchPlaceholder: 'search_settings_placeholder',
-          userName: "Alex 'The Hammer'",
-          userSubtitle: 'Muay Thai • Rank 4',
-          userTag: 'PRO',
+          userName: '',
+          userSubtitle: '',
+          userTag: '',
           sections: const [
             SettingsSection(
               title: 'account',
@@ -126,11 +126,13 @@ class SettingsCubit extends Cubit<SettingsState> {
           tag = level.toUpperCase();
         }
       }
-      emit(state.copyWith(
-        userName: name.isNotEmpty ? name : null,
-        userSubtitle: subtitle.isNotEmpty ? subtitle : null,
-        userTag: tag.isNotEmpty ? tag : null,
-      ));
+      emit(
+        state.copyWith(
+          userName: name.isNotEmpty ? name : null,
+          userSubtitle: subtitle.isNotEmpty ? subtitle : null,
+          userTag: tag.isNotEmpty ? tag : null,
+        ),
+      );
     } catch (_) {}
   }
 

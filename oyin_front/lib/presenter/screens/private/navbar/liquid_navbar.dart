@@ -27,26 +27,28 @@ class AdaptiveNavBar extends StatefulWidget {
 }
 
 class _AdaptiveNavBarState extends State<AdaptiveNavBar> {
-  static const int _glassSupportedIOSMajorVersion = 16;
+  // Keep native CNTabBar only for iOS 26+, fallback to Flutter bar below that.
+  static const int _liquidGlassSupportedIOSMajorVersion = 26;
 
-  late final Future<_NavPresentation> _navPresentationFuture = _detectPresentation();
+  late final Future<_NavPresentation> _navPresentationFuture =
+      _detectPresentation();
 
   Future<_NavPresentation> _detectPresentation() async {
-    if (kIsWeb) return _NavPresentation.frosted;
+    if (kIsWeb || !Platform.isIOS) {
+      return _NavPresentation.frosted;
+    }
 
     try {
       final deviceInfo = DeviceInfoPlugin();
+      final info = await deviceInfo.iosInfo;
+      final version = info.systemVersion.split('.').first;
+      final majorVersion = int.tryParse(version) ?? 0;
 
-      if (Platform.isIOS) {
-        final info = await deviceInfo.iosInfo;
-        final version = info.systemVersion.split('.').first;
-        final majorVersion = int.tryParse(version) ?? 0;
-        if (majorVersion >= _glassSupportedIOSMajorVersion) {
-          return _NavPresentation.cupertino;
-        }
+      if (majorVersion >= _liquidGlassSupportedIOSMajorVersion) {
+        return _NavPresentation.cupertino;
       }
     } catch (_) {
-      // fallback to frosted
+      // Fall back to frosted bar if iOS version detection fails.
     }
 
     return _NavPresentation.frosted;

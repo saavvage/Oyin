@@ -104,9 +104,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
       final l10n = AppLocalizations.of(context);
       AppNotifier.showSuccess(
         context,
-        updated.status == 'RESOLVED'
-            ? l10n.karmaDemo
-            : l10n.voteCountedDemo,
+        updated.status == 'RESOLVED' ? l10n.karmaDemo : l10n.voteCountedDemo,
       );
       return;
     }
@@ -158,7 +156,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
                 dispute: _dispute!,
                 selectedMedia: _selectedMedia,
                 isVoting: _isVoting,
-                winnerName: _winnerName(_dispute!),
+                winnerName: _winnerName(context, _dispute!),
                 onSelectMedia: _setSelectedMedia,
                 onVote: _vote,
               ),
@@ -166,12 +164,13 @@ class _DisputeScreenState extends State<DisputeScreen> {
     );
   }
 
-  String _winnerName(DisputeDetailsDto dispute) {
+  String _winnerName(BuildContext context, DisputeDetailsDto dispute) {
+    final l10n = AppLocalizations.of(context);
     final side = dispute.resolution?.winningSide;
     if (side == 'PLAYER1') return dispute.player1.name;
     if (side == 'PLAYER2') return dispute.player2.name;
-    if (side == 'DRAW') return 'Draw';
-    return 'Community';
+    if (side == 'DRAW') return l10n.draw;
+    return l10n.disputeWinnerCommunity;
   }
 
   bool _isDemoDisputeId(String? disputeId) {
@@ -186,7 +185,7 @@ class _DisputeScreenState extends State<DisputeScreen> {
       displayId: '4920',
       gameId: 'seed-game-4920',
       status: 'VOTING',
-      sport: 'Tennis',
+      sport: 'TENNIS',
       subject: 'Set 3 Tie-breaker Dispute',
       locationLabel: 'Santa Monica, CA',
       description:

@@ -15,18 +15,19 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   static ProfileState _buildInitial() {
     final user = MockUserRepository.instance.getOrDefault();
-    final displayName = user.fullName.isNotEmpty
-        ? user.fullName
-        : '';
+    final displayName = user.fullName.isNotEmpty ? user.fullName : '';
     final location = user.city.isNotEmpty ? user.city : '';
+    final localSportProfiles = _buildLocalSportProfiles(user);
+    final localTagline = _buildTaglineFromProfiles(localSportProfiles);
+    final localLeague = _leagueFromSkillLevel(user.level);
 
     return ProfileState(
       avatarUrl: '',
       name: displayName,
-      tagline: '',
+      tagline: localTagline,
       email: user.email,
       location: location,
-      league: '',
+      league: localLeague,
       stats: const ProfileStats(
         reputation: 0,
         reputationNoteKey: LocaleKeys.reputationExcellent,
@@ -53,7 +54,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           subtitle: 'match_history_desc',
         ),
       ],
-      sportProfiles: const [],
+      sportProfiles: localSportProfiles,
     );
   }
 
@@ -65,7 +66,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       final city = (data['city'] ?? state.location).toString();
       final avatar = (data['avatarUrl'] ?? '').toString();
       final reliability =
-          (data['reliabilityScore'] as num?)?.toInt() ?? state.stats.reliability;
+          (data['reliabilityScore'] as num?)?.toInt() ??
+          state.stats.reliability;
       final sportProfiles = _extractSportProfiles(data['sportProfiles']);
 
       final safeName = name.isNotEmpty && name.toLowerCase() != 'new user'
@@ -77,7 +79,8 @@ class ProfileCubit extends Cubit<ProfileState> {
       int eloRating = 1000;
       if (data['sportProfiles'] is List &&
           (data['sportProfiles'] as List).isNotEmpty) {
-        eloRating = ((data['sportProfiles'] as List).first['eloRating'] as num?)
+        eloRating =
+            ((data['sportProfiles'] as List).first['eloRating'] as num?)
                 ?.toInt() ??
             1000;
       }
@@ -118,8 +121,9 @@ class ProfileCubit extends Cubit<ProfileState> {
         );
 
         // Find next upcoming match (PENDING or SCHEDULED)
-        final upcoming = games.where((g) =>
-            g.status == 'PENDING' || g.status == 'SCHEDULED').toList();
+        final upcoming = games
+            .where((g) => g.status == 'PENDING' || g.status == 'SCHEDULED')
+            .toList();
         if (upcoming.isNotEmpty) {
           final next = upcoming.first;
           nextMatch = NextMatch(
@@ -204,19 +208,67 @@ class ProfileCubit extends Cubit<ProfileState> {
   }
 
   String _buildTagline(List<UserSportProfileView> profiles) {
-    if (profiles.isEmpty) {
-      return state.tagline;
-    }
+    final computed = _buildTaglineFromProfiles(profiles);
+    return computed.isNotEmpty ? computed : state.tagline;
+  }
+
+  static List<UserSportProfileView> _buildLocalSportProfiles(
+    UserProfileM user,
+  ) {
+    if (user.selectedSports.isEmpty) return const [];
+
+    final normalizedSports = user.selectedSports
+        .map(normalizeSportCode)
+        .where((code) => code.isNotEmpty)
+        .toSet()
+        .toList();
+    if (normalizedSports.isEmpty) return const [];
+
+    final level = user.level.trim().isEmpty
+        ? 'AMATEUR'
+        : user.level.trim().toUpperCase();
+    final skills = user.skills
+        .map((skill) => skill.trim())
+        .where((skill) => skill.isNotEmpty)
+        .toSet()
+        .toList();
+    final experienceYears = user.experienceYears < 0
+        ? 0
+        : (user.experienceYears > 90 ? 90 : user.experienceYears);
+
+    return normalizedSports
+        .map(
+          (sport) => UserSportProfileView(
+            sportType: sport,
+            level: level,
+            skills: skills,
+            experienceYears: experienceYears,
+          ),
+        )
+        .toList();
+  }
+
+  static String _buildTaglineFromProfiles(List<UserSportProfileView> profiles) {
+    if (profiles.isEmpty) return '';
     final labels = profiles
         .map((profile) => sportLabelByCode(profile.sportType))
         .where((label) => label.isNotEmpty)
         .toSet()
         .toList();
-
-    if (labels.isEmpty) {
-      return state.tagline;
-    }
-
+    if (labels.isEmpty) return '';
     return labels.take(3).join(' • ');
+  }
+
+  static String _leagueFromSkillLevel(String level) {
+    switch (level.trim().toUpperCase()) {
+      case 'PRO':
+        return 'PLATINUM LEAGUE';
+      case 'SEMI_PRO':
+        return 'GOLD LEAGUE';
+      case 'AMATEUR':
+        return 'SILVER LEAGUE';
+      default:
+        return '';
+    }
   }
 }

@@ -14,7 +14,7 @@ class AiAssistantCard extends StatelessWidget {
     final palette = context.palette;
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
+        Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(builder: (_) => const AiChatScreen()),
         );
       },

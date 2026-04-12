@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/errors/app_errors.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
@@ -15,7 +16,7 @@ class MatchHistoryScreen extends StatefulWidget {
 class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
   List<GameHistoryDto> _games = const [];
   bool _isLoading = true;
-  String? _error;
+  AppErrorCode? _errorCode;
 
   @override
   void initState() {
@@ -24,6 +25,13 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
   }
 
   Future<void> _load() async {
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+        _errorCode = null;
+      });
+    }
+
     try {
       final me = await UsersApi.getMe();
       final myId = (me['id'] ?? '').toString();
@@ -31,12 +39,13 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
       if (!mounted) return;
       setState(() {
         _games = games;
+        _errorCode = null;
         _isLoading = false;
       });
-    } catch (e) {
+    } catch (error) {
       if (!mounted) return;
       setState(() {
-        _error = e.toString();
+        _errorCode = AppErrorMapper.fromException(error);
         _isLoading = false;
       });
     }
@@ -65,8 +74,8 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
                   Text(
                     l10n.matchHistory,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -83,11 +92,42 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_error != null) {
+    if (_errorCode != null) {
+      final code = _errorCode!;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Text(_error!, style: TextStyle(color: palette.muted)),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.cloud_off_rounded, size: 52, color: palette.muted),
+              12.vSpacing,
+              Text(
+                _errorTitle(l10n, code),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center,
+              ),
+              8.vSpacing,
+              Text(
+                _errorMessage(l10n, code),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: palette.muted),
+                textAlign: TextAlign.center,
+              ),
+              16.vSpacing,
+              ElevatedButton(
+                onPressed: _load,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: palette.primary,
+                  foregroundColor: Colors.black,
+                ),
+                child: Text(l10n.retry),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -101,10 +141,9 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
             12.vSpacing,
             Text(
               l10n.matchHistoryDesc,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: palette.muted),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(color: palette.muted),
             ),
           ],
         ),
@@ -131,6 +170,44 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => DisputeScreen(disputeId: disputeId)),
     );
+  }
+
+  String _errorTitle(AppLocalizations l10n, AppErrorCode code) {
+    switch (code) {
+      case AppErrorCode.noConnection:
+        return l10n.errorNoConnectionTitle;
+      case AppErrorCode.timeout:
+        return l10n.errorTimeoutTitle;
+      case AppErrorCode.unauthorized:
+        return l10n.errorUnauthorizedTitle;
+      case AppErrorCode.forbidden:
+        return l10n.errorForbiddenTitle;
+      case AppErrorCode.notFound:
+        return l10n.errorNotFoundTitle;
+      case AppErrorCode.server:
+        return l10n.errorServerTitle;
+      case AppErrorCode.unknown:
+        return l10n.errorUnknownTitle;
+    }
+  }
+
+  String _errorMessage(AppLocalizations l10n, AppErrorCode code) {
+    switch (code) {
+      case AppErrorCode.noConnection:
+        return l10n.errorNoConnectionMessage;
+      case AppErrorCode.timeout:
+        return l10n.errorTimeoutMessage;
+      case AppErrorCode.unauthorized:
+        return l10n.errorUnauthorizedMessage;
+      case AppErrorCode.forbidden:
+        return l10n.errorForbiddenMessage;
+      case AppErrorCode.notFound:
+        return l10n.errorNotFoundMessage;
+      case AppErrorCode.server:
+        return l10n.errorServerMessage;
+      case AppErrorCode.unknown:
+        return l10n.errorUnknownMessage;
+    }
   }
 }
 
@@ -174,10 +251,9 @@ class _GameCard extends StatelessWidget {
               children: [
                 Text(
                   game.opponentName,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 4.vSpacing,
                 Row(
@@ -185,19 +261,17 @@ class _GameCard extends StatelessWidget {
                     if (game.score != null) ...[
                       Text(
                         game.score!,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: palette.muted),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodySmall?.copyWith(color: palette.muted),
                       ),
                       8.hSpacing,
                     ],
                     Text(
                       dateLabel,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(color: palette.muted),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: palette.muted),
                     ),
                   ],
                 ),
@@ -208,8 +282,10 @@ class _GameCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: resultColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
@@ -217,9 +293,9 @@ class _GameCard extends StatelessWidget {
                 child: Text(
                   resultLabel,
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: resultColor,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    color: resultColor,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               if (game.status == 'CONFLICT' || game.status == 'DISPUTED') ...[
@@ -234,9 +310,9 @@ class _GameCard extends StatelessWidget {
                       Text(
                         game.status == 'DISPUTED' ? 'Dispute' : 'Conflict',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Colors.orange[700],
-                              fontWeight: FontWeight.w600,
-                            ),
+                          color: Colors.orange[700],
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),

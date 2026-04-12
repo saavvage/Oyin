@@ -19,6 +19,7 @@ class DisputeRewardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -48,7 +49,9 @@ class DisputeRewardCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  isResolved ? '+$karma Karma Earned' : '+$karma Karma Pending',
+                  isResolved
+                      ? l10n.disputeRewardEarned(karma)
+                      : l10n.disputeRewardPending(karma),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -56,8 +59,8 @@ class DisputeRewardCard extends StatelessWidget {
                 4.vSpacing,
                 Text(
                   isResolved
-                      ? 'Final verdict: $winnerName.'
-                      : 'Review impartially to earn your reward.',
+                      ? l10n.disputeRewardFinalVerdict(winnerName)
+                      : l10n.disputeRewardReviewPrompt,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: palette.muted),
@@ -135,7 +138,11 @@ class DisputeVotesBar extends StatelessWidget {
           color: Colors.redAccent,
         ),
         10.hSpacing,
-        _VoteCounter(label: AppLocalizations.of(context).draw, value: summary.draw, color: Colors.grey),
+        _VoteCounter(
+          label: AppLocalizations.of(context).draw,
+          value: summary.draw,
+          color: Colors.grey,
+        ),
       ],
     );
   }
@@ -273,6 +280,7 @@ class DisputeResolvedBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
     final rating = dispute.resolution?.ratingImpact;
 
     return Container(
@@ -287,7 +295,7 @@ class DisputeResolvedBlock extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Final Verdict',
+            l10n.disputeResolvedFinalVerdict,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Colors.blueAccent,
               letterSpacing: 1,
@@ -295,7 +303,7 @@ class DisputeResolvedBlock extends StatelessWidget {
           ),
           6.vSpacing,
           Text(
-            '$winnerName won',
+            l10n.disputeResolvedWinner(winnerName),
             style: Theme.of(
               context,
             ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
@@ -303,8 +311,12 @@ class DisputeResolvedBlock extends StatelessWidget {
           if (rating != null) ...[
             12.vSpacing,
             Text(
-              'Rating impact: ${rating.player1Before ?? '-'} -> ${rating.player1After ?? '-'} | '
-              '${rating.player2Before ?? '-'} -> ${rating.player2After ?? '-'}',
+              l10n.disputeResolvedRatingImpact(
+                player1Before: '${rating.player1Before ?? '-'}',
+                player1After: '${rating.player1After ?? '-'}',
+                player2Before: '${rating.player2Before ?? '-'}',
+                player2After: '${rating.player2After ?? '-'}',
+              ),
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: palette.muted),
@@ -323,7 +335,7 @@ class DisputeResolvedBlock extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text(AppLocalizations.of(context).returnToDashboard),
+              child: Text(l10n.returnToDashboard),
             ),
           ),
         ],

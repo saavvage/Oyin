@@ -4,6 +4,7 @@ import '../infrastructure/export.dart';
 import '../presenter/extensions/theme.dart';
 import '../presenter/screens/guest/auth_entry/auth_entry_screen.dart';
 import '../presenter/screens/private/navbar/nav_shell.dart';
+import 'navigation/app_route_observer.dart';
 import 'localization/app_localizations.dart';
 
 class OyinApp extends StatefulWidget {
@@ -64,6 +65,7 @@ class _OyinAppState extends State<OyinApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       theme: AppTheme.dark,
+      navigatorObservers: [appRouteObserver],
       home: !_isSessionReady
           ? const Scaffold(body: Center(child: CircularProgressIndicator()))
           : (_isAuthorized ? const NavShell() : const AuthEntryScreen()),

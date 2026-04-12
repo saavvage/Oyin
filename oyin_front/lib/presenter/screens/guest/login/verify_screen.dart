@@ -14,11 +14,13 @@ class VerifyCodeScreen extends StatefulWidget {
     this.phone,
     this.email,
     this.autoSendCode = false,
+    this.openOnboardingOnSkip = true,
   });
 
   final String? phone;
   final String? email;
   final bool autoSendCode;
+  final bool openOnboardingOnSkip;
 
   String get displayIdentifier => email ?? phone ?? '';
 
@@ -184,12 +186,13 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             );
                           }
 
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           if (response.isNewUser) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (_) =>
-                                    ProfileInfoScreen(phone: widget.phone ?? ''),
+                                builder: (_) => ProfileInfoScreen(
+                                  phone: widget.phone ?? '',
+                                ),
                               ),
                             );
                           } else {
@@ -200,7 +203,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                             );
                           }
                         } catch (error) {
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           AppNotifier.showError(context, error);
                         } finally {
                           if (mounted) setState(() => _isLoading = false);
@@ -316,9 +319,19 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
     await SessionStorage.setGuestMode(true);
 
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => ProfileInfoScreen(phone: widget.phone ?? '')),
-    );
+    if (widget.openOnboardingOnSkip) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => ProfileInfoScreen(phone: widget.phone ?? ''),
+        ),
+      );
+      return;
+    }
+
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).popUntil((route) => route.isFirst);
   }
 }
 

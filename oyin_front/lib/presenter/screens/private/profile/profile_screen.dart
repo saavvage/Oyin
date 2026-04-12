@@ -9,6 +9,7 @@ import '../../../widgets/_export.dart';
 import '../../guest/login/phone_screen.dart';
 import '../wallet/wallet_screen.dart';
 import 'cubit/_export.dart';
+import 'availability_screen.dart';
 import 'match_history_screen.dart';
 import 'sport_preferences_screen.dart';
 import 'widgets/_export.dart';
@@ -48,10 +49,10 @@ class _ProfileView extends StatelessWidget {
                   14.vSpacing,
                   ProfileAvatarSection(
                     name: state.name,
-                    tagline: state.tagline,
+                    tagline: _localizedTagline(state, l10n),
                     email: state.email,
                     location: state.location,
-                    league: state.league,
+                    league: _localizedLeague(state.league, l10n),
                     avatarUrl: state.avatarUrl,
                     onAvatarTap: () => _showAvatarActions(context),
                   ),
@@ -115,27 +116,75 @@ class _ProfileView extends StatelessWidget {
     }
   }
 
+  String _localizedTagline(ProfileState state, AppLocalizations l10n) {
+    if (state.sportProfiles.isNotEmpty) {
+      final labels = state.sportProfiles
+          .map((profile) => l10n.sportName(profile.sportType))
+          .where((label) => label.isNotEmpty)
+          .toSet()
+          .toList();
+      if (labels.isNotEmpty) {
+        return labels.take(3).join(' • ');
+      }
+    }
+    return state.tagline;
+  }
+
+  String _localizedLeague(String league, AppLocalizations l10n) {
+    switch (league.trim().toUpperCase()) {
+      case 'BRONZE LEAGUE':
+      case 'BRONZE_LEAGUE':
+        return l10n.leagueBronze;
+      case 'SILVER LEAGUE':
+      case 'SILVER_LEAGUE':
+        return l10n.leagueSilver;
+      case 'GOLD LEAGUE':
+      case 'GOLD_LEAGUE':
+        return l10n.leagueGold;
+      case 'PLATINUM LEAGUE':
+      case 'PLATINUM_LEAGUE':
+        return l10n.leaguePlatinum;
+      case 'DIAMOND LEAGUE':
+      case 'DIAMOND_LEAGUE':
+        return l10n.leagueDiamond;
+      default:
+        return league;
+    }
+  }
+
   Future<void> _onSettingsTap(
     BuildContext context,
     ProfileSettingItem item,
     ProfileState state,
   ) async {
     switch (item.icon) {
+      case 'availability':
+        final updated = await Navigator.of(context, rootNavigator: true)
+            .push<bool>(
+              MaterialPageRoute(builder: (_) => const AvailabilityScreen()),
+            );
+        if (updated == true && context.mounted) {
+          await context.read<ProfileCubit>().refreshProfile();
+        }
+        break;
       case 'sports':
-        final updated = await Navigator.of(context).push<bool>(
-          MaterialPageRoute(
-            builder: (_) =>
-                SportPreferencesScreen(initialProfiles: state.sportProfiles),
-          ),
-        );
+        final updated = await Navigator.of(context, rootNavigator: true)
+            .push<bool>(
+              MaterialPageRoute(
+                builder: (_) => SportPreferencesScreen(
+                  initialProfiles: state.sportProfiles,
+                ),
+              ),
+            );
         if (updated == true && context.mounted) {
           await context.read<ProfileCubit>().refreshProfile();
         }
         break;
       case 'history':
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const MatchHistoryScreen()),
-        );
+        Navigator.of(
+          context,
+          rootNavigator: true,
+        ).push(MaterialPageRoute(builder: (_) => const MatchHistoryScreen()));
         break;
       default:
         break;
@@ -186,9 +235,10 @@ class _GuestPhoneVerificationCard extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context, rootNavigator: true).push(
                       MaterialPageRoute(
-                        builder: (_) => const PhoneLoginScreen(),
+                        builder: (_) =>
+                            const PhoneLoginScreen(openOnboardingOnSkip: false),
                       ),
                     );
                   },

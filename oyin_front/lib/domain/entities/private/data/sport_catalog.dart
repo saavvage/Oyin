@@ -1,35 +1,31 @@
 class SportCatalogEntry {
-  const SportCatalogEntry({required this.code, required this.label});
+  const SportCatalogEntry({required this.code});
 
   final String code;
-  final String label;
 }
 
 const List<SportCatalogEntry> kSportCatalog = [
-  SportCatalogEntry(code: 'BOXING', label: 'Boxing'),
-  SportCatalogEntry(code: 'MUAY_THAI', label: 'Muay Thai'),
-  SportCatalogEntry(code: 'BJJ', label: 'BJJ'),
-  SportCatalogEntry(code: 'TENNIS', label: 'Tennis'),
-  SportCatalogEntry(code: 'PADEL', label: 'Padel'),
-  SportCatalogEntry(code: 'BASKETBALL', label: 'Basketball'),
-  SportCatalogEntry(code: 'FOOTBALL', label: 'Soccer'),
-  SportCatalogEntry(code: 'WRESTLING', label: 'Wrestling'),
-  SportCatalogEntry(code: 'SWIMMING', label: 'Swimming'),
-  SportCatalogEntry(code: 'RUNNING', label: 'Running'),
-  SportCatalogEntry(code: 'MMA', label: 'MMA'),
-  SportCatalogEntry(code: 'KICKBOXING', label: 'Kickboxing'),
-  SportCatalogEntry(code: 'VOLLEYBALL', label: 'Volleyball'),
-  SportCatalogEntry(code: 'TABLE_TENNIS', label: 'Table Tennis'),
+  SportCatalogEntry(code: 'BOXING'),
+  SportCatalogEntry(code: 'MUAY_THAI'),
+  SportCatalogEntry(code: 'BJJ'),
+  SportCatalogEntry(code: 'TENNIS'),
+  SportCatalogEntry(code: 'PADEL'),
+  SportCatalogEntry(code: 'BASKETBALL'),
+  SportCatalogEntry(code: 'FOOTBALL'),
+  SportCatalogEntry(code: 'WRESTLING'),
+  SportCatalogEntry(code: 'SWIMMING'),
+  SportCatalogEntry(code: 'RUNNING'),
+  SportCatalogEntry(code: 'MMA'),
+  SportCatalogEntry(code: 'KICKBOXING'),
+  SportCatalogEntry(code: 'VOLLEYBALL'),
+  SportCatalogEntry(code: 'TABLE_TENNIS'),
 ];
 
-String sportLabelByCode(String code) {
-  final normalized = code.trim().toUpperCase();
-  for (final item in kSportCatalog) {
-    if (item.code == normalized) {
-      return item.label;
-    }
-  }
+String normalizeSportCode(String code) =>
+    code.trim().toUpperCase().replaceAll('-', '_').replaceAll(' ', '_');
 
+String sportLabelByCode(String code) {
+  final normalized = normalizeSportCode(code);
   if (normalized.isEmpty) return '';
   return normalized
       .split('_')

@@ -39,6 +39,34 @@ class UserPushSettings {
   }
 }
 
+class UserAvailabilitySettings {
+  const UserAvailabilitySettings({
+    required this.city,
+    required this.schedule,
+    required this.profilesCount,
+  });
+
+  final String city;
+  final Map<String, dynamic> schedule;
+  final int profilesCount;
+
+  factory UserAvailabilitySettings.fromJson(Map<String, dynamic> json) {
+    final rawSchedule = json['schedule'];
+    final schedule = rawSchedule is Map
+        ? rawSchedule.cast<String, dynamic>()
+        : <String, dynamic>{};
+
+    return UserAvailabilitySettings(
+      city: (json['city'] ?? '').toString(),
+      schedule: schedule,
+      profilesCount:
+          (json['profilesCount'] as num?)?.toInt() ??
+          (json['profilesUpdated'] as num?)?.toInt() ??
+          0,
+    );
+  }
+}
+
 class UsersApi {
   static Future<Map<String, dynamic>> getMe() async {
     final data = await ApiClient.instance.get(ApiEndpoints.usersMe);
@@ -115,6 +143,29 @@ class UsersApi {
     await ApiClient.instance.put(
       ApiEndpoints.usersPushToken,
       data: {'token': token, 'platform': platform},
+    );
+  }
+
+  static Future<UserAvailabilitySettings> getAvailabilitySettings() async {
+    final data = await ApiClient.instance.get(ApiEndpoints.usersAvailability);
+    return UserAvailabilitySettings.fromJson(
+      (data as Map).cast<String, dynamic>(),
+    );
+  }
+
+  static Future<UserAvailabilitySettings> updateAvailabilitySettings({
+    String? city,
+    Map<String, dynamic>? schedule,
+  }) async {
+    final data = await ApiClient.instance.put(
+      ApiEndpoints.usersAvailability,
+      data: {
+        if (city != null) 'city': city,
+        if (schedule != null) 'schedule': schedule,
+      },
+    );
+    return UserAvailabilitySettings.fromJson(
+      (data as Map).cast<String, dynamic>(),
     );
   }
 

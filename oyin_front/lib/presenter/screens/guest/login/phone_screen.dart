@@ -11,7 +11,9 @@ import '../register/profile_info_screen.dart';
 import 'verify_screen.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
-  const PhoneLoginScreen({super.key});
+  const PhoneLoginScreen({super.key, this.openOnboardingOnSkip = true});
+
+  final bool openOnboardingOnSkip;
 
   @override
   State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
@@ -166,9 +168,7 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                 child: TextButton(
                   onPressed: () => setState(() => _useEmail = !_useEmail),
                   child: Text(
-                    _useEmail
-                        ? l10n.phoneNumberLabel
-                        : 'Email',
+                    _useEmail ? l10n.phoneNumberLabel : 'Email',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: context.palette.primary,
                       fontWeight: FontWeight.w600,
@@ -193,8 +193,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                     }
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) =>
-                            VerifyCodeScreen(email: email, autoSendCode: true),
+                        builder: (_) => VerifyCodeScreen(
+                          email: email,
+                          autoSendCode: true,
+                          openOnboardingOnSkip: widget.openOnboardingOnSkip,
+                        ),
                       ),
                     );
                     return;
@@ -219,8 +222,11 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                       '${_country.dialCode} ${formatPhoneDigits(digits)}';
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) =>
-                          VerifyCodeScreen(phone: phone, autoSendCode: true),
+                      builder: (_) => VerifyCodeScreen(
+                        phone: phone,
+                        autoSendCode: true,
+                        openOnboardingOnSkip: widget.openOnboardingOnSkip,
+                      ),
                     ),
                   );
                 },
@@ -280,9 +286,17 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
     await SessionStorage.setGuestMode(true);
 
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const ProfileInfoScreen()),
-    );
+    if (widget.openOnboardingOnSkip) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const ProfileInfoScreen()),
+      );
+      return;
+    }
+
+    Navigator.of(
+      context,
+      rootNavigator: true,
+    ).popUntil((route) => route.isFirst);
   }
 }
 

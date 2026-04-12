@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 
 class SettingsUserTile extends StatelessWidget {
   const SettingsUserTile({
@@ -38,27 +37,37 @@ class SettingsUserTile extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                 ),
-                4.vSpacing,
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
-                ),
+                if (subtitle.isNotEmpty) ...[
+                  4.vSpacing,
+                  Text(
+                    subtitle,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                  ),
+                ],
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(10),
+          if (tag.isNotEmpty) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                tag,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelLarge?.copyWith(color: Colors.blue),
+              ),
             ),
-            child: Text(
-              tag,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.blue),
-            ),
-          ),
+          ],
           const Icon(Icons.chevron_right),
         ],
       ),

@@ -85,28 +85,32 @@ class ProfileAvatarSection extends StatelessWidget {
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
         ),
-        10.vSpacing,
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: palette.primary.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            league,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: palette.primary,
-              fontWeight: FontWeight.w700,
+        if (league.trim().isNotEmpty) ...[
+          10.vSpacing,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: palette.primary.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              league,
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                color: palette.primary,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
-        ),
-        8.vSpacing,
-        Text(
-          tagline,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: palette.muted),
-        ),
+        ],
+        if (tagline.trim().isNotEmpty) ...[
+          8.vSpacing,
+          Text(
+            tagline,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: palette.muted),
+          ),
+        ],
         if (email.isNotEmpty) ...[
           6.vSpacing,
           Text(

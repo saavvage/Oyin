@@ -101,7 +101,10 @@ class MatchProfileCard extends StatelessWidget {
                 ),
                 6.vSpacing,
                 Text(
-                  l10n.sportAndLevel(profile.sport, profile.level),
+                  l10n.sportAndLevel(
+                    l10n.sportName(profile.sport),
+                    l10n.levelName(profile.level),
+                  ),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: palette.muted,
                     fontWeight: FontWeight.w600,
@@ -123,7 +126,7 @@ class MatchProfileCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            tag,
+                            l10n.skillTag(tag),
                             style: Theme.of(context).textTheme.labelLarge,
                           ),
                         ),

@@ -27,6 +27,7 @@ class DisputeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
     final media = dispute.evidence;
     final selected = media.isNotEmpty
         ? media[selectedMedia.clamp(0, media.length - 1)]
@@ -45,7 +46,7 @@ class DisputeContent extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  'Dispute #${dispute.displayId}',
+                  l10n.disputeHeader(dispute.displayId),
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
@@ -92,7 +93,7 @@ class DisputeContent extends StatelessWidget {
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
-                          dispute.sport,
+                          l10n.sportName(dispute.sport),
                           style: Theme.of(context).textTheme.labelSmall
                               ?.copyWith(
                                 color: Colors.blueAccent,
@@ -118,7 +119,7 @@ class DisputeContent extends StatelessWidget {
                 ),
                 16.vSpacing,
                 Text(
-                  'Evidence',
+                  l10n.disputeEvidence,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -131,7 +132,7 @@ class DisputeContent extends StatelessWidget {
                     child: Container(
                       color: palette.card,
                       child: selected == null
-                          ? Center(child: Text(AppLocalizations.of(context).noEvidence))
+                          ? Center(child: Text(l10n.noEvidence))
                           : Stack(
                               children: [
                                 Positioned.fill(
@@ -205,7 +206,7 @@ class DisputeContent extends StatelessWidget {
                 ],
                 18.vSpacing,
                 Text(
-                  'Statements',
+                  l10n.disputeStatements,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
@@ -214,7 +215,7 @@ class DisputeContent extends StatelessWidget {
                 DisputeStatementCard(
                   color: Colors.blueAccent,
                   name: dispute.plaintiff.name,
-                  role: 'Plaintiff',
+                  role: l10n.disputeRolePlaintiff,
                   text: dispute.plaintiff.statement.isNotEmpty
                       ? dispute.plaintiff.statement
                       : dispute.description,
@@ -223,10 +224,10 @@ class DisputeContent extends StatelessWidget {
                 DisputeStatementCard(
                   color: Colors.redAccent,
                   name: dispute.defendant.name,
-                  role: 'Defendant',
+                  role: l10n.disputeRoleDefendant,
                   text: dispute.defendant.statement.isNotEmpty
                       ? dispute.defendant.statement
-                      : 'The call was incorrect according to my view.',
+                      : l10n.disputeDefendantFallback,
                 ),
                 16.vSpacing,
                 DisputeVotesBar(dispute: dispute),
@@ -250,8 +251,8 @@ class DisputeContent extends StatelessWidget {
                     ),
                     child: Text(
                       dispute.hasVoted
-                          ? 'Ваш голос принят. Ждём финальный вердикт.'
-                          : 'Вы участник спора. Ожидайте решение сообщества.',
+                          ? l10n.disputeVoteAccepted
+                          : l10n.disputeVoteParticipantWait,
                       textAlign: TextAlign.center,
                       style: Theme.of(
                         context,
@@ -277,11 +278,7 @@ class DisputeContent extends StatelessWidget {
       context,
       title: l10n.infoDisputeTitle,
       subtitle: l10n.infoDisputeSubtitle,
-      tips: [
-        l10n.infoDisputeTip1,
-        l10n.infoDisputeTip2,
-        l10n.infoDisputeTip3,
-      ],
+      tips: [l10n.infoDisputeTip1, l10n.infoDisputeTip2, l10n.infoDisputeTip3],
     );
   }
 }
