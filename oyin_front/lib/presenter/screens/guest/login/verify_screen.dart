@@ -15,12 +15,14 @@ class VerifyCodeScreen extends StatefulWidget {
     this.email,
     this.autoSendCode = false,
     this.openOnboardingOnSkip = true,
+    this.openOnboardingForNewUser = true,
   });
 
   final String? phone;
   final String? email;
   final bool autoSendCode;
   final bool openOnboardingOnSkip;
+  final bool openOnboardingForNewUser;
 
   String get displayIdentifier => email ?? phone ?? '';
 
@@ -136,6 +138,7 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                         }
                         setState(() => _isLoading = true);
                         try {
+                          final wasGuest = await SessionStorage.getGuestMode();
                           if (!_codeRequested) {
                             await _sendCode(showError: false);
                           }
@@ -154,44 +157,34 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
                           );
                           await PushNotificationsService.syncTokenWithBackend();
 
-                          final user = response.user;
-                          if (user.isNotEmpty) {
-                            final name = (user['name'] ?? '').toString().trim();
-                            final parts = name.isNotEmpty
-                                ? name.split(' ')
-                                : <String>[];
-                            final firstName = parts.isNotEmpty
-                                ? parts.first
-                                : '';
-                            final lastName = parts.length > 1
-                                ? parts.sublist(1).join(' ')
-                                : '';
+                          if (wasGuest) {
+                            try {
+                              await _syncLocalGuestProfileToServer();
+                            } catch (_) {}
+                          }
 
-                            DateTime? birthDate;
-                            final rawBirth = user['birthDate'];
-                            if (rawBirth is String) {
-                              birthDate = DateTime.tryParse(rawBirth);
-                            }
-
-                            MockUserRepository.instance.save(
-                              UserProfileM(
-                                firstName: firstName,
-                                lastName: lastName,
-                                email: (user['email'] ?? '').toString(),
-                                city: (user['city'] ?? '').toString(),
-                                phone: (user['phone'] ?? widget.phone ?? '')
-                                    .toString(),
-                                birthDate: birthDate,
-                              ),
-                            );
+                          final freshUser = await _resolveFreshUser(
+                            response.user,
+                          );
+                          if (freshUser.isNotEmpty) {
+                            _saveProfileLocally(freshUser);
                           }
 
                           if (!context.mounted) return;
-                          if (response.isNewUser) {
+                          final shouldOpenOnboarding =
+                              response.isNewUser &&
+                              !wasGuest &&
+                              widget.openOnboardingForNewUser;
+                          if (shouldOpenOnboarding) {
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                 builder: (_) => ProfileInfoScreen(
-                                  phone: widget.phone ?? '',
+                                  phone:
+                                      (freshUser['phone'] ?? widget.phone ?? '')
+                                          .toString(),
+                                  initialEmail:
+                                      (freshUser['email'] ?? widget.email ?? '')
+                                          .toString(),
                                 ),
                               ),
                             );
@@ -290,6 +283,88 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
         setState(() => _isSendingCode = false);
       }
     }
+  }
+
+  Future<Map<String, dynamic>> _resolveFreshUser(
+    Map<String, dynamic> fallbackUser,
+  ) async {
+    try {
+      final me = await UsersApi.getMe();
+      if (me.isNotEmpty) {
+        return me;
+      }
+    } catch (_) {}
+    return fallbackUser;
+  }
+
+  Future<void> _syncLocalGuestProfileToServer() async {
+    final local = MockUserRepository.instance.profile;
+    if (local == null) return;
+
+    final server = await _resolveFreshUser(<String, dynamic>{});
+    final mergedName = local.fullName.isNotEmpty
+        ? local.fullName
+        : (server['name'] ?? 'New User').toString();
+    final mergedCity = local.city.trim().isNotEmpty
+        ? local.city.trim()
+        : (server['city'] ?? '').toString();
+    final mergedEmail = local.email.trim().isNotEmpty
+        ? local.email.trim()
+        : (server['email'] ?? '').toString();
+
+    await UsersApi.updateProfile(
+      name: mergedName,
+      city: mergedCity.isNotEmpty ? mergedCity : null,
+      email: mergedEmail.contains('@') ? mergedEmail : null,
+      birthDate: local.birthDate,
+    );
+
+    if (local.selectedSports.isNotEmpty && local.level.trim().isNotEmpty) {
+      final profiles = local.selectedSports
+          .map(normalizeSportCode)
+          .where((code) => code.isNotEmpty)
+          .toSet()
+          .map(
+            (sportCode) => UserSportProfileInput(
+              sportType: sportCode,
+              level: local.level.trim().toUpperCase(),
+              skills: local.skills
+                  .map((item) => item.trim())
+                  .where((item) => item.isNotEmpty)
+                  .toList(),
+              experienceYears: local.experienceYears,
+            ),
+          )
+          .toList();
+
+      if (profiles.isNotEmpty) {
+        await UsersApi.replaceSportProfiles(profiles: profiles);
+      }
+    }
+  }
+
+  void _saveProfileLocally(Map<String, dynamic> user) {
+    final name = (user['name'] ?? '').toString().trim();
+    final parts = name.isNotEmpty ? name.split(' ') : <String>[];
+    final firstName = parts.isNotEmpty ? parts.first : '';
+    final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+
+    DateTime? birthDate;
+    final rawBirth = user['birthDate'];
+    if (rawBirth is String) {
+      birthDate = DateTime.tryParse(rawBirth);
+    }
+
+    MockUserRepository.instance.save(
+      UserProfileM(
+        firstName: firstName,
+        lastName: lastName,
+        email: (user['email'] ?? '').toString(),
+        city: (user['city'] ?? '').toString(),
+        phone: (user['phone'] ?? widget.phone ?? '').toString(),
+        birthDate: birthDate,
+      ),
+    );
   }
 
   Future<void> _skipForNow() async {

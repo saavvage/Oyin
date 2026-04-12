@@ -4,7 +4,7 @@ import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../app/app.dart';
-import '../login/phone_screen.dart';
+import '../login/credential_auth_screen.dart';
 
 class AuthEntryScreen extends StatelessWidget {
   const AuthEntryScreen({super.key});
@@ -69,7 +69,10 @@ class AuthEntryScreen extends StatelessWidget {
                 label: l10n.getStarted,
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PhoneLoginScreen()),
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const CredentialAuthScreen(isRegistration: true),
+                    ),
                   );
                 },
               ),
@@ -78,7 +81,10 @@ class AuthEntryScreen extends StatelessWidget {
                 label: l10n.logIn,
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PhoneLoginScreen()),
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const CredentialAuthScreen(isRegistration: false),
+                    ),
                   );
                 },
               ),

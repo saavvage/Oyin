@@ -35,7 +35,8 @@ class ApiClient {
 
           handler.next(response);
         },
-        onError: (error, handler) {
+        onError: (error, handler) async {
+          await _handleUnauthorizedIfNeeded(error);
           _logError(error);
 
           handler.next(error);
@@ -46,6 +47,7 @@ class ApiClient {
 
   static final ApiClient instance = ApiClient._();
   static int _requestCounter = 0;
+  static bool _isHandlingUnauthorized = false;
   late final Dio _dio;
 
   Future<dynamic> get(String path, {Map<String, dynamic>? query}) async {
@@ -135,5 +137,29 @@ class ApiClient {
       return text;
     }
     return '${text.substring(0, max)}...';
+  }
+
+  static Future<void> _handleUnauthorizedIfNeeded(DioException error) async {
+    final status = error.response?.statusCode;
+    if (status != 401) return;
+
+    final path = error.requestOptions.path;
+    if (path.contains('/auth/login') ||
+        path.contains('/auth/register') ||
+        path.contains('/auth/verify') ||
+        path.contains('/auth/login-password')) {
+      return;
+    }
+
+    if (_isHandlingUnauthorized) return;
+    _isHandlingUnauthorized = true;
+    try {
+      if (kDebugMode) {
+        debugPrint('[Session] Unauthorized response. Signing out.');
+      }
+      await SessionStorage.forceSignOut();
+    } finally {
+      _isHandlingUnauthorized = false;
+    }
   }
 }

@@ -2,15 +2,53 @@ import 'api_client.dart';
 import 'api_endpoints.dart';
 
 class AuthApi {
+  static Future<AuthVerifyResponse> register({
+    required String email,
+    required String password,
+    String? phone,
+  }) async {
+    final data = await ApiClient.instance.post(
+      ApiEndpoints.authRegister,
+      data: {
+        'email': email,
+        'password': password,
+        if (phone != null && phone.trim().isNotEmpty) 'phone': phone.trim(),
+      },
+    );
+
+    return AuthVerifyResponse.fromMap((data as Map).cast<String, dynamic>());
+  }
+
+  static Future<AuthVerifyResponse> loginWithPassword({
+    required String login,
+    required String password,
+  }) async {
+    final data = await ApiClient.instance.post(
+      ApiEndpoints.authLoginPassword,
+      data: {'login': login.trim(), 'password': password},
+    );
+
+    return AuthVerifyResponse.fromMap((data as Map).cast<String, dynamic>());
+  }
+
   static Future<void> login({required String phone}) async {
-    await ApiClient.instance.post(ApiEndpoints.authLogin, data: {'phone': phone});
+    await ApiClient.instance.post(
+      ApiEndpoints.authLogin,
+      data: {'phone': phone},
+    );
   }
 
   static Future<void> loginWithEmail({required String email}) async {
-    await ApiClient.instance.post(ApiEndpoints.authLogin, data: {'email': email});
+    await ApiClient.instance.post(
+      ApiEndpoints.authLogin,
+      data: {'email': email},
+    );
   }
 
-  static Future<AuthVerifyResponse> verify({required String phone, required String code}) async {
+  static Future<AuthVerifyResponse> verify({
+    required String phone,
+    required String code,
+  }) async {
     final data = await ApiClient.instance.post(
       ApiEndpoints.authVerify,
       data: {'phone': phone, 'code': code},
@@ -19,7 +57,10 @@ class AuthApi {
     return AuthVerifyResponse.fromMap(data as Map<String, dynamic>);
   }
 
-  static Future<AuthVerifyResponse> verifyEmail({required String email, required String code}) async {
+  static Future<AuthVerifyResponse> verifyEmail({
+    required String email,
+    required String code,
+  }) async {
     final data = await ApiClient.instance.post(
       ApiEndpoints.authVerify,
       data: {'email': email, 'code': code},

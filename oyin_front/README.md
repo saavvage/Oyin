@@ -50,6 +50,8 @@ API_BASE_URL=http://localhost:3000
 # API_BASE_URL=http://10.0.2.2:3000
 ```
 
+AI-ассистент вызывается через backend endpoint `/api/ai/*`. Отдельный `AI_BASE_URL` во frontend не нужен.
+
 ### 3. Запустить
 ```bash
 flutter run

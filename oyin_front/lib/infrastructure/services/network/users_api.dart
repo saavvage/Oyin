@@ -74,17 +74,17 @@ class UsersApi {
   }
 
   static Future<void> updateProfile({
-    required String name,
-    required String email,
-    required String city,
+    String? name,
+    String? email,
+    String? city,
     DateTime? birthDate,
   }) async {
     await ApiClient.instance.put(
       ApiEndpoints.usersUpdateProfile,
       data: {
-        'name': name,
-        'email': email,
-        'city': city,
+        if (name != null) 'name': name,
+        if (email != null) 'email': email,
+        if (city != null) 'city': city,
         if (birthDate != null) 'birthDate': birthDate.toIso8601String(),
       },
     );

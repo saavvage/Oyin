@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../../app/errors/app_errors.dart';
@@ -13,7 +14,6 @@ class AppNotifier {
     Duration duration = const Duration(seconds: 3),
   }) {
     final overlay = Overlay.of(context);
-    if (overlay == null) return;
 
     late OverlayEntry entry;
     entry = OverlayEntry(
@@ -29,6 +29,21 @@ class AppNotifier {
 
   static void showError(BuildContext context, Object error) {
     final l10n = AppLocalizations.of(context);
+
+    if (error is DioException) {
+      final serverMessage = _extractServerMessage(error.response?.data);
+      if (serverMessage != null && serverMessage.trim().isNotEmpty) {
+        final path = error.requestOptions.path;
+        if (_isAuthFlowPath(path)) {
+          show(
+            context,
+            AppNotificationData.warning(l10n.notifTitleWarning, serverMessage),
+          );
+          return;
+        }
+      }
+    }
+
     final code = AppErrorMapper.fromException(error);
     final title = _errorTitle(l10n, code);
     final message = _errorMessage(l10n, code);
@@ -131,6 +146,36 @@ class AppNotifier {
       default:
         return l10n.errorUnknownMessage;
     }
+  }
+
+  static bool _isAuthFlowPath(String path) {
+    return path.contains('/auth/login') ||
+        path.contains('/auth/register') ||
+        path.contains('/auth/verify') ||
+        path.contains('/auth/login-password');
+  }
+
+  static String? _extractServerMessage(dynamic data) {
+    if (data == null) return null;
+
+    if (data is String) {
+      final message = data.trim();
+      return message.isEmpty ? null : message;
+    }
+
+    if (data is Map) {
+      final message = data['message'];
+      if (message is String && message.trim().isNotEmpty) {
+        return message.trim();
+      }
+
+      final error = data['error'];
+      if (error is String && error.trim().isNotEmpty) {
+        return error.trim();
+      }
+    }
+
+    return null;
   }
 }
 

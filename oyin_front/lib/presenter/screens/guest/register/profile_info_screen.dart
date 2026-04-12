@@ -6,9 +6,10 @@ import 'onboarding_draft.dart';
 import 'sport_selection_screen.dart';
 
 class ProfileInfoScreen extends StatefulWidget {
-  const ProfileInfoScreen({super.key, this.phone = ''});
+  const ProfileInfoScreen({super.key, this.phone = '', this.initialEmail = ''});
 
   final String phone;
+  final String initialEmail;
 
   @override
   State<ProfileInfoScreen> createState() => _ProfileInfoScreenState();
@@ -22,6 +23,14 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
   final _city = TextEditingController();
   final _birthController = TextEditingController();
   DateTime? _birthDate;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialEmail.trim().isNotEmpty) {
+      _email.text = widget.initialEmail.trim();
+    }
+  }
 
   @override
   void dispose() {

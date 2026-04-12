@@ -294,6 +294,33 @@ class AppLocalizations {
   String get onboardingSubtitle => _string(LocaleKeys.onboardingSubtitle);
   String get getStarted => _string(LocaleKeys.getStarted);
   String get logIn => _string(LocaleKeys.logIn);
+  String get authCredentialRegisterSubtitle =>
+      _string(LocaleKeys.authCredentialRegisterSubtitle);
+  String get authCredentialLoginSubtitle =>
+      _string(LocaleKeys.authCredentialLoginSubtitle);
+  String get authCredentialOptional =>
+      _string(LocaleKeys.authCredentialOptional);
+  String get authCredentialLoginLabel =>
+      _string(LocaleKeys.authCredentialLoginLabel);
+  String get authCredentialLoginHint =>
+      _string(LocaleKeys.authCredentialLoginHint);
+  String get authCredentialPasswordLabel =>
+      _string(LocaleKeys.authCredentialPasswordLabel);
+  String get authCredentialConfirmPasswordLabel =>
+      _string(LocaleKeys.authCredentialConfirmPasswordLabel);
+  String get authCredentialSwitchToLogin =>
+      _string(LocaleKeys.authCredentialSwitchToLogin);
+  String get authCredentialSwitchToRegister =>
+      _string(LocaleKeys.authCredentialSwitchToRegister);
+  String get authCredentialUseOtp => _string(LocaleKeys.authCredentialUseOtp);
+  String get authCredentialPasswordTooShort =>
+      _string(LocaleKeys.authCredentialPasswordTooShort);
+  String get authCredentialPasswordsMismatch =>
+      _string(LocaleKeys.authCredentialPasswordsMismatch);
+  String get authCredentialLoginRequired =>
+      _string(LocaleKeys.authCredentialLoginRequired);
+  String get authCredentialEmailRegistered =>
+      _string(LocaleKeys.authCredentialEmailRegistered);
   String get phoneNumberLabel => _string(LocaleKeys.phoneNumber);
   String get sendCode => _string(LocaleKeys.sendCode);
   String get phoneEntryTitle => _string(LocaleKeys.phoneEntryTitle);
@@ -862,6 +889,24 @@ const Map<String, Map<String, String>> _localizedValues = {
         'The hybrid matching system for fighters. Find partners, track stats, and grow safely.',
     LocaleKeys.getStarted: 'Get Started',
     LocaleKeys.logIn: 'Log In',
+    LocaleKeys.authCredentialRegisterSubtitle:
+        'Create an account and complete your athlete profile',
+    LocaleKeys.authCredentialLoginSubtitle:
+        'Sign in to an existing account with login and password',
+    LocaleKeys.authCredentialOptional: '(optional)',
+    LocaleKeys.authCredentialLoginLabel: 'Login',
+    LocaleKeys.authCredentialLoginHint: 'Email or phone',
+    LocaleKeys.authCredentialPasswordLabel: 'Password',
+    LocaleKeys.authCredentialConfirmPasswordLabel: 'Confirm password',
+    LocaleKeys.authCredentialSwitchToLogin: 'Already have an account? Log In',
+    LocaleKeys.authCredentialSwitchToRegister: 'No account yet? Get Started',
+    LocaleKeys.authCredentialUseOtp: 'Sign in with verification code',
+    LocaleKeys.authCredentialPasswordTooShort:
+        'Password must be at least 6 characters',
+    LocaleKeys.authCredentialPasswordsMismatch: 'Passwords do not match',
+    LocaleKeys.authCredentialLoginRequired: 'Enter login and password',
+    LocaleKeys.authCredentialEmailRegistered:
+        'This email is already registered. Use the "Log In" button.',
     LocaleKeys.phoneNumber: 'Phone Number',
     LocaleKeys.sendCode: 'Send Code',
     LocaleKeys.phoneEntryTitle: 'Let’s get you in the ring.',
@@ -1361,6 +1406,24 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Гибридная система матчмейкинга для бойцов. Находи партнёров, веди статистику и прогрессируй безопасно.',
     LocaleKeys.getStarted: 'Начать',
     LocaleKeys.logIn: 'Войти',
+    LocaleKeys.authCredentialRegisterSubtitle:
+        'Создайте аккаунт и заполните профиль спортсмена',
+    LocaleKeys.authCredentialLoginSubtitle:
+        'Вход в существующий аккаунт по логину и паролю',
+    LocaleKeys.authCredentialOptional: '(необязательно)',
+    LocaleKeys.authCredentialLoginLabel: 'Логин',
+    LocaleKeys.authCredentialLoginHint: 'Почта или телефон',
+    LocaleKeys.authCredentialPasswordLabel: 'Пароль',
+    LocaleKeys.authCredentialConfirmPasswordLabel: 'Подтвердите пароль',
+    LocaleKeys.authCredentialSwitchToLogin: 'Уже есть аккаунт? Войти',
+    LocaleKeys.authCredentialSwitchToRegister: 'Нет аккаунта? Начать',
+    LocaleKeys.authCredentialUseOtp: 'Войти через код подтверждения',
+    LocaleKeys.authCredentialPasswordTooShort:
+        'Пароль должен быть минимум 6 символов',
+    LocaleKeys.authCredentialPasswordsMismatch: 'Пароли не совпадают',
+    LocaleKeys.authCredentialLoginRequired: 'Введите логин и пароль',
+    LocaleKeys.authCredentialEmailRegistered:
+        'Этот email уже зарегистрирован. Используйте кнопку "Войти".',
     LocaleKeys.phoneNumber: 'Номер телефона',
     LocaleKeys.sendCode: 'Отправить код',
     LocaleKeys.phoneEntryTitle: 'Заходим на ринг.',
@@ -1860,6 +1923,24 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Жекпе-жекшілерге арналған гибридті матчинг. Серіктестерді тап, статистиканы жүргіз, қауіпсіз дамы.',
     LocaleKeys.getStarted: 'Бастау',
     LocaleKeys.logIn: 'Кіру',
+    LocaleKeys.authCredentialRegisterSubtitle:
+        'Аккаунт ашып, спортшы профилін толтырыңыз',
+    LocaleKeys.authCredentialLoginSubtitle:
+        'Бар аккаунтқа логин мен құпиясөз арқылы кіріңіз',
+    LocaleKeys.authCredentialOptional: '(міндетті емес)',
+    LocaleKeys.authCredentialLoginLabel: 'Логин',
+    LocaleKeys.authCredentialLoginHint: 'Email немесе телефон',
+    LocaleKeys.authCredentialPasswordLabel: 'Құпиясөз',
+    LocaleKeys.authCredentialConfirmPasswordLabel: 'Құпиясөзді растаңыз',
+    LocaleKeys.authCredentialSwitchToLogin: 'Аккаунтыңыз бар ма? Кіру',
+    LocaleKeys.authCredentialSwitchToRegister: 'Аккаунт жоқ па? Бастау',
+    LocaleKeys.authCredentialUseOtp: 'Растау коды арқылы кіру',
+    LocaleKeys.authCredentialPasswordTooShort:
+        'Құпиясөз кемінде 6 таңбадан тұруы керек',
+    LocaleKeys.authCredentialPasswordsMismatch: 'Құпиясөздер сәйкес келмейді',
+    LocaleKeys.authCredentialLoginRequired: 'Логин мен құпиясөзді енгізіңіз',
+    LocaleKeys.authCredentialEmailRegistered:
+        'Бұл email әлдеқашан тіркелген. "Кіру" батырмасын пайдаланыңыз.',
     LocaleKeys.phoneNumber: 'Телефон нөмірі',
     LocaleKeys.sendCode: 'Код жіберу',
     LocaleKeys.phoneEntryTitle: 'Рингке кірейік.',

@@ -26,6 +26,7 @@ class ProfileCubit extends Cubit<ProfileState> {
       name: displayName,
       tagline: localTagline,
       email: user.email,
+      isAccountVerified: false,
       location: location,
       league: localLeague,
       stats: const ProfileStats(
@@ -74,6 +75,7 @@ class ProfileCubit extends Cubit<ProfileState> {
           ? name
           : state.name;
       final tagline = _buildTagline(sportProfiles);
+      final isAccountVerified = _resolveVerificationFlag(data);
 
       // Extract ELO rating for league calculation
       int eloRating = 1000;
@@ -144,6 +146,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         state.copyWith(
           name: safeName,
           email: email.isNotEmpty ? email : state.email,
+          isAccountVerified: isAccountVerified,
           location: city.isNotEmpty ? city : state.location,
           avatarUrl: avatar.isNotEmpty ? avatar : state.avatarUrl,
           tagline: tagline,
@@ -270,5 +273,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       default:
         return '';
     }
+  }
+
+  static bool _resolveVerificationFlag(Map<String, dynamic> data) {
+    final phoneVerified = data['phoneVerified'] == true;
+    final emailVerified = data['emailVerified'] == true;
+    return phoneVerified || emailVerified;
   }
 }

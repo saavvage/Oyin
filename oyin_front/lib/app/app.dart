@@ -21,32 +21,49 @@ class _OyinAppState extends State<OyinApp> {
   Locale _locale = AppLocalizations.supportedLocales.first;
   bool _isSessionReady = false;
   bool _isAuthorized = false;
+  bool _isResolvingSession = false;
 
   @override
   void initState() {
     super.initState();
+    SessionStorage.sessionVersion.addListener(_onSessionChanged);
     _resolveSession();
   }
 
+  @override
+  void dispose() {
+    SessionStorage.sessionVersion.removeListener(_onSessionChanged);
+    super.dispose();
+  }
+
   Future<void> _resolveSession() async {
-    final token = await SessionStorage.getAccessToken();
-    final isGuest = await SessionStorage.getGuestMode();
-    final savedLocale = await SessionStorage.getLocale();
-    if (token != null && token.isNotEmpty) {
-      await PushNotificationsService.syncTokenWithBackend();
-      LocationService.syncLocationWithBackend(); // fire and forget
-    }
-    if (!mounted) return;
-    setState(() {
-      _isAuthorized = isGuest || (token != null && token.isNotEmpty);
-      _isSessionReady = true;
-      if (savedLocale != null && savedLocale.isNotEmpty) {
-        final locale = Locale(savedLocale);
-        if (AppLocalizations.supportedLocales.contains(locale)) {
-          _locale = locale;
-        }
+    if (_isResolvingSession) return;
+    _isResolvingSession = true;
+    try {
+      final token = await SessionStorage.getAccessToken();
+      final savedLocale = await SessionStorage.getLocale();
+      if (token != null && token.isNotEmpty) {
+        await PushNotificationsService.syncTokenWithBackend();
+        LocationService.syncLocationWithBackend(); // fire and forget
       }
-    });
+      if (!mounted) return;
+      setState(() {
+        _isAuthorized = token != null && token.isNotEmpty;
+        _isSessionReady = true;
+        if (savedLocale != null && savedLocale.isNotEmpty) {
+          final locale = Locale(savedLocale);
+          if (AppLocalizations.supportedLocales.contains(locale)) {
+            _locale = locale;
+          }
+        }
+      });
+    } finally {
+      _isResolvingSession = false;
+    }
+  }
+
+  void _onSessionChanged() {
+    _resolveSession();
   }
 
   void setLocale(Locale locale) {

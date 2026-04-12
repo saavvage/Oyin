@@ -58,6 +58,7 @@ class ProfileState {
     required this.name,
     required this.tagline,
     required this.email,
+    required this.isAccountVerified,
     required this.location,
     required this.league,
     required this.stats,
@@ -70,6 +71,7 @@ class ProfileState {
   final String name;
   final String tagline;
   final String email;
+  final bool isAccountVerified;
   final String location;
   final String league;
   final ProfileStats stats;
@@ -82,6 +84,7 @@ class ProfileState {
     String? name,
     String? tagline,
     String? email,
+    bool? isAccountVerified,
     String? location,
     String? league,
     ProfileStats? stats,
@@ -94,6 +97,7 @@ class ProfileState {
       name: name ?? this.name,
       tagline: tagline ?? this.tagline,
       email: email ?? this.email,
+      isAccountVerified: isAccountVerified ?? this.isAccountVerified,
       location: location ?? this.location,
       league: league ?? this.league,
       stats: stats ?? this.stats,

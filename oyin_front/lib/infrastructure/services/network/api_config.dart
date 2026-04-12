@@ -11,7 +11,6 @@ class ApiConfig {
   }
 
   static String get aiBaseUrl {
-    final raw = dotenv.env['AI_BASE_URL'] ?? 'http://10.0.2.2:8000';
-    return raw.endsWith('/') ? raw.substring(0, raw.length - 1) : raw;
+    return '$baseUrl/ai';
   }
 }

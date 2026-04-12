@@ -1,9 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../domain/export.dart';
 
 class SessionStorage {
   static SharedPreferences? _prefs;
+  static final ValueNotifier<int> sessionVersion = ValueNotifier<int>(0);
 
   static Future<void> init() async {
     _prefs ??= await SharedPreferences.getInstance();
@@ -13,6 +15,7 @@ class SessionStorage {
     await init();
     await _prefs!.setString(_Keys.accessToken, token);
     await _prefs!.setBool(_Keys.guestMode, false);
+    _bumpSessionVersion();
   }
 
   static Future<String?> getAccessToken() async {
@@ -23,6 +26,7 @@ class SessionStorage {
   static Future<void> clearAccessToken() async {
     await init();
     await _prefs!.remove(_Keys.accessToken);
+    _bumpSessionVersion();
   }
 
   static Future<void> setGuestMode(bool enabled) async {
@@ -31,6 +35,14 @@ class SessionStorage {
     if (enabled) {
       await _prefs!.remove(_Keys.accessToken);
     }
+    _bumpSessionVersion();
+  }
+
+  static Future<void> forceSignOut() async {
+    await init();
+    await _prefs!.remove(_Keys.accessToken);
+    await _prefs!.setBool(_Keys.guestMode, false);
+    _bumpSessionVersion();
   }
 
   static Future<bool> getGuestMode() async {
@@ -94,6 +106,10 @@ class SessionStorage {
   static Future<String?> getLocale() async {
     await init();
     return _prefs!.getString(_Keys.locale);
+  }
+
+  static void _bumpSessionVersion() {
+    sessionVersion.value = sessionVersion.value + 1;
   }
 }
 

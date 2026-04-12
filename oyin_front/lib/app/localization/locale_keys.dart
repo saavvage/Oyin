@@ -160,6 +160,26 @@ class LocaleKeys {
   static const onboardingSubtitle = 'onboarding_subtitle';
   static const getStarted = 'get_started';
   static const logIn = 'log_in';
+  static const authCredentialRegisterSubtitle =
+      'auth_credential_register_subtitle';
+  static const authCredentialLoginSubtitle = 'auth_credential_login_subtitle';
+  static const authCredentialOptional = 'auth_credential_optional';
+  static const authCredentialLoginLabel = 'auth_credential_login_label';
+  static const authCredentialLoginHint = 'auth_credential_login_hint';
+  static const authCredentialPasswordLabel = 'auth_credential_password_label';
+  static const authCredentialConfirmPasswordLabel =
+      'auth_credential_confirm_password_label';
+  static const authCredentialSwitchToLogin = 'auth_credential_switch_to_login';
+  static const authCredentialSwitchToRegister =
+      'auth_credential_switch_to_register';
+  static const authCredentialUseOtp = 'auth_credential_use_otp';
+  static const authCredentialPasswordTooShort =
+      'auth_credential_password_too_short';
+  static const authCredentialPasswordsMismatch =
+      'auth_credential_passwords_mismatch';
+  static const authCredentialLoginRequired = 'auth_credential_login_required';
+  static const authCredentialEmailRegistered =
+      'auth_credential_email_registered';
   static const phoneNumber = 'phone_number';
   static const sendCode = 'send_code';
   static const phoneEntryTitle = 'phone_entry_title';

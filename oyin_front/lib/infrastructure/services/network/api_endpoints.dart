@@ -2,6 +2,8 @@ class ApiEndpoints {
   static const String health = '/';
 
   // Auth
+  static const String authRegister = '/auth/register';
+  static const String authLoginPassword = '/auth/login-password';
   static const String authLogin = '/auth/login';
   static const String authVerify = '/auth/verify';
 

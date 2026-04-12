@@ -11,9 +11,14 @@ import '../register/profile_info_screen.dart';
 import 'verify_screen.dart';
 
 class PhoneLoginScreen extends StatefulWidget {
-  const PhoneLoginScreen({super.key, this.openOnboardingOnSkip = true});
+  const PhoneLoginScreen({
+    super.key,
+    this.openOnboardingOnSkip = true,
+    this.openOnboardingForNewUser = true,
+  });
 
   final bool openOnboardingOnSkip;
+  final bool openOnboardingForNewUser;
 
   @override
   State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
@@ -197,6 +202,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                           email: email,
                           autoSendCode: true,
                           openOnboardingOnSkip: widget.openOnboardingOnSkip,
+                          openOnboardingForNewUser:
+                              widget.openOnboardingForNewUser,
                         ),
                       ),
                     );
@@ -226,6 +233,8 @@ class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
                         phone: phone,
                         autoSendCode: true,
                         openOnboardingOnSkip: widget.openOnboardingOnSkip,
+                        openOnboardingForNewUser:
+                            widget.openOnboardingForNewUser,
                       ),
                     ),
                   );
