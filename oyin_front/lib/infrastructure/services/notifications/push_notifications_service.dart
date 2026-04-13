@@ -46,6 +46,7 @@ class PushNotificationsService {
 
       await _initializeLocalNotifications();
       await _requestNotificationPermissions();
+      await _waitForApnsTokenIfNeeded();
       await _logFcmToken();
       await syncTokenWithBackend();
       _listenTokenRefresh();
@@ -117,6 +118,29 @@ class PushNotificationsService {
     debugPrint(
       '[Push] Permission status: ${settings.authorizationStatus.name}',
     );
+  }
+
+  static Future<void> _waitForApnsTokenIfNeeded() async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.iOS) {
+      return;
+    }
+
+    const maxAttempts = 8;
+    const attemptDelay = Duration(seconds: 1);
+
+    for (var i = 1; i <= maxAttempts; i++) {
+      try {
+        final apnsToken = await _messaging.getAPNSToken();
+        if (apnsToken != null && apnsToken.isNotEmpty) {
+          debugPrint('[Push] APNS token is ready.');
+          return;
+        }
+      } catch (_) {}
+
+      await Future<void>.delayed(attemptDelay);
+    }
+
+    debugPrint('[Push] APNS token is not available yet.');
   }
 
   static Future<void> _logFcmToken() async {
