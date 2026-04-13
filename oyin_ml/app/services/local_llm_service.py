@@ -25,8 +25,11 @@ class LocalLLMService:
     - google/gemma-7b-it (Hugging Face)
     """
     
-    def __init__(self, model_path: str):
+    def __init__(self, model_path: str, model_file: str = "", n_gpu_layers: int = -1, n_ctx: int = 4096):
         self.model_path = Path(model_path) if not model_path.endswith('.gguf') else Path(model_path)
+        self.model_file = model_file
+        self.n_gpu_layers = n_gpu_layers
+        self.n_ctx = n_ctx
         self.model = None
         self.tokenizer = None
         self.is_available = False
@@ -39,11 +42,18 @@ class LocalLLMService:
         # Search for GGUF files in multiple locations
         gguf_files = []
         
+        # Explicit MODEL_FILE setting wins (lets you pick between gemma2 and gemma4)
+        if self.model_file:
+            explicit = Path(self.model_path) / self.model_file if self.model_path.is_dir() else Path(self.model_file)
+            if explicit.is_file():
+                gguf_files = [explicit]
+            else:
+                logger.warning(f"MODEL_FILE={self.model_file} not found at {explicit}, falling back to auto-pick")
         # Check if model_path is a specific GGUF file
-        if self.model_path.is_file() and str(self.model_path).endswith('.gguf'):
+        if not gguf_files and self.model_path.is_file() and str(self.model_path).endswith('.gguf'):
             gguf_files = [self.model_path]
         # Search in models/ directory
-        elif not gguf_files:
+        if not gguf_files:
             gguf_files = list(Path('models').glob("*.gguf"))
         # Fallback to project root
         if not gguf_files:
@@ -98,11 +108,12 @@ class LocalLLMService:
                 logger.info(f"Loading GGUF model from {self.gguf_path}...")
                 logger.info("This may take a minute on first load...")
                 
+                logger.info(f"llama.cpp config: n_ctx={self.n_ctx}, n_gpu_layers={self.n_gpu_layers}")
                 self.model = Llama(
                     model_path=str(self.gguf_path),
-                    n_ctx=2048,
+                    n_ctx=self.n_ctx,
                     n_threads=4,
-                    n_gpu_layers=0,
+                    n_gpu_layers=self.n_gpu_layers,
                     verbose=False
                 )
                 
@@ -224,10 +235,10 @@ class LocalLLMService:
 
 local_llm_service = None
 
-def get_local_llm_service(model_path: str) -> LocalLLMService:
+def get_local_llm_service(model_path: str, model_file: str = "", n_gpu_layers: int = -1, n_ctx: int = 4096) -> LocalLLMService:
     global local_llm_service
     if local_llm_service is None:
-        local_llm_service = LocalLLMService(model_path)
+        local_llm_service = LocalLLMService(model_path, model_file, n_gpu_layers, n_ctx)
     return local_llm_service
 
 

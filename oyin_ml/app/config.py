@@ -11,6 +11,9 @@ class Settings(BaseSettings):
 
     # Local GGUF model (primary)
     local_model_path: str = "./models"
+    model_file: str = ""  # specific .gguf filename inside local_model_path; empty = auto-pick first
+    n_gpu_layers: int = -1  # -1 = offload all layers to GPU, 0 = CPU only
+    n_ctx: int = 4096
 
     # Vast.ai remote inference (fallback when local is unavailable)
     vastai_api_url: str = ""          # e.g. http://<vast-ip>:8080

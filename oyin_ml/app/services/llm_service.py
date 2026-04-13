@@ -22,7 +22,12 @@ class LLMService:
     def _initialize_local(self):
         try:
             from app.services.local_llm_service import get_local_llm_service
-            self.local_service = get_local_llm_service(self.settings.local_model_path)
+            self.local_service = get_local_llm_service(
+                self.settings.local_model_path,
+                self.settings.model_file,
+                self.settings.n_gpu_layers,
+                self.settings.n_ctx,
+            )
             if self.local_service.is_available:
                 logger.info("Local GGUF model available (primary)")
             else:
