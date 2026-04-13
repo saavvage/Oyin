@@ -14,6 +14,9 @@ oyin_ml/chroma_db/
 # macOS
 .DS_Store
 
+# Oyin admin panel (local-only in this repo)
+oyin_admin/
+
 # Miscellaneous
 *.class
 *.lock
