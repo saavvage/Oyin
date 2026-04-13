@@ -29,6 +29,18 @@ class MatchResultPlayer {
   );
 }
 
+class MatchResultContract {
+  const MatchResultContract({
+    required this.dateTime,
+    required this.location,
+    required this.reminder,
+  });
+
+  final DateTime dateTime;
+  final String location;
+  final bool reminder;
+}
+
 class MatchResultState {
   const MatchResultState({
     required this.gameId,
@@ -39,6 +51,7 @@ class MatchResultState {
     required this.leftPlayer,
     required this.rightPlayer,
     required this.isCurrentUserPlayer1,
+    required this.contract,
     required this.isLoading,
     required this.isSubmitting,
     required this.isCreatingDispute,
@@ -54,20 +67,24 @@ class MatchResultState {
   final MatchResultPlayer leftPlayer;
   final MatchResultPlayer rightPlayer;
   final bool isCurrentUserPlayer1;
+  final MatchResultContract? contract;
   final bool isLoading;
   final bool isSubmitting;
   final bool isCreatingDispute;
   final String? disputeId;
   final String? error;
 
+  bool get hasContract => contract != null;
+
   bool get canSubmit =>
+      hasContract &&
       !isLoading &&
       !isSubmitting &&
       leftPlayer.score != null &&
       rightPlayer.score != null;
 
   bool get canOpenDispute =>
-      statusLabel == 'CONFLICT' || statusLabel == 'DISPUTED';
+      hasContract && (statusLabel == 'CONFLICT' || statusLabel == 'DISPUTED');
 
   MatchResultState copyWith({
     String? gameId,
@@ -78,6 +95,8 @@ class MatchResultState {
     MatchResultPlayer? leftPlayer,
     MatchResultPlayer? rightPlayer,
     bool? isCurrentUserPlayer1,
+    MatchResultContract? contract,
+    bool clearContract = false,
     bool? isLoading,
     bool? isSubmitting,
     bool? isCreatingDispute,
@@ -94,6 +113,7 @@ class MatchResultState {
     leftPlayer: leftPlayer ?? this.leftPlayer,
     rightPlayer: rightPlayer ?? this.rightPlayer,
     isCurrentUserPlayer1: isCurrentUserPlayer1 ?? this.isCurrentUserPlayer1,
+    contract: clearContract ? null : (contract ?? this.contract),
     isLoading: isLoading ?? this.isLoading,
     isSubmitting: isSubmitting ?? this.isSubmitting,
     isCreatingDispute: isCreatingDispute ?? this.isCreatingDispute,
@@ -128,6 +148,7 @@ class MatchResultState {
         score: null,
       ),
       isCurrentUserPlayer1: true,
+      contract: null,
       isLoading: true,
       isSubmitting: false,
       isCreatingDispute: false,

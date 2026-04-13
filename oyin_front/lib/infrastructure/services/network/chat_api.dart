@@ -34,6 +34,7 @@ class ChatThreadDto {
     required this.avatarUrl,
     required this.statusKey,
     required this.timestamp,
+    required this.isBlocked,
     this.badgeCount,
     this.accent,
     this.highlight,
@@ -46,6 +47,7 @@ class ChatThreadDto {
   final String avatarUrl;
   final String statusKey;
   final String timestamp;
+  final bool isBlocked;
   final int? badgeCount;
   final String? accent;
   final bool? highlight;
@@ -59,6 +61,7 @@ class ChatThreadDto {
       avatarUrl: (map['avatarUrl'] ?? '').toString(),
       statusKey: (map['statusKey'] ?? '').toString(),
       timestamp: (map['timestamp'] ?? '').toString(),
+      isBlocked: map['isBlocked'] == true,
       badgeCount: map['badgeCount'] is int ? map['badgeCount'] as int : null,
       accent: map['accent']?.toString(),
       highlight: map['highlight'] == true,
@@ -166,6 +169,15 @@ class ChatApi {
     return ChatThreadsResponse.fromMap((data as Map).cast<String, dynamic>());
   }
 
+  static Future<List<ChatThreadDto>> getBlockedThreads() async {
+    final data = await ApiClient.instance.get(ApiEndpoints.chatsBlocked);
+    if (data is! List) return const [];
+    return data
+        .whereType<Map>()
+        .map((item) => ChatThreadDto.fromMap(item.cast<String, dynamic>()))
+        .toList();
+  }
+
   static Future<List<ChatMessageDto>> getMessages(
     String threadId, {
     DateTime? before,
@@ -205,6 +217,10 @@ class ChatApi {
 
   static Future<void> blockThread(String threadId) async {
     await ApiClient.instance.post(ApiEndpoints.chatsBlock(threadId));
+  }
+
+  static Future<void> unblockThread(String threadId) async {
+    await ApiClient.instance.post(ApiEndpoints.chatsUnblock(threadId));
   }
 
   static Future<void> reportThread(String threadId, {String? reason}) async {

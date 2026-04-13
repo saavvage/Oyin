@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import 'api_client.dart';
 import 'api_endpoints.dart';
 
@@ -380,6 +384,29 @@ class DisputeVoteResponse {
   }
 }
 
+class DisputeEvidenceUploadDto {
+  const DisputeEvidenceUploadDto({
+    required this.url,
+    required this.type,
+    required this.thumbnailUrl,
+    required this.durationLabel,
+  });
+
+  final String url;
+  final String type;
+  final String? thumbnailUrl;
+  final String? durationLabel;
+
+  factory DisputeEvidenceUploadDto.fromMap(Map<String, dynamic> map) {
+    return DisputeEvidenceUploadDto(
+      url: (map['url'] ?? '').toString(),
+      type: (map['type'] ?? 'VIDEO').toString(),
+      thumbnailUrl: map['thumbnailUrl']?.toString(),
+      durationLabel: map['durationLabel']?.toString(),
+    );
+  }
+}
+
 class DisputesApi {
   static Future<CreateDisputeResponse> createDispute({
     required String gameId,
@@ -413,6 +440,23 @@ class DisputesApi {
     );
 
     return CreateDisputeResponse.fromMap((data as Map).cast<String, dynamic>());
+  }
+
+  static Future<DisputeEvidenceUploadDto?> uploadEvidenceFile(File file) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        file.path,
+        filename: file.path.split(Platform.pathSeparator).last,
+      ),
+    });
+
+    final data = await ApiClient.instance.post(
+      ApiEndpoints.disputesEvidenceUpload,
+      data: formData,
+    );
+
+    if (data is! Map) return null;
+    return DisputeEvidenceUploadDto.fromMap((data).cast<String, dynamic>());
   }
 
   static Future<List<DisputeDetailsDto>> getJuryDuty() async {

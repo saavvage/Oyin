@@ -70,8 +70,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         city: city,
         birthDate: _birthDate,
       );
+      await UsersApi.getMe();
       if (!mounted) return;
-      AppNotifier.showSuccess(context, AppLocalizations.of(context).profileUpdated);
+      AppNotifier.showSuccess(
+        context,
+        AppLocalizations.of(context).profileUpdated,
+      );
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
@@ -124,8 +128,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Text(
                     l10n.personalInfo,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),
@@ -135,15 +139,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             else
               Expanded(
                 child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
                   child: Column(
                     children: [
                       _Field(
                         controller: _nameController,
-                        label: l10n.personalInfo.contains('Личные')
-                            ? 'Имя'
-                            : 'Name',
+                        label: l10n.firstName,
                         icon: Icons.person_outline,
                       ),
                       14.vSpacing,
@@ -156,9 +160,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       14.vSpacing,
                       _Field(
                         controller: _cityController,
-                        label: l10n.personalInfo.contains('Личные')
-                            ? 'Город'
-                            : 'City',
+                        label: l10n.city,
                         icon: Icons.location_city_outlined,
                       ),
                       14.vSpacing,
@@ -167,25 +169,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 16),
+                            horizontal: 14,
+                            vertical: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: palette.card,
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.cake_outlined,
-                                  color: palette.muted, size: 20),
+                              Icon(
+                                Icons.cake_outlined,
+                                color: palette.muted,
+                                size: 20,
+                              ),
                               12.hSpacing,
                               Text(
                                 _birthDate != null
                                     ? '${_birthDate!.day.toString().padLeft(2, '0')}.${_birthDate!.month.toString().padLeft(2, '0')}.${_birthDate!.year}'
-                                    : (l10n.personalInfo.contains('Личные')
-                                        ? 'Дата рождения'
-                                        : 'Birth date'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
+                                    : l10n.birthDate,
+                                style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
                                       color: _birthDate != null
                                           ? null
@@ -214,7 +217,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   height: 20,
                                   width: 20,
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2),
+                                    strokeWidth: 2,
+                                  ),
                                 )
                               : Text(l10n.save),
                         ),

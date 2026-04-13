@@ -10,6 +10,7 @@ class ApiEndpoints {
   // Users
   static const String usersMe = '/users/me';
   static const String usersUpdateProfile = '/users/me';
+  static const String usersUpdatePassword = '/users/me/password';
   static const String usersOnboarding = '/users/onboarding';
   static const String usersLocation = '/users/me/location';
   static const String usersPushSettings = '/users/me/push-settings';
@@ -30,15 +31,19 @@ class ApiEndpoints {
   // Chat
   static const String chatsThreads = '/chats/threads';
   static const String chatsCreateThread = '/chats/threads';
+  static const String chatsBlocked = '/chats/blocked';
   static String chatsMessages(String threadId) =>
       '/chats/threads/$threadId/messages';
   static String chatsDelete(String threadId) => '/chats/threads/$threadId';
   static String chatsBlock(String threadId) => '/chats/threads/$threadId/block';
+  static String chatsUnblock(String threadId) =>
+      '/chats/threads/$threadId/unblock';
   static String chatsReport(String threadId) =>
       '/chats/threads/$threadId/report';
 
   // Games
   static const String gamesMy = '/games/my';
+  static String gamesContract(String gameId) => '/games/$gameId/contract';
   static String gamesResult(String gameId) => '/games/$gameId/result';
   static String gamesById(String gameId) => '/games/$gameId';
 
@@ -52,6 +57,7 @@ class ApiEndpoints {
 
   // Disputes
   static const String disputesCreate = '/disputes';
+  static const String disputesEvidenceUpload = '/disputes/evidence/upload';
   static const String disputesJuryDuty = '/disputes/jury-duty';
   static const String disputesMy = '/disputes/my';
   static String disputesById(String id) => '/disputes/$id';

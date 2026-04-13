@@ -133,35 +133,7 @@ class DisputeContent extends StatelessWidget {
                       color: palette.card,
                       child: selected == null
                           ? Center(child: Text(l10n.noEvidence))
-                          : Stack(
-                              children: [
-                                Positioned.fill(
-                                  child: Image.network(
-                                    selected.thumbnailUrl?.isNotEmpty == true
-                                        ? selected.thumbnailUrl!
-                                        : selected.url,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                if (selected.type == 'VIDEO')
-                                  Center(
-                                    child: Container(
-                                      width: 64,
-                                      height: 64,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white.withValues(
-                                          alpha: 0.35,
-                                        ),
-                                      ),
-                                      child: const Icon(
-                                        Icons.play_arrow_rounded,
-                                        size: 40,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
+                          : _buildEvidencePreview(context, selected),
                     ),
                   ),
                 ),
@@ -191,12 +163,7 @@ class DisputeContent extends StatelessWidget {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                item.thumbnailUrl?.isNotEmpty == true
-                                    ? item.thumbnailUrl!
-                                    : item.url,
-                                fit: BoxFit.cover,
-                              ),
+                              child: _buildEvidenceThumbnail(item),
                             ),
                           ),
                         );
@@ -279,6 +246,68 @@ class DisputeContent extends StatelessWidget {
       title: l10n.infoDisputeTitle,
       subtitle: l10n.infoDisputeSubtitle,
       tips: [l10n.infoDisputeTip1, l10n.infoDisputeTip2, l10n.infoDisputeTip3],
+    );
+  }
+
+  Widget _buildEvidencePreview(BuildContext context, DisputeEvidenceDto item) {
+    final previewUrl = item.thumbnailUrl?.isNotEmpty == true
+        ? item.thumbnailUrl!
+        : item.url;
+    final isVideo = item.type.toUpperCase() == 'VIDEO';
+
+    return Stack(
+      children: [
+        Positioned.fill(
+          child:
+              isVideo &&
+                  (item.thumbnailUrl == null || item.thumbnailUrl!.isEmpty)
+              ? Container(color: Colors.black12)
+              : Image.network(
+                  previewUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => Container(color: Colors.black12),
+                ),
+        ),
+        if (isVideo)
+          Center(
+            child: Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+              child: const Icon(Icons.play_arrow_rounded, size: 40),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildEvidenceThumbnail(DisputeEvidenceDto item) {
+    final thumbUrl = item.thumbnailUrl?.isNotEmpty == true
+        ? item.thumbnailUrl!
+        : item.url;
+    final isVideo = item.type.toUpperCase() == 'VIDEO';
+
+    if (isVideo && (item.thumbnailUrl == null || item.thumbnailUrl!.isEmpty)) {
+      return Container(
+        color: Colors.black12,
+        alignment: Alignment.center,
+        child: const Icon(Icons.play_circle_fill_rounded),
+      );
+    }
+
+    return Image.network(
+      thumbUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => Container(
+        color: Colors.black12,
+        alignment: Alignment.center,
+        child: Icon(
+          isVideo ? Icons.play_circle_fill_rounded : Icons.broken_image_rounded,
+        ),
+      ),
     );
   }
 }

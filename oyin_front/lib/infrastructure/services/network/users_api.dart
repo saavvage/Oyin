@@ -90,6 +90,26 @@ class UsersApi {
     );
   }
 
+  static Future<void> updatePassword({
+    required String newPassword,
+    String? currentPassword,
+    String? code,
+    String? email,
+    String? phone,
+  }) async {
+    await ApiClient.instance.put(
+      ApiEndpoints.usersUpdatePassword,
+      data: {
+        'newPassword': newPassword,
+        if (currentPassword != null && currentPassword.trim().isNotEmpty)
+          'currentPassword': currentPassword.trim(),
+        if (code != null && code.trim().isNotEmpty) 'code': code.trim(),
+        if (email != null && email.trim().isNotEmpty) 'email': email.trim(),
+        if (phone != null && phone.trim().isNotEmpty) 'phone': phone.trim(),
+      },
+    );
+  }
+
   static Future<void> createSportProfile({
     required String sportType,
     required String level,

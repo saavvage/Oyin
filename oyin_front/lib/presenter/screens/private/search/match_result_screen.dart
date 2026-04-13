@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import 'contract_setup_screen.dart';
+import 'dispute_evidence_screen.dart';
 import 'cubit/_export.dart';
 import 'dispute_screen.dart';
 import 'widgets/_export.dart';
@@ -67,6 +69,57 @@ class _MatchResultView extends StatelessWidget {
                     locationLabel: state.locationLabel,
                     statusLabel: state.statusLabel,
                   ),
+                  12.vSpacing,
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: state.isLoading
+                          ? null
+                          : () => _openContract(
+                              context,
+                              forceReadOnly: state.hasContract,
+                            ),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          color: state.hasContract
+                              ? Colors.greenAccent
+                              : palette.muted.withValues(alpha: 0.55),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: Icon(
+                        state.hasContract
+                            ? Icons.verified_rounded
+                            : Icons.edit_calendar_rounded,
+                        color: state.hasContract
+                            ? Colors.greenAccent
+                            : palette.muted,
+                      ),
+                      label: Text(
+                        state.hasContract
+                            ? l10n.contractViewDetailsButton
+                            : l10n.contractOpenButton,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: state.hasContract
+                              ? Colors.greenAccent
+                              : Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                  8.vSpacing,
+                  Text(
+                    state.hasContract
+                        ? l10n.contractLockedHint
+                        : l10n.contractRequiredBeforeResult,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                  ),
                   26.vSpacing,
                   Center(
                     child: Text(
@@ -126,7 +179,9 @@ class _MatchResultView extends StatelessWidget {
                   24.vSpacing,
                   DisputeBlock(
                     l10n: l10n,
-                    enabled: true,
+                    enabled:
+                        state.canOpenDispute ||
+                        (state.disputeId?.isNotEmpty ?? false),
                     isLoading: state.isCreatingDispute,
                     onTap: () => _openDisputeFlow(context),
                   ),
@@ -151,6 +206,8 @@ class _MatchResultView extends StatelessWidget {
   Future<void> _submitResult(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<MatchResultCubit>();
+    final hasContract = await _ensureContractBeforeAction(context);
+    if (!context.mounted || !hasContract) return;
 
     try {
       final result = await cubit.submitResult();
@@ -193,7 +250,11 @@ class _MatchResultView extends StatelessWidget {
 
   Future<void> _openDisputeFlow(BuildContext context) async {
     final cubit = context.read<MatchResultCubit>();
-    final state = cubit.state;
+    var state = cubit.state;
+
+    final hasContract = await _ensureContractBeforeAction(context);
+    if (!context.mounted || !hasContract) return;
+    state = cubit.state;
 
     if (!state.canOpenDispute && !(state.disputeId?.isNotEmpty ?? false)) {
       final l10n = AppLocalizations.of(context);
@@ -218,7 +279,9 @@ class _MatchResultView extends StatelessWidget {
       return;
     }
 
-    final payload = await _showCreateDisputeSheet(context);
+    final payload = await Navigator.of(context).push<DisputeEvidenceDraft>(
+      MaterialPageRoute(builder: (_) => const DisputeEvidenceScreen()),
+    );
     if (!context.mounted || payload == null) return;
 
     try {
@@ -227,6 +290,7 @@ class _MatchResultView extends StatelessWidget {
         plaintiffStatement: payload.plaintiffStatement,
         defendantStatement: payload.defendantStatement,
         evidenceUrl: payload.evidenceUrl,
+        evidenceItems: payload.evidenceItems,
       );
 
       if (!context.mounted) return;
@@ -245,17 +309,58 @@ class _MatchResultView extends StatelessWidget {
     );
   }
 
+  Future<bool> _openContract(
+    BuildContext context, {
+    required bool forceReadOnly,
+  }) async {
+    final cubit = context.read<MatchResultCubit>();
+    final state = cubit.state;
+
+    final updated = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => ContractSetupScreen(
+          gameId: state.gameId,
+          forceReadOnly: forceReadOnly,
+          initialDateTime: state.contract?.dateTime,
+          initialLocation: state.contract?.location,
+          initialReminder: state.contract?.reminder,
+        ),
+      ),
+    );
+
+    if (!context.mounted) return false;
+
+    if (updated == true) {
+      await cubit.loadGame();
+    }
+
+    return updated == true || cubit.state.hasContract;
+  }
+
+  Future<bool> _ensureContractBeforeAction(BuildContext context) async {
+    final cubit = context.read<MatchResultCubit>();
+    if (cubit.state.hasContract) {
+      return true;
+    }
+
+    final l10n = AppLocalizations.of(context);
+    AppNotifier.showMessage(
+      context,
+      l10n.contractRequiredBeforeResult,
+      title: l10n.validationTitle,
+      type: AppNotificationType.warning,
+    );
+
+    return _openContract(context, forceReadOnly: false);
+  }
+
   static void _showInfo(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     showFrostedInfoModal(
       context,
       title: l10n.infoResultTitle,
       subtitle: l10n.infoResultSubtitle,
-      tips: [
-        l10n.infoResultTip1,
-        l10n.infoResultTip2,
-        l10n.infoResultTip3,
-      ],
+      tips: [l10n.infoResultTip1, l10n.infoResultTip2, l10n.infoResultTip3],
     );
   }
 
@@ -322,156 +427,4 @@ class _MatchResultView extends StatelessWidget {
       onPicked(picked);
     }
   }
-
-  Future<_CreateDisputePayload?> _showCreateDisputeSheet(
-    BuildContext context,
-  ) async {
-    final palette = context.palette;
-    final commentController = TextEditingController();
-    final plaintiffController = TextEditingController();
-    final defendantController = TextEditingController();
-    final evidenceController = TextEditingController();
-
-    final payload = await showModalBottomSheet<_CreateDisputePayload>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: palette.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            16,
-            16,
-            16,
-            16 + MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context).openDispute,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                12.vSpacing,
-                _SheetField(
-                  controller: commentController,
-                  label: AppLocalizations.of(context).disputeCommentLabel,
-                  minLines: 2,
-                ),
-                10.vSpacing,
-                _SheetField(
-                  controller: plaintiffController,
-                  label: AppLocalizations.of(context).plaintiffStatementLabel,
-                  minLines: 2,
-                ),
-                10.vSpacing,
-                _SheetField(
-                  controller: defendantController,
-                  label: AppLocalizations.of(context).defendantStatementLabel,
-                  minLines: 2,
-                ),
-                10.vSpacing,
-                _SheetField(
-                  controller: evidenceController,
-                  label: AppLocalizations.of(context).evidenceLinkLabel,
-                ),
-                14.vSpacing,
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final comment = commentController.text.trim();
-                      if (comment.isEmpty) {
-                        final l10n = AppLocalizations.of(context);
-                        AppNotifier.showMessage(
-                          context,
-                          l10n.addDisputeComment,
-                          title: l10n.validationTitle,
-                          type: AppNotificationType.warning,
-                        );
-                        return;
-                      }
-
-                      Navigator.of(context).pop(
-                        _CreateDisputePayload(
-                          comment: comment,
-                          plaintiffStatement: plaintiffController.text.trim(),
-                          defendantStatement: defendantController.text.trim(),
-                          evidenceUrl: evidenceController.text.trim(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: palette.primary,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    child: Text(AppLocalizations.of(context).sendToCourt),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-
-    commentController.dispose();
-    plaintiffController.dispose();
-    defendantController.dispose();
-    evidenceController.dispose();
-
-    return payload;
-  }
-}
-
-class _SheetField extends StatelessWidget {
-  const _SheetField({
-    required this.controller,
-    required this.label,
-    this.minLines,
-  });
-
-  final TextEditingController controller;
-  final String label;
-  final int? minLines;
-
-  @override
-  Widget build(BuildContext context) {
-    final palette = context.palette;
-    return TextField(
-      controller: controller,
-      minLines: minLines,
-      maxLines: minLines != null ? minLines! + 2 : 1,
-      decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: palette.background,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-    );
-  }
-}
-
-class _CreateDisputePayload {
-  const _CreateDisputePayload({
-    required this.comment,
-    required this.plaintiffStatement,
-    required this.defendantStatement,
-    required this.evidenceUrl,
-  });
-
-  final String comment;
-  final String plaintiffStatement;
-  final String defendantStatement;
-  final String evidenceUrl;
 }

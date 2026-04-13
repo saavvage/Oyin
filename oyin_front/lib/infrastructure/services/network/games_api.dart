@@ -21,6 +21,29 @@ class GameUserDto {
   }
 }
 
+class GameContractDto {
+  const GameContractDto({
+    required this.date,
+    required this.venueId,
+    required this.reminder,
+    required this.location,
+  });
+
+  final DateTime? date;
+  final String? venueId;
+  final bool reminder;
+  final String? location;
+
+  factory GameContractDto.fromMap(Map<String, dynamic> map) {
+    return GameContractDto(
+      date: DateTime.tryParse((map['date'] ?? '').toString()),
+      venueId: map['venueId']?.toString(),
+      reminder: map['reminder'] == true,
+      location: map['location']?.toString(),
+    );
+  }
+}
+
 class GameDetailsDto {
   const GameDetailsDto({
     required this.id,
@@ -33,6 +56,7 @@ class GameDetailsDto {
     required this.player1Submitted,
     required this.player2Submitted,
     required this.disputeId,
+    required this.contractData,
     required this.location,
   });
 
@@ -46,9 +70,15 @@ class GameDetailsDto {
   final bool player1Submitted;
   final bool player2Submitted;
   final String? disputeId;
+  final GameContractDto? contractData;
   final String? location;
 
   factory GameDetailsDto.fromMap(Map<String, dynamic> map) {
+    final rawContract = map['contractData'];
+    final contract = rawContract is Map
+        ? GameContractDto.fromMap(rawContract.cast<String, dynamic>())
+        : null;
+
     return GameDetailsDto(
       id: (map['id'] ?? '').toString(),
       type: (map['type'] ?? '').toString(),
@@ -64,8 +94,8 @@ class GameDetailsDto {
       player1Submitted: map['player1Submitted'] == true,
       player2Submitted: map['player2Submitted'] == true,
       disputeId: map['disputeId']?.toString(),
-      location: (((map['contractData'] as Map?) ?? const {})['location'])
-          ?.toString(),
+      contractData: contract,
+      location: contract?.location,
     );
   }
 }
@@ -153,6 +183,26 @@ class GamesApi {
   static Future<GameDetailsDto> getById(String gameId) async {
     final data = await ApiClient.instance.get(ApiEndpoints.gamesById(gameId));
     return GameDetailsDto.fromMap((data as Map).cast<String, dynamic>());
+  }
+
+  static Future<GameDetailsDto> proposeContract({
+    required String gameId,
+    required DateTime dateTime,
+    required String location,
+    bool reminder = true,
+    String? venueId,
+  }) async {
+    await ApiClient.instance.post(
+      ApiEndpoints.gamesContract(gameId),
+      data: {
+        'date': dateTime.toIso8601String(),
+        'location': location,
+        'reminder': reminder,
+        if (venueId != null && venueId.isNotEmpty) 'venueId': venueId,
+      },
+    );
+
+    return getById(gameId);
   }
 
   static Future<GameResultResponse> submitResult({

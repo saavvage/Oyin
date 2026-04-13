@@ -39,14 +39,10 @@ class ChatHeader extends StatelessWidget {
               context,
               title: l10n.myGames,
               subtitle: l10n.infoChatSubtitle,
-              tips: [
-                l10n.infoChatTip1,
-                l10n.infoChatTip2,
-                l10n.infoChatTip3,
-              ],
+              tips: [l10n.infoChatTip1, l10n.infoChatTip2, l10n.infoChatTip3],
             );
           },
-          icon: const Icon(Icons.person_add_alt_1),
+          icon: const Icon(Icons.info_outline_rounded),
         ),
       ],
     );

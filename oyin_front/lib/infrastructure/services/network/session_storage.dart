@@ -108,6 +108,36 @@ class SessionStorage {
     return _prefs!.getString(_Keys.locale);
   }
 
+  static Future<void> setPublicVisibility(bool value) async {
+    await init();
+    await _prefs!.setBool(_Keys.publicVisibility, value);
+  }
+
+  static Future<bool?> getPublicVisibility() async {
+    await init();
+    return _prefs!.getBool(_Keys.publicVisibility);
+  }
+
+  static Future<void> setMatchRequests(bool value) async {
+    await init();
+    await _prefs!.setBool(_Keys.matchRequests, value);
+  }
+
+  static Future<bool?> getMatchRequests() async {
+    await init();
+    return _prefs!.getBool(_Keys.matchRequests);
+  }
+
+  static Future<void> setDisputeUpdates(bool value) async {
+    await init();
+    await _prefs!.setBool(_Keys.disputeUpdates, value);
+  }
+
+  static Future<bool?> getDisputeUpdates() async {
+    await init();
+    return _prefs!.getBool(_Keys.disputeUpdates);
+  }
+
   static void _bumpSessionVersion() {
     sessionVersion.value = sessionVersion.value + 1;
   }
@@ -124,4 +154,7 @@ class _Keys {
   static const String timedReminderIntervalMinutes =
       'timed_reminder_interval_minutes';
   static const String locale = 'app_locale';
+  static const String publicVisibility = 'public_visibility';
+  static const String matchRequests = 'match_requests';
+  static const String disputeUpdates = 'dispute_updates';
 }

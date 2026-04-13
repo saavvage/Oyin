@@ -4,6 +4,7 @@ import '../../../../app/localization/app_localizations.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import 'contract_setup_screen.dart';
 import 'match_result_screen.dart';
 
 class ArenaScreen extends StatefulWidget {
@@ -94,17 +95,11 @@ class _ArenaScreenState extends State<ArenaScreen> {
   Future<void> _challenge(_Player player) async {
     if (_isChallenging) return;
 
-    // For demo/seed players, open MatchResultScreen directly without API call
+    // Demo/seed opponents still follow the same contract -> result flow.
     if (player.userId.startsWith('seed-')) {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
-          builder: (_) => MatchResultScreen(
-            gameId: 'demo-game-${player.userId}',
-            challengerName: _currentUserName,
-            opponentName: player.name,
-            opponentAvatarUrl: player.avatar,
-          ),
-        ),
+      await _openContractThenResult(
+        gameId: 'demo-game-${player.userId}',
+        player: player,
       );
       return;
     }
@@ -113,17 +108,7 @@ class _ArenaScreenState extends State<ArenaScreen> {
     try {
       final response = await ArenaApi.challenge(targetId: player.userId);
       if (!mounted) return;
-
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
-          builder: (_) => MatchResultScreen(
-            gameId: response.gameId,
-            challengerName: _currentUserName,
-            opponentName: player.name,
-            opponentAvatarUrl: player.avatar,
-          ),
-        ),
-      );
+      await _openContractThenResult(gameId: response.gameId, player: player);
     } catch (error) {
       if (!mounted) return;
       AppNotifier.showError(context, error);
@@ -132,6 +117,28 @@ class _ArenaScreenState extends State<ArenaScreen> {
         setState(() => _isChallenging = false);
       }
     }
+  }
+
+  Future<void> _openContractThenResult({
+    required String gameId,
+    required _Player player,
+  }) async {
+    final confirmed = await Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(builder: (_) => ContractSetupScreen(gameId: gameId)),
+    );
+
+    if (!mounted || confirmed != true) return;
+
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => MatchResultScreen(
+          gameId: gameId,
+          challengerName: _currentUserName,
+          opponentName: player.name,
+          opponentAvatarUrl: player.avatar,
+        ),
+      ),
+    );
   }
 
   @override

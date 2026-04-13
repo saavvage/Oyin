@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../infrastructure/export.dart';
+import '../contract_draft_store.dart';
 import 'match_result_state.dart';
 
 class MatchResultCubit extends Cubit<MatchResultState> {
@@ -24,7 +25,33 @@ class MatchResultCubit extends Cubit<MatchResultState> {
 
   Future<void> loadGame() async {
     if (_isDemoGame) {
-      emit(state.copyWith(isLoading: false, statusLabel: 'PENDING'));
+      final draft = ContractDraftStore.get(state.gameId);
+      final hasConfirmedContract =
+          draft?.confirmed == true && draft?.dateTime != null;
+      final contract = hasConfirmedContract
+          ? MatchResultContract(
+              dateTime: draft!.dateTime!,
+              location: draft.location,
+              reminder: draft.reminder,
+            )
+          : null;
+
+      final status = hasConfirmedContract ? 'SCHEDULED' : 'PENDING';
+      emit(
+        state.copyWith(
+          isLoading: false,
+          clearError: true,
+          statusLabel: status,
+          title: _statusTitle(status, hasContract: hasConfirmedContract),
+          dateLabel: contract != null
+              ? _formatContractDate(contract.dateTime)
+              : _statusDateLabel(status),
+          locationLabel: contract != null && contract.location.trim().isNotEmpty
+              ? contract.location
+              : 'Court TBD',
+          contract: contract,
+        ),
+      );
       return;
     }
 
@@ -72,12 +99,14 @@ class MatchResultCubit extends Cubit<MatchResultState> {
       emit(state.copyWith(isSubmitting: true, clearError: true));
       await Future.delayed(const Duration(milliseconds: 500));
       final status = myScore == opponentScore ? 'PLAYED' : 'PLAYED';
-      emit(state.copyWith(
-        isSubmitting: false,
-        statusLabel: status,
-        title: 'Result Confirmed',
-        dateLabel: 'Completed',
-      ));
+      emit(
+        state.copyWith(
+          isSubmitting: false,
+          statusLabel: status,
+          title: 'Result Confirmed',
+          dateLabel: 'Completed',
+        ),
+      );
       return GameResultResponse(
         success: true,
         gameId: state.gameId,
@@ -118,6 +147,7 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     String? plaintiffStatement,
     String? defendantStatement,
     String? evidenceUrl,
+    List<DisputeEvidenceInput> evidenceItems = const [],
   }) async {
     if (state.isCreatingDispute) {
       return state.disputeId;
@@ -127,11 +157,13 @@ class MatchResultCubit extends Cubit<MatchResultState> {
       emit(state.copyWith(isCreatingDispute: true, clearError: true));
       await Future.delayed(const Duration(milliseconds: 400));
       final demoDisputeId = 'seed-dispute-${state.gameId}';
-      emit(state.copyWith(
-        isCreatingDispute: false,
-        disputeId: demoDisputeId,
-        statusLabel: 'DISPUTED',
-      ));
+      emit(
+        state.copyWith(
+          isCreatingDispute: false,
+          disputeId: demoDisputeId,
+          statusLabel: 'DISPUTED',
+        ),
+      );
       return demoDisputeId;
     }
 
@@ -147,6 +179,7 @@ class MatchResultCubit extends Cubit<MatchResultState> {
         plaintiffStatement: plaintiffStatement,
         defendantStatement: defendantStatement,
         evidenceUrl: evidenceUrl,
+        evidenceItems: evidenceItems,
       );
 
       emit(
@@ -201,12 +234,13 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   void _applyGame(GameDetailsDto game, {required String currentUserId}) {
     final isPlayer1 = game.player1.id == currentUserId;
     final scorePair = _pickScorePair(game);
+    final contract = _mapContract(game.contractData);
 
     emit(
       state.copyWith(
-        title: _statusTitle(game.status),
-        dateLabel: _statusDateLabel(game.status),
-        locationLabel: _extractLocation(game),
+        title: _statusTitle(game.status, hasContract: contract != null),
+        dateLabel: _extractDateLabel(game, contract),
+        locationLabel: _extractLocation(game, contract),
         statusLabel: game.status,
         isCurrentUserPlayer1: isPlayer1,
         leftPlayer: MatchResultPlayer(
@@ -223,6 +257,7 @@ class MatchResultCubit extends Cubit<MatchResultState> {
           isYou: !isPlayer1,
           score: scorePair?.$2 ?? state.rightPlayer.score,
         ),
+        contract: contract,
         disputeId: game.disputeId,
         isLoading: false,
       ),
@@ -249,7 +284,12 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     return (left, right);
   }
 
-  String _extractLocation(GameDetailsDto game) {
+  String _extractLocation(GameDetailsDto game, MatchResultContract? contract) {
+    final contractLocation = contract?.location.trim() ?? '';
+    if (contractLocation.isNotEmpty) {
+      return contractLocation;
+    }
+
     if (game.location != null && game.location!.isNotEmpty) {
       return game.location!;
     }
@@ -260,14 +300,25 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     return 'Match Arena';
   }
 
-  String _statusTitle(String status) {
+  String _extractDateLabel(GameDetailsDto game, MatchResultContract? contract) {
+    if (contract != null) {
+      return _formatContractDate(contract.dateTime);
+    }
+    return _statusDateLabel(game.status);
+  }
+
+  String _statusTitle(String status, {required bool hasContract}) {
     switch (status) {
+      case 'SCHEDULED':
+        return 'Contract Confirmed';
       case 'PLAYED':
         return 'Result Confirmed';
       case 'CONFLICT':
         return 'Result Conflict';
       case 'DISPUTED':
         return 'Dispute In Progress';
+      case 'PENDING':
+        return hasContract ? 'Contract Confirmed' : 'Challenge Match';
       default:
         return 'Challenge Match';
     }
@@ -283,5 +334,27 @@ class MatchResultCubit extends Cubit<MatchResultState> {
       default:
         return 'Pending schedule';
     }
+  }
+
+  MatchResultContract? _mapContract(GameContractDto? raw) {
+    if (raw == null) return null;
+    final date = raw.date;
+    if (date == null) return null;
+
+    return MatchResultContract(
+      dateTime: date,
+      location: (raw.location ?? '').trim(),
+      reminder: raw.reminder,
+    );
+  }
+
+  String _formatContractDate(DateTime dateTime) {
+    final local = dateTime.toLocal();
+    final day = local.day.toString().padLeft(2, '0');
+    final month = local.month.toString().padLeft(2, '0');
+    final year = local.year.toString();
+    final hour = local.hour.toString().padLeft(2, '0');
+    final minute = local.minute.toString().padLeft(2, '0');
+    return '$day.$month.$year $hour:$minute';
   }
 }

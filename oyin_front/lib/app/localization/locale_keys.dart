@@ -73,6 +73,64 @@ class LocaleKeys {
   static const personalInfo = 'personal_info';
   static const passwordSecurity = 'password_security';
   static const linkedAccounts = 'linked_accounts';
+  static const accountOverviewTitle = 'account_overview_title';
+  static const accountOverviewContacts = 'account_overview_contacts';
+  static const accountOverviewSports = 'account_overview_sports';
+  static const accountOverviewNoSports = 'account_overview_no_sports';
+  static const accountOverviewAvailability = 'account_overview_availability';
+  static const accountOverviewNoAvailability =
+      'account_overview_no_availability';
+  static const accountOverviewStatistics = 'account_overview_statistics';
+  static const accountOverviewNoStats = 'account_overview_no_stats';
+  static const accountOverviewBirthDate = 'account_overview_birth_date';
+  static const accountOverviewExperienceYears =
+      'account_overview_experience_years';
+  static const accountOverviewWinRate = 'account_overview_win_rate';
+  static const accountOverviewWins = 'account_overview_wins';
+  static const accountOverviewLosses = 'account_overview_losses';
+  static const accountOverviewDraws = 'account_overview_draws';
+  static const notSet = 'not_set';
+  static const verified = 'verified';
+  static const notVerified = 'not_verified';
+  static const securityContactsTitle = 'security_contacts_title';
+  static const securityPasswordTitle = 'security_password_title';
+  static const securityPasswordSubtitle = 'security_password_subtitle';
+  static const securityCurrentPasswordOptional =
+      'security_current_password_optional';
+  static const securityNewPassword = 'security_new_password';
+  static const securityConfirmPassword = 'security_confirm_password';
+  static const securityVerificationMethod = 'security_verification_method';
+  static const securityChangePasswordAction = 'security_change_password_action';
+  static const securityNoVerificationChannel =
+      'security_no_verification_channel';
+  static const securityPhoneNotSet = 'security_phone_not_set';
+  static const securityCodeSent = 'security_code_sent';
+  static const securityCodeRequired = 'security_code_required';
+  static const securityPasswordChanged = 'security_password_changed';
+  static const securityEmailTitle = 'security_email_title';
+  static const securityChangeEmailAction = 'security_change_email_action';
+  static const securityEmailChanged = 'security_email_changed';
+  static const securityPhoneTitle = 'security_phone_title';
+  static const securityChangePhoneAction = 'security_change_phone_action';
+  static const securityPhoneChanged = 'security_phone_changed';
+  static const blockedUsersUnblock = 'blocked_users_unblock';
+  static const blockedUsersUnblocked = 'blocked_users_unblocked';
+  static const helpContactTitle = 'help_contact_title';
+  static const helpContactBody = 'help_contact_body';
+  static const helpFaqQ1 = 'help_faq_q1';
+  static const helpFaqA1 = 'help_faq_a1';
+  static const helpFaqQ2 = 'help_faq_q2';
+  static const helpFaqA2 = 'help_faq_a2';
+  static const helpFaqQ3 = 'help_faq_q3';
+  static const helpFaqA3 = 'help_faq_a3';
+  static const helpFaqQ4 = 'help_faq_q4';
+  static const helpFaqA4 = 'help_faq_a4';
+  static const fairPlayRule1 = 'fair_play_rule_1';
+  static const fairPlayRule2 = 'fair_play_rule_2';
+  static const fairPlayRule3 = 'fair_play_rule_3';
+  static const fairPlayRule4 = 'fair_play_rule_4';
+  static const fairPlayRule5 = 'fair_play_rule_5';
+  static const fairPlayPenaltyNote = 'fair_play_penalty_note';
   static const sparringPrivacy = 'sparring_privacy';
   static const publicVisibility = 'public_visibility';
   static const publicVisibilityDesc = 'public_visibility_desc';
@@ -496,4 +554,57 @@ class LocaleKeys {
   static const disputeLoadFailed = 'dispute_load_failed';
   static const noActiveDisputes = 'no_active_disputes';
   static const noActiveDisputesDesc = 'no_active_disputes_desc';
+  static const disputeEvidenceScreenTitle = 'dispute_evidence_screen_title';
+  static const disputeEvidenceProvideDetailsTitle =
+      'dispute_evidence_provide_details_title';
+  static const disputeEvidenceProvideDetailsHint =
+      'dispute_evidence_provide_details_hint';
+  static const disputeEvidenceDescriptionLabel =
+      'dispute_evidence_description_label';
+  static const disputeEvidenceDescriptionHint =
+      'dispute_evidence_description_hint';
+  static const disputeEvidenceVideoTitle = 'dispute_evidence_video_title';
+  static const disputeEvidenceTapUpload = 'dispute_evidence_tap_upload';
+  static const disputeEvidenceVideoHint = 'dispute_evidence_video_hint';
+  static const disputeEvidenceOrLink = 'dispute_evidence_or_link';
+  static const disputeEvidenceUrlLabel = 'dispute_evidence_url_label';
+  static const disputeEvidenceUrlHint = 'dispute_evidence_url_hint';
+  static const disputeEvidenceSubmit = 'dispute_evidence_submit';
+  static const disputeEvidenceFootnote = 'dispute_evidence_footnote';
+  static const disputeEvidenceDescriptionRequired =
+      'dispute_evidence_description_required';
+  static const disputeEvidenceRequired = 'dispute_evidence_required';
+  static const disputeEvidenceUploadFailed = 'dispute_evidence_upload_failed';
+  static const contractSetupTitle = 'contract_setup_title';
+  static const contractProgressTitle = 'contract_progress_title';
+  static const contractStepContract = 'contract_step_contract';
+  static const contractStepResult = 'contract_step_result';
+  static const contractLockedHint = 'contract_locked_hint';
+  static const contractLogistics = 'contract_logistics';
+  static const contractDateLabel = 'contract_date_label';
+  static const contractTimeLabel = 'contract_time_label';
+  static const contractDatePlaceholder = 'contract_date_placeholder';
+  static const contractTimePlaceholder = 'contract_time_placeholder';
+  static const contractLocationLabel = 'contract_location_label';
+  static const contractLocationHint = 'contract_location_hint';
+  static const contractNotificationsTitle = 'contract_notifications_title';
+  static const contractReminderToggle = 'contract_reminder_toggle';
+  static const contractAgreementStatusTitle = 'contract_agreement_status_title';
+  static const contractAgreementYou = 'contract_agreement_you';
+  static const contractAgreementYouStatusPending =
+      'contract_agreement_you_status_pending';
+  static const contractAgreementYouStatusLocked =
+      'contract_agreement_you_status_locked';
+  static const contractAgreementOpponent = 'contract_agreement_opponent';
+  static const contractAgreementOpponentStatus =
+      'contract_agreement_opponent_status';
+  static const contractCodeOfConduct = 'contract_code_of_conduct';
+  static const contractProposeButton = 'contract_propose_button';
+  static const contractSaved = 'contract_saved';
+  static const contractRequiredDate = 'contract_required_date';
+  static const contractRequiredLocation = 'contract_required_location';
+  static const contractAgreementRequired = 'contract_agreement_required';
+  static const contractOpenButton = 'contract_open_button';
+  static const contractViewDetailsButton = 'contract_view_details_button';
+  static const contractRequiredBeforeResult = 'contract_required_before_result';
 }

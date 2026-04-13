@@ -202,6 +202,78 @@ class AppLocalizations {
   String get personalInfo => _string(LocaleKeys.personalInfo);
   String get passwordSecurity => _string(LocaleKeys.passwordSecurity);
   String get linkedAccounts => _string(LocaleKeys.linkedAccounts);
+  String get accountOverviewTitle => _string(LocaleKeys.accountOverviewTitle);
+  String get accountOverviewContacts =>
+      _string(LocaleKeys.accountOverviewContacts);
+  String get accountOverviewSports => _string(LocaleKeys.accountOverviewSports);
+  String get accountOverviewNoSports =>
+      _string(LocaleKeys.accountOverviewNoSports);
+  String get accountOverviewAvailability =>
+      _string(LocaleKeys.accountOverviewAvailability);
+  String get accountOverviewNoAvailability =>
+      _string(LocaleKeys.accountOverviewNoAvailability);
+  String get accountOverviewStatistics =>
+      _string(LocaleKeys.accountOverviewStatistics);
+  String get accountOverviewNoStats =>
+      _string(LocaleKeys.accountOverviewNoStats);
+  String get accountOverviewBirthDate =>
+      _string(LocaleKeys.accountOverviewBirthDate);
+  String get accountOverviewExperienceYears =>
+      _string(LocaleKeys.accountOverviewExperienceYears);
+  String get accountOverviewWinRate =>
+      _string(LocaleKeys.accountOverviewWinRate);
+  String get accountOverviewWins => _string(LocaleKeys.accountOverviewWins);
+  String get accountOverviewLosses => _string(LocaleKeys.accountOverviewLosses);
+  String get accountOverviewDraws => _string(LocaleKeys.accountOverviewDraws);
+  String get notSet => _string(LocaleKeys.notSet);
+  String get verified => _string(LocaleKeys.verified);
+  String get notVerified => _string(LocaleKeys.notVerified);
+  String get securityContactsTitle => _string(LocaleKeys.securityContactsTitle);
+  String get securityPasswordTitle => _string(LocaleKeys.securityPasswordTitle);
+  String get securityPasswordSubtitle =>
+      _string(LocaleKeys.securityPasswordSubtitle);
+  String get securityCurrentPasswordOptional =>
+      _string(LocaleKeys.securityCurrentPasswordOptional);
+  String get securityNewPassword => _string(LocaleKeys.securityNewPassword);
+  String get securityConfirmPassword =>
+      _string(LocaleKeys.securityConfirmPassword);
+  String get securityVerificationMethod =>
+      _string(LocaleKeys.securityVerificationMethod);
+  String get securityChangePasswordAction =>
+      _string(LocaleKeys.securityChangePasswordAction);
+  String get securityNoVerificationChannel =>
+      _string(LocaleKeys.securityNoVerificationChannel);
+  String get securityPhoneNotSet => _string(LocaleKeys.securityPhoneNotSet);
+  String get securityCodeSent => _string(LocaleKeys.securityCodeSent);
+  String get securityCodeRequired => _string(LocaleKeys.securityCodeRequired);
+  String get securityPasswordChanged =>
+      _string(LocaleKeys.securityPasswordChanged);
+  String get securityEmailTitle => _string(LocaleKeys.securityEmailTitle);
+  String get securityChangeEmailAction =>
+      _string(LocaleKeys.securityChangeEmailAction);
+  String get securityEmailChanged => _string(LocaleKeys.securityEmailChanged);
+  String get securityPhoneTitle => _string(LocaleKeys.securityPhoneTitle);
+  String get securityChangePhoneAction =>
+      _string(LocaleKeys.securityChangePhoneAction);
+  String get securityPhoneChanged => _string(LocaleKeys.securityPhoneChanged);
+  String get blockedUsersUnblock => _string(LocaleKeys.blockedUsersUnblock);
+  String get blockedUsersUnblocked => _string(LocaleKeys.blockedUsersUnblocked);
+  String get helpContactTitle => _string(LocaleKeys.helpContactTitle);
+  String get helpContactBody => _string(LocaleKeys.helpContactBody);
+  String get helpFaqQ1 => _string(LocaleKeys.helpFaqQ1);
+  String get helpFaqA1 => _string(LocaleKeys.helpFaqA1);
+  String get helpFaqQ2 => _string(LocaleKeys.helpFaqQ2);
+  String get helpFaqA2 => _string(LocaleKeys.helpFaqA2);
+  String get helpFaqQ3 => _string(LocaleKeys.helpFaqQ3);
+  String get helpFaqA3 => _string(LocaleKeys.helpFaqA3);
+  String get helpFaqQ4 => _string(LocaleKeys.helpFaqQ4);
+  String get helpFaqA4 => _string(LocaleKeys.helpFaqA4);
+  String get fairPlayRule1 => _string(LocaleKeys.fairPlayRule1);
+  String get fairPlayRule2 => _string(LocaleKeys.fairPlayRule2);
+  String get fairPlayRule3 => _string(LocaleKeys.fairPlayRule3);
+  String get fairPlayRule4 => _string(LocaleKeys.fairPlayRule4);
+  String get fairPlayRule5 => _string(LocaleKeys.fairPlayRule5);
+  String get fairPlayPenaltyNote => _string(LocaleKeys.fairPlayPenaltyNote);
   String get sparringPrivacy => _string(LocaleKeys.sparringPrivacy);
   String get publicVisibility => _string(LocaleKeys.publicVisibility);
   String get publicVisibilityDesc => _string(LocaleKeys.publicVisibilityDesc);
@@ -682,6 +754,78 @@ class AppLocalizations {
   String get disputeLoadFailed => _string(LocaleKeys.disputeLoadFailed);
   String get noActiveDisputes => _string(LocaleKeys.noActiveDisputes);
   String get noActiveDisputesDesc => _string(LocaleKeys.noActiveDisputesDesc);
+  String get disputeEvidenceScreenTitle =>
+      _string(LocaleKeys.disputeEvidenceScreenTitle);
+  String get disputeEvidenceProvideDetailsTitle =>
+      _string(LocaleKeys.disputeEvidenceProvideDetailsTitle);
+  String get disputeEvidenceProvideDetailsHint =>
+      _string(LocaleKeys.disputeEvidenceProvideDetailsHint);
+  String get disputeEvidenceDescriptionLabel =>
+      _string(LocaleKeys.disputeEvidenceDescriptionLabel);
+  String get disputeEvidenceDescriptionHint =>
+      _string(LocaleKeys.disputeEvidenceDescriptionHint);
+  String get disputeEvidenceVideoTitle =>
+      _string(LocaleKeys.disputeEvidenceVideoTitle);
+  String get disputeEvidenceTapUpload =>
+      _string(LocaleKeys.disputeEvidenceTapUpload);
+  String get disputeEvidenceVideoHint =>
+      _string(LocaleKeys.disputeEvidenceVideoHint);
+  String get disputeEvidenceOrLink => _string(LocaleKeys.disputeEvidenceOrLink);
+  String get disputeEvidenceUrlLabel =>
+      _string(LocaleKeys.disputeEvidenceUrlLabel);
+  String get disputeEvidenceUrlHint =>
+      _string(LocaleKeys.disputeEvidenceUrlHint);
+  String get disputeEvidenceSubmit => _string(LocaleKeys.disputeEvidenceSubmit);
+  String get disputeEvidenceFootnote =>
+      _string(LocaleKeys.disputeEvidenceFootnote);
+  String get disputeEvidenceDescriptionRequired =>
+      _string(LocaleKeys.disputeEvidenceDescriptionRequired);
+  String get disputeEvidenceRequired =>
+      _string(LocaleKeys.disputeEvidenceRequired);
+  String get disputeEvidenceUploadFailed =>
+      _string(LocaleKeys.disputeEvidenceUploadFailed);
+  String get contractSetupTitle => _string(LocaleKeys.contractSetupTitle);
+  String get contractProgressTitle => _string(LocaleKeys.contractProgressTitle);
+  String get contractStepContract => _string(LocaleKeys.contractStepContract);
+  String get contractStepResult => _string(LocaleKeys.contractStepResult);
+  String get contractLockedHint => _string(LocaleKeys.contractLockedHint);
+  String get contractLogistics => _string(LocaleKeys.contractLogistics);
+  String get contractDateLabel => _string(LocaleKeys.contractDateLabel);
+  String get contractTimeLabel => _string(LocaleKeys.contractTimeLabel);
+  String get contractDatePlaceholder =>
+      _string(LocaleKeys.contractDatePlaceholder);
+  String get contractTimePlaceholder =>
+      _string(LocaleKeys.contractTimePlaceholder);
+  String get contractLocationLabel => _string(LocaleKeys.contractLocationLabel);
+  String get contractLocationHint => _string(LocaleKeys.contractLocationHint);
+  String get contractNotificationsTitle =>
+      _string(LocaleKeys.contractNotificationsTitle);
+  String get contractReminderToggle =>
+      _string(LocaleKeys.contractReminderToggle);
+  String get contractAgreementStatusTitle =>
+      _string(LocaleKeys.contractAgreementStatusTitle);
+  String get contractAgreementYou => _string(LocaleKeys.contractAgreementYou);
+  String get contractAgreementYouStatusPending =>
+      _string(LocaleKeys.contractAgreementYouStatusPending);
+  String get contractAgreementYouStatusLocked =>
+      _string(LocaleKeys.contractAgreementYouStatusLocked);
+  String get contractAgreementOpponent =>
+      _string(LocaleKeys.contractAgreementOpponent);
+  String get contractAgreementOpponentStatus =>
+      _string(LocaleKeys.contractAgreementOpponentStatus);
+  String get contractCodeOfConduct => _string(LocaleKeys.contractCodeOfConduct);
+  String get contractProposeButton => _string(LocaleKeys.contractProposeButton);
+  String get contractSaved => _string(LocaleKeys.contractSaved);
+  String get contractRequiredDate => _string(LocaleKeys.contractRequiredDate);
+  String get contractRequiredLocation =>
+      _string(LocaleKeys.contractRequiredLocation);
+  String get contractAgreementRequired =>
+      _string(LocaleKeys.contractAgreementRequired);
+  String get contractOpenButton => _string(LocaleKeys.contractOpenButton);
+  String get contractViewDetailsButton =>
+      _string(LocaleKeys.contractViewDetailsButton);
+  String get contractRequiredBeforeResult =>
+      _string(LocaleKeys.contractRequiredBeforeResult);
 
   String nameAndAge(String name, int age) => _string(
     LocaleKeys.nameAge,
@@ -799,6 +943,74 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.personalInfo: 'Personal Information',
     LocaleKeys.passwordSecurity: 'Password & Security',
     LocaleKeys.linkedAccounts: 'Linked Accounts',
+    LocaleKeys.accountOverviewTitle: 'Account Card',
+    LocaleKeys.accountOverviewContacts: 'Contacts & Verification',
+    LocaleKeys.accountOverviewSports: 'Sports, Level & Skills',
+    LocaleKeys.accountOverviewNoSports: 'No sport preferences yet.',
+    LocaleKeys.accountOverviewAvailability: 'My Availability',
+    LocaleKeys.accountOverviewNoAvailability:
+        'Availability is not configured yet.',
+    LocaleKeys.accountOverviewStatistics: 'Sparring Statistics',
+    LocaleKeys.accountOverviewNoStats: 'No completed sparrings yet.',
+    LocaleKeys.accountOverviewBirthDate: 'Birth date',
+    LocaleKeys.accountOverviewExperienceYears: 'Experience (years)',
+    LocaleKeys.accountOverviewWinRate: 'Win rate',
+    LocaleKeys.accountOverviewWins: 'Wins',
+    LocaleKeys.accountOverviewLosses: 'Losses',
+    LocaleKeys.accountOverviewDraws: 'Draws',
+    LocaleKeys.notSet: 'Not set',
+    LocaleKeys.verified: 'Verified',
+    LocaleKeys.notVerified: 'Not verified',
+    LocaleKeys.securityContactsTitle: 'Recovery contacts',
+    LocaleKeys.securityPasswordTitle: 'Change password',
+    LocaleKeys.securityPasswordSubtitle:
+        'Use current password or verify via email/phone code.',
+    LocaleKeys.securityCurrentPasswordOptional: 'Current password (optional)',
+    LocaleKeys.securityNewPassword: 'New password',
+    LocaleKeys.securityConfirmPassword: 'Confirm new password',
+    LocaleKeys.securityVerificationMethod: 'Verification method',
+    LocaleKeys.securityChangePasswordAction: 'Update password',
+    LocaleKeys.securityNoVerificationChannel:
+        'Choose email or phone for verification.',
+    LocaleKeys.securityPhoneNotSet: 'Phone number is not set.',
+    LocaleKeys.securityCodeSent: 'Verification code sent.',
+    LocaleKeys.securityCodeRequired: 'Enter verification code.',
+    LocaleKeys.securityPasswordChanged: 'Password updated successfully.',
+    LocaleKeys.securityEmailTitle: 'Change email',
+    LocaleKeys.securityChangeEmailAction: 'Verify and change email',
+    LocaleKeys.securityEmailChanged: 'Email updated and verified.',
+    LocaleKeys.securityPhoneTitle: 'Change phone',
+    LocaleKeys.securityChangePhoneAction: 'Verify and change phone',
+    LocaleKeys.securityPhoneChanged: 'Phone updated and verified.',
+    LocaleKeys.blockedUsersUnblock: 'Unblock',
+    LocaleKeys.blockedUsersUnblocked: 'User unblocked.',
+    LocaleKeys.helpContactTitle: 'Support contact',
+    LocaleKeys.helpContactBody:
+        'For payment issues, disputes, or account access problems, contact support: oyin.support@gmail.com',
+    LocaleKeys.helpFaqQ1: 'How do I submit sparring result?',
+    LocaleKeys.helpFaqA1:
+        'Open the match card, enter score for both players, and submit. Result is confirmed when both sides send matching score.',
+    LocaleKeys.helpFaqQ2: 'What if opponent sent different score?',
+    LocaleKeys.helpFaqA2:
+        'Open dispute from result screen and attach evidence (video/link/comment). Jury voting will resolve the final verdict.',
+    LocaleKeys.helpFaqQ3: 'How do I change phone or email?',
+    LocaleKeys.helpFaqA3:
+        'Go to Settings → Password & Security and verify changes by OTP code.',
+    LocaleKeys.helpFaqQ4: 'Why can’t I find new opponents?',
+    LocaleKeys.helpFaqA4:
+        'Check sparring filters (distance/age), sport preferences and public visibility in settings.',
+    LocaleKeys.fairPlayRule1:
+        'Submit only truthful match scores agreed by both athletes.',
+    LocaleKeys.fairPlayRule2:
+        'Respect confirmed contract time and location, notify early about changes.',
+    LocaleKeys.fairPlayRule3:
+        'In disputes, provide real evidence and avoid false accusations.',
+    LocaleKeys.fairPlayRule4:
+        'Harassment, insults, threats and hate speech are prohibited.',
+    LocaleKeys.fairPlayRule5:
+        'Repeated violations reduce reliability score and may limit account access.',
+    LocaleKeys.fairPlayPenaltyNote:
+        'Moderation may reset results, issue temporary restrictions, or suspend account for severe abuse.',
     LocaleKeys.sparringPrivacy: 'Sparring & Privacy',
     LocaleKeys.publicVisibility: 'Public Visibility',
     LocaleKeys.publicVisibilityDesc: 'Allow others to find you for matches',
@@ -1239,6 +1451,61 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.noActiveDisputes: 'No active disputes available',
     LocaleKeys.noActiveDisputesDesc:
         'When a dispute is opened, it will appear here for review.',
+    LocaleKeys.disputeEvidenceScreenTitle: 'Dispute Evidence',
+    LocaleKeys.disputeEvidenceProvideDetailsTitle: 'Provide Details',
+    LocaleKeys.disputeEvidenceProvideDetailsHint:
+        'Please describe the incident clearly and attach evidence for fair review.',
+    LocaleKeys.disputeEvidenceDescriptionLabel: 'Description of events',
+    LocaleKeys.disputeEvidenceDescriptionHint:
+        'Explain what happened during the session...',
+    LocaleKeys.disputeEvidenceVideoTitle: 'Video Evidence',
+    LocaleKeys.disputeEvidenceTapUpload: 'Tap to upload video',
+    LocaleKeys.disputeEvidenceVideoHint: 'MP4, MOV up to 100MB',
+    LocaleKeys.disputeEvidenceOrLink: 'OR PROVIDE LINK',
+    LocaleKeys.disputeEvidenceUrlLabel: 'Video URL',
+    LocaleKeys.disputeEvidenceUrlHint: 'e.g. YouTube, Vimeo link',
+    LocaleKeys.disputeEvidenceSubmit: 'Submit Evidence',
+    LocaleKeys.disputeEvidenceFootnote:
+        'Evidence cannot be edited after sending.',
+    LocaleKeys.disputeEvidenceDescriptionRequired:
+        'Please add a description of the incident.',
+    LocaleKeys.disputeEvidenceRequired:
+        'Attach video evidence or provide a link.',
+    LocaleKeys.disputeEvidenceUploadFailed:
+        'Failed to upload video evidence. Please try again.',
+    LocaleKeys.contractSetupTitle: 'New Sparring Contract',
+    LocaleKeys.contractProgressTitle: 'Progress',
+    LocaleKeys.contractStepContract: '1. Contract',
+    LocaleKeys.contractStepResult: '2. Result',
+    LocaleKeys.contractLockedHint:
+        'Contract is confirmed and locked. Date, time and location cannot be changed.',
+    LocaleKeys.contractLogistics: 'Logistics',
+    LocaleKeys.contractDateLabel: 'Date',
+    LocaleKeys.contractTimeLabel: 'Time',
+    LocaleKeys.contractDatePlaceholder: 'Select date',
+    LocaleKeys.contractTimePlaceholder: 'Select time',
+    LocaleKeys.contractLocationLabel: 'Location',
+    LocaleKeys.contractLocationHint: 'City Gym, Brooklyn',
+    LocaleKeys.contractNotificationsTitle: 'Notifications',
+    LocaleKeys.contractReminderToggle: 'Last minute reminder',
+    LocaleKeys.contractAgreementStatusTitle: 'Agreement Status',
+    LocaleKeys.contractAgreementYou: 'You',
+    LocaleKeys.contractAgreementYouStatusPending: 'Ready to sign',
+    LocaleKeys.contractAgreementYouStatusLocked: 'Signed',
+    LocaleKeys.contractAgreementOpponent: 'Opponent',
+    LocaleKeys.contractAgreementOpponentStatus: 'Waiting for signature...',
+    LocaleKeys.contractCodeOfConduct:
+        'I agree to the Sparring Code of Conduct and dispute policy.',
+    LocaleKeys.contractProposeButton: 'Propose Contract',
+    LocaleKeys.contractSaved: 'Contract saved. Data is now locked.',
+    LocaleKeys.contractRequiredDate: 'Select date and time for sparring.',
+    LocaleKeys.contractRequiredLocation: 'Enter sparring location.',
+    LocaleKeys.contractAgreementRequired:
+        'Confirm agreement with the code of conduct.',
+    LocaleKeys.contractOpenButton: 'Create Contract',
+    LocaleKeys.contractViewDetailsButton: 'View Confirmed Contract',
+    LocaleKeys.contractRequiredBeforeResult:
+        'Create and confirm contract first. Only then result/dispute is available.',
   },
   'ru': {
     LocaleKeys.discovery: 'Поиск',
@@ -1315,6 +1582,75 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.personalInfo: 'Личные данные',
     LocaleKeys.passwordSecurity: 'Пароль и безопасность',
     LocaleKeys.linkedAccounts: 'Связанные аккаунты',
+    LocaleKeys.accountOverviewTitle: 'Карточка аккаунта',
+    LocaleKeys.accountOverviewContacts: 'Контакты и верификация',
+    LocaleKeys.accountOverviewSports: 'Спорт, уровень и навыки',
+    LocaleKeys.accountOverviewNoSports:
+        'Спортивные предпочтения пока не заполнены.',
+    LocaleKeys.accountOverviewAvailability: 'Моя доступность',
+    LocaleKeys.accountOverviewNoAvailability: 'Доступность пока не настроена.',
+    LocaleKeys.accountOverviewStatistics: 'Статистика спаррингов',
+    LocaleKeys.accountOverviewNoStats: 'Завершённых спаррингов пока нет.',
+    LocaleKeys.accountOverviewBirthDate: 'Дата рождения',
+    LocaleKeys.accountOverviewExperienceYears: 'Опыт (лет)',
+    LocaleKeys.accountOverviewWinRate: 'Процент побед',
+    LocaleKeys.accountOverviewWins: 'Победы',
+    LocaleKeys.accountOverviewLosses: 'Поражения',
+    LocaleKeys.accountOverviewDraws: 'Ничьи',
+    LocaleKeys.notSet: 'Не указано',
+    LocaleKeys.verified: 'Подтверждено',
+    LocaleKeys.notVerified: 'Не подтверждено',
+    LocaleKeys.securityContactsTitle: 'Контакты для восстановления',
+    LocaleKeys.securityPasswordTitle: 'Смена пароля',
+    LocaleKeys.securityPasswordSubtitle:
+        'Используйте текущий пароль или подтверждение кодом по email/телефону.',
+    LocaleKeys.securityCurrentPasswordOptional:
+        'Текущий пароль (необязательно)',
+    LocaleKeys.securityNewPassword: 'Новый пароль',
+    LocaleKeys.securityConfirmPassword: 'Подтвердите новый пароль',
+    LocaleKeys.securityVerificationMethod: 'Способ подтверждения',
+    LocaleKeys.securityChangePasswordAction: 'Обновить пароль',
+    LocaleKeys.securityNoVerificationChannel:
+        'Выберите email или телефон для подтверждения.',
+    LocaleKeys.securityPhoneNotSet: 'Номер телефона не указан.',
+    LocaleKeys.securityCodeSent: 'Код подтверждения отправлен.',
+    LocaleKeys.securityCodeRequired: 'Введите код подтверждения.',
+    LocaleKeys.securityPasswordChanged: 'Пароль успешно обновлён.',
+    LocaleKeys.securityEmailTitle: 'Смена email',
+    LocaleKeys.securityChangeEmailAction: 'Подтвердить и сменить email',
+    LocaleKeys.securityEmailChanged: 'Email обновлён и подтверждён.',
+    LocaleKeys.securityPhoneTitle: 'Смена телефона',
+    LocaleKeys.securityChangePhoneAction: 'Подтвердить и сменить телефон',
+    LocaleKeys.securityPhoneChanged: 'Телефон обновлён и подтверждён.',
+    LocaleKeys.blockedUsersUnblock: 'Разблокировать',
+    LocaleKeys.blockedUsersUnblocked: 'Пользователь разблокирован.',
+    LocaleKeys.helpContactTitle: 'Контакты поддержки',
+    LocaleKeys.helpContactBody:
+        'По вопросам оплаты, споров или доступа к аккаунту пишите: oyin.support@gmail.com',
+    LocaleKeys.helpFaqQ1: 'Как отправить результат спарринга?',
+    LocaleKeys.helpFaqA1:
+        'Откройте карточку матча, укажите счёт обоих игроков и отправьте. Результат подтвердится, когда обе стороны отправят одинаковый счёт.',
+    LocaleKeys.helpFaqQ2: 'Что делать, если соперник указал другой счёт?',
+    LocaleKeys.helpFaqA2:
+        'Откройте спор на экране результата и приложите доказательства (видео/ссылку/комментарий). Итог решит голосование жюри.',
+    LocaleKeys.helpFaqQ3: 'Как поменять телефон или email?',
+    LocaleKeys.helpFaqA3:
+        'Перейдите в Настройки → Пароль и безопасность и подтвердите изменение кодом.',
+    LocaleKeys.helpFaqQ4: 'Почему не находятся новые соперники?',
+    LocaleKeys.helpFaqA4:
+        'Проверьте фильтры спарринга (расстояние/возраст), спортивные предпочтения и публичность профиля в настройках.',
+    LocaleKeys.fairPlayRule1:
+        'Отправляйте только правдивый результат матча, согласованный обоими спортсменами.',
+    LocaleKeys.fairPlayRule2:
+        'Соблюдайте подтверждённые время и место контракта, заранее предупреждайте об изменениях.',
+    LocaleKeys.fairPlayRule3:
+        'В спорах прикладывайте реальные доказательства и не подавайте ложные обвинения.',
+    LocaleKeys.fairPlayRule4:
+        'Оскорбления, угрозы, травля и язык ненависти запрещены.',
+    LocaleKeys.fairPlayRule5:
+        'Повторные нарушения снижают надёжность и могут ограничить доступ к аккаунту.',
+    LocaleKeys.fairPlayPenaltyNote:
+        'Модерация может сбросить результаты, выдать временные ограничения или заблокировать аккаунт за серьёзные нарушения.',
     LocaleKeys.sparringPrivacy: 'Спарринги и приватность',
     LocaleKeys.publicVisibility: 'Публичность',
     LocaleKeys.publicVisibilityDesc: 'Позволять находить меня для матчей',
@@ -1758,6 +2094,61 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.noActiveDisputes: 'Нет активных споров',
     LocaleKeys.noActiveDisputesDesc:
         'Когда спор будет открыт, он появится здесь для рассмотрения.',
+    LocaleKeys.disputeEvidenceScreenTitle: 'Доказательства спора',
+    LocaleKeys.disputeEvidenceProvideDetailsTitle: 'Укажите детали',
+    LocaleKeys.disputeEvidenceProvideDetailsHint:
+        'Опишите ситуацию максимально ясно и добавьте доказательства для честного рассмотрения.',
+    LocaleKeys.disputeEvidenceDescriptionLabel: 'Описание событий',
+    LocaleKeys.disputeEvidenceDescriptionHint:
+        'Опишите, что произошло во время сессии...',
+    LocaleKeys.disputeEvidenceVideoTitle: 'Видео-доказательство',
+    LocaleKeys.disputeEvidenceTapUpload: 'Нажмите, чтобы загрузить видео',
+    LocaleKeys.disputeEvidenceVideoHint: 'MP4, MOV до 100MB',
+    LocaleKeys.disputeEvidenceOrLink: 'ИЛИ ДОБАВЬТЕ ССЫЛКУ',
+    LocaleKeys.disputeEvidenceUrlLabel: 'Ссылка на видео',
+    LocaleKeys.disputeEvidenceUrlHint: 'например, ссылка YouTube или Vimeo',
+    LocaleKeys.disputeEvidenceSubmit: 'Отправить доказательства',
+    LocaleKeys.disputeEvidenceFootnote:
+        'После отправки доказательства нельзя изменить.',
+    LocaleKeys.disputeEvidenceDescriptionRequired:
+        'Добавьте описание инцидента.',
+    LocaleKeys.disputeEvidenceRequired:
+        'Прикрепите видео-доказательство или добавьте ссылку.',
+    LocaleKeys.disputeEvidenceUploadFailed:
+        'Не удалось загрузить видео-доказательство. Попробуйте снова.',
+    LocaleKeys.contractSetupTitle: 'Новый контракт на спарринг',
+    LocaleKeys.contractProgressTitle: 'Прогресс',
+    LocaleKeys.contractStepContract: '1. Контракт',
+    LocaleKeys.contractStepResult: '2. Результат',
+    LocaleKeys.contractLockedHint:
+        'Контракт подтвержден и зафиксирован. Дату, время и локацию изменить нельзя.',
+    LocaleKeys.contractLogistics: 'Логистика',
+    LocaleKeys.contractDateLabel: 'Дата',
+    LocaleKeys.contractTimeLabel: 'Время',
+    LocaleKeys.contractDatePlaceholder: 'Выберите дату',
+    LocaleKeys.contractTimePlaceholder: 'Выберите время',
+    LocaleKeys.contractLocationLabel: 'Локация',
+    LocaleKeys.contractLocationHint: 'City Gym, Brooklyn',
+    LocaleKeys.contractNotificationsTitle: 'Уведомления',
+    LocaleKeys.contractReminderToggle: 'Напоминание перед началом',
+    LocaleKeys.contractAgreementStatusTitle: 'Статус соглашения',
+    LocaleKeys.contractAgreementYou: 'Вы',
+    LocaleKeys.contractAgreementYouStatusPending: 'Готов подписать',
+    LocaleKeys.contractAgreementYouStatusLocked: 'Подписано',
+    LocaleKeys.contractAgreementOpponent: 'Оппонент',
+    LocaleKeys.contractAgreementOpponentStatus: 'Ожидает подписи...',
+    LocaleKeys.contractCodeOfConduct:
+        'Я согласен с кодексом спарринга и политикой разрешения споров.',
+    LocaleKeys.contractProposeButton: 'Отправить контракт',
+    LocaleKeys.contractSaved: 'Контракт сохранен. Данные зафиксированы.',
+    LocaleKeys.contractRequiredDate: 'Выберите дату и время спарринга.',
+    LocaleKeys.contractRequiredLocation: 'Укажите локацию спарринга.',
+    LocaleKeys.contractAgreementRequired:
+        'Подтвердите согласие с кодексом поведения.',
+    LocaleKeys.contractOpenButton: 'Создать контракт',
+    LocaleKeys.contractViewDetailsButton: 'Посмотреть утвержденный контракт',
+    LocaleKeys.contractRequiredBeforeResult:
+        'Сначала создайте и подтвердите контракт. Затем доступны результат/суд.',
   },
   'kk': {
     LocaleKeys.discovery: 'Іздеу',
@@ -1833,6 +2224,74 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.personalInfo: 'Жеке деректер',
     LocaleKeys.passwordSecurity: 'Қауіпсіздік',
     LocaleKeys.linkedAccounts: 'Байланған аккаунттар',
+    LocaleKeys.accountOverviewTitle: 'Аккаунт картасы',
+    LocaleKeys.accountOverviewContacts: 'Байланыс және верификация',
+    LocaleKeys.accountOverviewSports: 'Спорт, деңгей және дағдылар',
+    LocaleKeys.accountOverviewNoSports: 'Спорттық қалаулар әлі толтырылмаған.',
+    LocaleKeys.accountOverviewAvailability: 'Менің қолжетімділігім',
+    LocaleKeys.accountOverviewNoAvailability: 'Қолжетімділік әлі бапталмаған.',
+    LocaleKeys.accountOverviewStatistics: 'Спарринг статистикасы',
+    LocaleKeys.accountOverviewNoStats: 'Аяқталған спаррингтер әлі жоқ.',
+    LocaleKeys.accountOverviewBirthDate: 'Туған күні',
+    LocaleKeys.accountOverviewExperienceYears: 'Тәжірибе (жыл)',
+    LocaleKeys.accountOverviewWinRate: 'Жеңіс пайызы',
+    LocaleKeys.accountOverviewWins: 'Жеңіс',
+    LocaleKeys.accountOverviewLosses: 'Жеңіліс',
+    LocaleKeys.accountOverviewDraws: 'Тең ойын',
+    LocaleKeys.notSet: 'Көрсетілмеген',
+    LocaleKeys.verified: 'Расталған',
+    LocaleKeys.notVerified: 'Расталмаған',
+    LocaleKeys.securityContactsTitle: 'Қалпына келтіру байланыстары',
+    LocaleKeys.securityPasswordTitle: 'Құпиясөзді өзгерту',
+    LocaleKeys.securityPasswordSubtitle:
+        'Ағымдағы құпиясөзді немесе email/телефон коды арқылы растауды қолданыңыз.',
+    LocaleKeys.securityCurrentPasswordOptional:
+        'Ағымдағы құпиясөз (міндетті емес)',
+    LocaleKeys.securityNewPassword: 'Жаңа құпиясөз',
+    LocaleKeys.securityConfirmPassword: 'Жаңа құпиясөзді растау',
+    LocaleKeys.securityVerificationMethod: 'Растау тәсілі',
+    LocaleKeys.securityChangePasswordAction: 'Құпиясөзді жаңарту',
+    LocaleKeys.securityNoVerificationChannel:
+        'Растау үшін email немесе телефон таңдаңыз.',
+    LocaleKeys.securityPhoneNotSet: 'Телефон нөмірі көрсетілмеген.',
+    LocaleKeys.securityCodeSent: 'Растау коды жіберілді.',
+    LocaleKeys.securityCodeRequired: 'Растау кодын енгізіңіз.',
+    LocaleKeys.securityPasswordChanged: 'Құпиясөз сәтті жаңартылды.',
+    LocaleKeys.securityEmailTitle: 'Email өзгерту',
+    LocaleKeys.securityChangeEmailAction: 'Email-ды растау және өзгерту',
+    LocaleKeys.securityEmailChanged: 'Email жаңартылды және расталды.',
+    LocaleKeys.securityPhoneTitle: 'Телефон өзгерту',
+    LocaleKeys.securityChangePhoneAction: 'Телефонды растау және өзгерту',
+    LocaleKeys.securityPhoneChanged: 'Телефон жаңартылды және расталды.',
+    LocaleKeys.blockedUsersUnblock: 'Бұғаттан шығару',
+    LocaleKeys.blockedUsersUnblocked: 'Пайдаланушы бұғаттан шығарылды.',
+    LocaleKeys.helpContactTitle: 'Қолдау байланысы',
+    LocaleKeys.helpContactBody:
+        'Төлем, дау немесе аккаунтқа кіру мәселелері бойынша жазыңыз: oyin.support@gmail.com',
+    LocaleKeys.helpFaqQ1: 'Спарринг нәтижесін қалай жіберемін?',
+    LocaleKeys.helpFaqA1:
+        'Матч карточкасын ашып, екі ойыншының есебін енгізіп жіберіңіз. Екі тарап бірдей есеп жібергенде нәтиже расталады.',
+    LocaleKeys.helpFaqQ2: 'Қарсылас басқа есеп жіберсе не істеймін?',
+    LocaleKeys.helpFaqA2:
+        'Нәтиже экранынан дау ашып, дәлел қосыңыз (видео/сілтеме/пікір). Соңғы шешімді қазылар дауыс беруі шығарады.',
+    LocaleKeys.helpFaqQ3: 'Телефонды немесе email-ды қалай ауыстырамын?',
+    LocaleKeys.helpFaqA3:
+        'Баптаулар → Қауіпсіздік бөліміне өтіп, өзгерісті OTP кодпен растаңыз.',
+    LocaleKeys.helpFaqQ4: 'Неге жаңа қарсыластар табылмайды?',
+    LocaleKeys.helpFaqA4:
+        'Баптаулардан спарринг фильтрлерін (қашықтық/жас), спорт қалауларын және профильдің ашықтығын тексеріңіз.',
+    LocaleKeys.fairPlayRule1:
+        'Екі спортшы келіскен матч нәтижесін ғана шынайы түрде жіберіңіз.',
+    LocaleKeys.fairPlayRule2:
+        'Расталған келісімшарттағы уақыт пен орынды сақтаңыз, өзгеріс болса алдын ала хабарлаңыз.',
+    LocaleKeys.fairPlayRule3:
+        'Дауда нақты дәлел беріңіз және жалған айып тағудан аулақ болыңыз.',
+    LocaleKeys.fairPlayRule4:
+        'Қорлау, қоқан-лоқы, буллинг және өшпенділік тіліне тыйым салынады.',
+    LocaleKeys.fairPlayRule5:
+        'Қайталанатын бұзушылық сенімділік рейтингін төмендетіп, аккаунтқа шектеу әкелуі мүмкін.',
+    LocaleKeys.fairPlayPenaltyNote:
+        'Модерация нәтижені жоя алады, уақытша шектеу қоя алады немесе ауыр бұзушылық үшін аккаунтты тоқтата алады.',
     LocaleKeys.sparringPrivacy: 'Спарринг және құпиялылық',
     LocaleKeys.publicVisibility: 'Публичность',
     LocaleKeys.publicVisibilityDesc: 'Мені матчқа табуға рұқсат ету',
@@ -2273,5 +2732,61 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.noActiveDisputes: 'Белсенді даулар жоқ',
     LocaleKeys.noActiveDisputesDesc:
         'Дау ашылғанда, ол мұнда қарау үшін пайда болады.',
+    LocaleKeys.disputeEvidenceScreenTitle: 'Дау дәлелдері',
+    LocaleKeys.disputeEvidenceProvideDetailsTitle: 'Мәлімет беріңіз',
+    LocaleKeys.disputeEvidenceProvideDetailsHint:
+        'Оқиғаны анық сипаттап, әділ қарау үшін дәлелдерді тіркеңіз.',
+    LocaleKeys.disputeEvidenceDescriptionLabel: 'Оқиға сипаттамасы',
+    LocaleKeys.disputeEvidenceDescriptionHint:
+        'Сессия кезінде не болғанын сипаттаңыз...',
+    LocaleKeys.disputeEvidenceVideoTitle: 'Видео дәлел',
+    LocaleKeys.disputeEvidenceTapUpload: 'Видеоны жүктеу үшін басыңыз',
+    LocaleKeys.disputeEvidenceVideoHint: 'MP4, MOV 100MB дейін',
+    LocaleKeys.disputeEvidenceOrLink: 'НЕМЕСЕ СІЛТЕМЕ ҚОСЫҢЫЗ',
+    LocaleKeys.disputeEvidenceUrlLabel: 'Видео сілтемесі',
+    LocaleKeys.disputeEvidenceUrlHint: 'мысалы, YouTube немесе Vimeo сілтемесі',
+    LocaleKeys.disputeEvidenceSubmit: 'Дәлелдерді жіберу',
+    LocaleKeys.disputeEvidenceFootnote:
+        'Жіберілгеннен кейін дәлелдерді өзгертуге болмайды.',
+    LocaleKeys.disputeEvidenceDescriptionRequired:
+        'Инцидент сипаттамасын қосыңыз.',
+    LocaleKeys.disputeEvidenceRequired:
+        'Видео дәлел тіркеңіз немесе сілтеме қосыңыз.',
+    LocaleKeys.disputeEvidenceUploadFailed:
+        'Видео дәлелді жүктеу мүмкін болмады. Қайта көріңіз.',
+    LocaleKeys.contractSetupTitle: 'Жаңа спарринг келісімшарты',
+    LocaleKeys.contractProgressTitle: 'Прогресс',
+    LocaleKeys.contractStepContract: '1. Келісімшарт',
+    LocaleKeys.contractStepResult: '2. Нәтиже',
+    LocaleKeys.contractLockedHint:
+        'Келісімшарт бекітілді және құлыпталды. Күн, уақыт, орын өзгертілмейді.',
+    LocaleKeys.contractLogistics: 'Логистика',
+    LocaleKeys.contractDateLabel: 'Күні',
+    LocaleKeys.contractTimeLabel: 'Уақыты',
+    LocaleKeys.contractDatePlaceholder: 'Күнді таңдаңыз',
+    LocaleKeys.contractTimePlaceholder: 'Уақытты таңдаңыз',
+    LocaleKeys.contractLocationLabel: 'Орын',
+    LocaleKeys.contractLocationHint: 'City Gym, Brooklyn',
+    LocaleKeys.contractNotificationsTitle: 'Хабарламалар',
+    LocaleKeys.contractReminderToggle: 'Басталар алдындағы еске салу',
+    LocaleKeys.contractAgreementStatusTitle: 'Келісім статусы',
+    LocaleKeys.contractAgreementYou: 'Сіз',
+    LocaleKeys.contractAgreementYouStatusPending: 'Қол қоюға дайын',
+    LocaleKeys.contractAgreementYouStatusLocked: 'Қол қойылды',
+    LocaleKeys.contractAgreementOpponent: 'Қарсылас',
+    LocaleKeys.contractAgreementOpponentStatus: 'Қол қоюды күтіп тұр...',
+    LocaleKeys.contractCodeOfConduct:
+        'Мен спарринг ережелерімен және дауды шешу саясатына келісемін.',
+    LocaleKeys.contractProposeButton: 'Келісімшарт ұсыну',
+    LocaleKeys.contractSaved:
+        'Келісімшарт сақталды. Мәліметтер енді өзгермейді.',
+    LocaleKeys.contractRequiredDate: 'Спарринг күні мен уақытын таңдаңыз.',
+    LocaleKeys.contractRequiredLocation: 'Спарринг орнын енгізіңіз.',
+    LocaleKeys.contractAgreementRequired:
+        'Ережелермен келісетініңізді растаңыз.',
+    LocaleKeys.contractOpenButton: 'Келісімшарт құру',
+    LocaleKeys.contractViewDetailsButton: 'Бекітілген келісімшартты көру',
+    LocaleKeys.contractRequiredBeforeResult:
+        'Алдымен келісімшартты құрып, бекітіңіз. Содан кейін нәтиже/дау қолжетімді.',
   },
 };

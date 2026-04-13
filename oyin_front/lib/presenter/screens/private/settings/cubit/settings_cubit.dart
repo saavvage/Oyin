@@ -27,11 +27,6 @@ class SettingsCubit extends Cubit<SettingsState> {
                   title: 'password_security',
                   subtitle: '',
                 ),
-                SettingsItem(
-                  icon: 'link',
-                  title: 'linked_accounts',
-                  subtitle: '',
-                ),
               ],
             ),
             SettingsSection(
@@ -104,6 +99,7 @@ class SettingsCubit extends Cubit<SettingsState> {
         ),
       ) {
     _loadMatchFilters();
+    _loadLocalToggleSettings();
     _loadTimedReminderSettings();
     _loadPushSettingsFromBackend();
     _loadUserData();
@@ -144,6 +140,21 @@ class SettingsCubit extends Cubit<SettingsState> {
     emit(state.copyWith(matchFilters: filters));
   }
 
+  Future<void> _loadLocalToggleSettings() async {
+    final publicVisibility = await SessionStorage.getPublicVisibility();
+    final matchRequests = await SessionStorage.getMatchRequests();
+    final disputeUpdates = await SessionStorage.getDisputeUpdates();
+    if (isClosed) return;
+
+    emit(
+      state.copyWith(
+        publicVisibility: publicVisibility ?? state.publicVisibility,
+        matchRequests: matchRequests ?? state.matchRequests,
+        disputeUpdates: disputeUpdates ?? state.disputeUpdates,
+      ),
+    );
+  }
+
   Future<void> _loadTimedReminderSettings() async {
     final enabled = await SessionStorage.getTimedReminderEnabled();
     final minutes = await SessionStorage.getTimedReminderIntervalMinutes();
@@ -182,13 +193,20 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  void togglePublicVisibility(bool value) =>
-      emit(state.copyWith(publicVisibility: value));
-  void toggleMatchRequests(bool value) =>
-      emit(state.copyWith(matchRequests: value));
+  void togglePublicVisibility(bool value) {
+    SessionStorage.setPublicVisibility(value);
+    emit(state.copyWith(publicVisibility: value));
+  }
 
-  void toggleDisputeUpdates(bool value) =>
-      emit(state.copyWith(disputeUpdates: value));
+  void toggleMatchRequests(bool value) {
+    SessionStorage.setMatchRequests(value);
+    emit(state.copyWith(matchRequests: value));
+  }
+
+  void toggleDisputeUpdates(bool value) {
+    SessionStorage.setDisputeUpdates(value);
+    emit(state.copyWith(disputeUpdates: value));
+  }
 
   Future<void> toggleTimedReminders(bool value) async {
     final intervalMinutes = state.timedRemindersIntervalMinutes;

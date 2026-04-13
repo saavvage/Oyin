@@ -44,7 +44,12 @@ class _ProfileView extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProfileHeader(l10n: l10n),
+                  ProfileHeader(
+                    l10n: l10n,
+                    onSettingsUpdated: () {
+                      context.read<ProfileCubit>().refreshProfile();
+                    },
+                  ),
                   14.vSpacing,
                   ProfileAvatarSection(
                     name: state.name,
