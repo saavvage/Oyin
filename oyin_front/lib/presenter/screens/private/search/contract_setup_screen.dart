@@ -74,8 +74,28 @@ class _ContractSetupScreenState extends State<ContractSetupScreen> {
     }
 
     if (_isDemoGame) {
-      _ensureDefaults();
-      _cacheDraft();
+      try {
+        final game = await GamesApi.getById(widget.gameId);
+        final contract = game.contractData;
+        if (contract?.date != null) {
+          final local = contract!.date!.toLocal();
+          _selectedDate = DateTime(local.year, local.month, local.day);
+          _selectedTime = TimeOfDay(hour: local.hour, minute: local.minute);
+          _locationController.text = (contract.location ?? '').trim();
+          _reminderEnabled = contract.reminder;
+          _acceptedCode = true;
+          ContractDraftStore.clear(widget.gameId);
+        } else {
+          _ensureDefaults();
+          _cacheDraft();
+        }
+        if (mounted) {
+          setState(() => _game = game);
+        }
+      } catch (_) {
+        _ensureDefaults();
+        _cacheDraft();
+      }
       setState(() => _isLoading = false);
       return;
     }
@@ -180,8 +200,15 @@ class _ContractSetupScreenState extends State<ContractSetupScreen> {
     setState(() => _isSaving = true);
     try {
       if (_isDemoGame) {
-        _cacheDraft(confirmed: true);
+        final updated = await GamesApi.proposeContract(
+          gameId: widget.gameId,
+          dateTime: dateTime,
+          location: location,
+          reminder: _reminderEnabled,
+        );
         if (!mounted) return;
+        setState(() => _game = updated);
+        _cacheDraft(confirmed: true);
         AppNotifier.showSuccess(context, l10n.contractSaved);
         Navigator.of(context).pop(true);
         return;

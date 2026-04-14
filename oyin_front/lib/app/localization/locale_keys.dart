@@ -162,6 +162,8 @@ class LocaleKeys {
   static const tabArchived = 'tab_archived';
   static const tabDisputes = 'tab_disputes';
   static const noDisputes = 'no_disputes';
+  static const myDisputes = 'my_disputes';
+  static const communityDisputes = 'community_disputes';
   static const actionRequired = 'action_required';
   static const upcoming = 'upcoming';
   static const resolveDispute = 'resolve_dispute';
@@ -192,6 +194,7 @@ class LocaleKeys {
   static const arenaRating = 'arena_rating';
   static const arenaAllPlayers = 'arena_all_players';
   static const arenaFairFight = 'arena_fair_fight';
+  static const arenaMatching = 'arena_matching';
   static const arenaInRange = 'arena_in_range';
   static const arenaChallenge = 'arena_challenge';
   static const arenaPending = 'arena_pending';
@@ -542,7 +545,12 @@ class LocaleKeys {
   static const returnToDashboard = 'return_to_dashboard';
   static const ok = 'ok';
   static const pickScore = 'pick_score';
+  static const statusWin = 'status_win';
+  static const statusLoss = 'status_loss';
   static const draw = 'draw';
+  static const statusPendingResult = 'status_pending_result';
+  static const statusConflict = 'status_conflict';
+  static const statusDispute = 'status_dispute';
   static const coinsLabel = 'coins_label';
 
   // Form labels

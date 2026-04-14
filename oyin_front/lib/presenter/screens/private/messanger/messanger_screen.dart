@@ -403,6 +403,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.palette;
     final l10n = AppLocalizations.of(context);
+    final safeAvatarUrl = avatarUrl.trim();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -412,7 +413,16 @@ class _Header extends StatelessWidget {
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
-          CircleAvatar(radius: 20, backgroundImage: NetworkImage(avatarUrl)),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: palette.accent,
+            backgroundImage: safeAvatarUrl.isNotEmpty
+                ? NetworkImage(safeAvatarUrl)
+                : null,
+            child: safeAvatarUrl.isEmpty
+                ? Icon(Icons.person, color: palette.muted)
+                : null,
+          ),
           12.hSpacing,
           Expanded(
             child: Column(

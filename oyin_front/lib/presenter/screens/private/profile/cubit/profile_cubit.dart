@@ -127,8 +127,14 @@ class ProfileCubit extends Cubit<ProfileState> {
             .where((g) => g.status == 'PENDING' || g.status == 'SCHEDULED')
             .toList();
         if (upcoming.isNotEmpty) {
-          final next = upcoming.first;
+          final next = upcoming.firstWhere(
+            (g) =>
+                g.opponentName.trim().toLowerCase() !=
+                safeName.trim().toLowerCase(),
+            orElse: () => upcoming.first,
+          );
           nextMatch = NextMatch(
+            gameId: next.id,
             opponentName: next.opponentName,
             opponentAvatar: next.opponentAvatarUrl,
             dateLabel: next.createdAt != null

@@ -5,6 +5,7 @@ import 'package:oyin_front/domain/export.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
+import '../messanger/messanger_screen.dart';
 import 'cubit/_export.dart';
 import 'widgets/_export.dart';
 
@@ -84,6 +85,18 @@ class _MatchViewState extends State<_MatchView> {
                     ),
                   ),
                 ),
+                if (state.mutualLikeMatch != null)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                    child: _MutualLikeCard(
+                      l10n: l10n,
+                      match: state.mutualLikeMatch!,
+                      onDismiss: () =>
+                          context.read<MatchCubit>().clearMutualLikeMatch(),
+                      onOpenChat: () =>
+                          _openMatchChat(context, state.mutualLikeMatch!),
+                    ),
+                  ),
                 if (!state.isLoading && !state.isFinished && profile != null)
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
@@ -162,6 +175,7 @@ class _MatchViewState extends State<_MatchView> {
       builder: (context) => _MatchFiltersSheet(l10n: l10n, filters: filters),
     );
 
+    if (!context.mounted) return;
     if (result != null) {
       context.read<MatchCubit>().updateFilters(result);
     }
@@ -280,6 +294,99 @@ class _MatchViewState extends State<_MatchView> {
           ),
         );
       },
+    );
+  }
+
+  void _openMatchChat(BuildContext context, MutualLikeMatch match) {
+    context.read<MatchCubit>().clearMutualLikeMatch();
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => MessangerScreen(
+          chatId: match.threadId,
+          partnerName: match.partnerName,
+          partnerAvatarUrl: match.partnerAvatarUrl,
+        ),
+      ),
+    );
+  }
+}
+
+class _MutualLikeCard extends StatelessWidget {
+  const _MutualLikeCard({
+    required this.l10n,
+    required this.match,
+    required this.onOpenChat,
+    required this.onDismiss,
+  });
+
+  final AppLocalizations l10n;
+  final MutualLikeMatch match;
+  final VoidCallback onOpenChat;
+  final VoidCallback onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: palette.card,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.35)),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 24,
+            backgroundColor: palette.accent,
+            backgroundImage: match.partnerAvatarUrl.isNotEmpty
+                ? NetworkImage(match.partnerAvatarUrl)
+                : null,
+            child: match.partnerAvatarUrl.isEmpty
+                ? const Icon(Icons.person)
+                : null,
+          ),
+          12.hSpacing,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${l10n.statusMatched} • ${match.partnerName}',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                4.vSpacing,
+                Text(
+                  l10n.draftingContract,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                ),
+              ],
+            ),
+          ),
+          8.hSpacing,
+          ElevatedButton(
+            onPressed: onOpenChat,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: palette.primary,
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            ),
+            child: Text(
+              l10n.chats,
+              style: const TextStyle(fontWeight: FontWeight.w700),
+            ),
+          ),
+          IconButton(
+            onPressed: onDismiss,
+            icon: const Icon(Icons.close_rounded),
+          ),
+        ],
+      ),
     );
   }
 }

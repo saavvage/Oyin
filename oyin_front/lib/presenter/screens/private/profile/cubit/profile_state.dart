@@ -38,6 +38,7 @@ class ProfileStats {
 
 class NextMatch {
   const NextMatch({
+    required this.gameId,
     required this.opponentName,
     required this.opponentAvatar,
     required this.dateLabel,
@@ -45,6 +46,7 @@ class NextMatch {
     required this.statusLabel,
   });
 
+  final String gameId;
   final String opponentName;
   final String opponentAvatar;
   final String dateLabel;

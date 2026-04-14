@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../extensions/_export.dart';
-import '../../../../extensions/theme.dart';
 import '../cubit/chat_state.dart';
 import '../../../../../app/localization/app_localizations.dart';
 
@@ -25,8 +24,13 @@ class ChatListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
-    final cardColor = card.highlight == true ? Colors.redAccent.withOpacity(0.12) : palette.card;
-    final borderColor = card.highlight == true ? Colors.redAccent : Colors.transparent;
+    final avatarUrl = card.avatarUrl.trim();
+    final cardColor = card.highlight == true
+        ? Colors.redAccent.withValues(alpha: 0.12)
+        : palette.card;
+    final borderColor = card.highlight == true
+        ? Colors.redAccent
+        : Colors.transparent;
     final statusColor = _statusColor(card.accent, palette);
 
     return GestureDetector(
@@ -46,7 +50,13 @@ class ChatListCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 22,
-                  backgroundImage: NetworkImage(card.avatarUrl),
+                  backgroundColor: palette.accent,
+                  backgroundImage: avatarUrl.isNotEmpty
+                      ? NetworkImage(avatarUrl)
+                      : null,
+                  child: avatarUrl.isEmpty
+                      ? Icon(Icons.person, color: palette.muted)
+                      : null,
                 ),
                 12.hSpacing,
                 Expanded(
@@ -57,27 +67,36 @@ class ChatListCard extends StatelessWidget {
                         children: [
                           Text(
                             card.name,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
                           ),
                           6.hSpacing,
-                          Icon(Icons.search, size: 14, color: palette.iconMuted),
+                          Icon(
+                            Icons.search,
+                            size: 14,
+                            color: palette.iconMuted,
+                          ),
                         ],
                       ),
                       4.vSpacing,
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
-                              color: statusColor.withOpacity(0.18),
+                              color: statusColor.withValues(alpha: 0.18),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
                               _statusText(card.statusKey, l10n),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall
-                                  ?.copyWith(color: statusColor, fontWeight: FontWeight.w700),
+                              style: Theme.of(context).textTheme.labelSmall
+                                  ?.copyWith(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                             ),
                           ),
                         ],
@@ -90,7 +109,9 @@ class ChatListCard extends StatelessWidget {
                   children: [
                     Text(
                       card.timestamp,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: palette.muted),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: palette.muted),
                     ),
                     if (card.badgeCount != null) ...[
                       6.vSpacing,
@@ -102,7 +123,9 @@ class ChatListCard extends StatelessWidget {
                         ),
                         child: Text(
                           card.badgeCount.toString(),
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.white),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelSmall?.copyWith(color: Colors.white),
                         ),
                       ),
                     ],
@@ -111,20 +134,23 @@ class ChatListCard extends StatelessWidget {
               ],
             ),
             12.vSpacing,
-            Text(
-              card.subtitle,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(card.subtitle, style: Theme.of(context).textTheme.bodyMedium),
             if (card.buttonKey != null) ...[
               12.vSpacing,
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: card.highlight == true ? const Color(0xFF542B35) : palette.primary,
-                    foregroundColor: card.highlight == true ? Colors.redAccent : Colors.black,
+                    backgroundColor: card.highlight == true
+                        ? const Color(0xFF542B35)
+                        : palette.primary,
+                    foregroundColor: card.highlight == true
+                        ? Colors.redAccent
+                        : Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   onPressed: onTap,
                   child: Row(

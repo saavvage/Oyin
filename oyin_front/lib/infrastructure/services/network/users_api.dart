@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import 'api_client.dart';
 import 'api_endpoints.dart';
+import 'mock_demo_runtime.dart';
 
 class UserPushSettings {
   const UserPushSettings({
@@ -69,8 +70,15 @@ class UserAvailabilitySettings {
 
 class UsersApi {
   static Future<Map<String, dynamic>> getMe() async {
-    final data = await ApiClient.instance.get(ApiEndpoints.usersMe);
-    return (data as Map).cast<String, dynamic>();
+    final runtime = MockDemoRuntime.instance;
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.usersMe);
+      final me = (data as Map).cast<String, dynamic>();
+      runtime.syncCurrentUserFromAccount(me);
+      return me;
+    } catch (_) {
+      return runtime.currentUser();
+    }
   }
 
   static Future<void> updateProfile({

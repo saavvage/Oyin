@@ -51,6 +51,7 @@ class MatchResultState {
     required this.leftPlayer,
     required this.rightPlayer,
     required this.isCurrentUserPlayer1,
+    required this.isReadOnly,
     required this.contract,
     required this.isLoading,
     required this.isSubmitting,
@@ -67,6 +68,7 @@ class MatchResultState {
   final MatchResultPlayer leftPlayer;
   final MatchResultPlayer rightPlayer;
   final bool isCurrentUserPlayer1;
+  final bool isReadOnly;
   final MatchResultContract? contract;
   final bool isLoading;
   final bool isSubmitting;
@@ -77,6 +79,7 @@ class MatchResultState {
   bool get hasContract => contract != null;
 
   bool get canSubmit =>
+      !isReadOnly &&
       hasContract &&
       !isLoading &&
       !isSubmitting &&
@@ -84,7 +87,9 @@ class MatchResultState {
       rightPlayer.score != null;
 
   bool get canOpenDispute =>
-      hasContract && (statusLabel == 'CONFLICT' || statusLabel == 'DISPUTED');
+      !isReadOnly &&
+      hasContract &&
+      (statusLabel == 'CONFLICT' || statusLabel == 'DISPUTED');
 
   MatchResultState copyWith({
     String? gameId,
@@ -95,6 +100,7 @@ class MatchResultState {
     MatchResultPlayer? leftPlayer,
     MatchResultPlayer? rightPlayer,
     bool? isCurrentUserPlayer1,
+    bool? isReadOnly,
     MatchResultContract? contract,
     bool clearContract = false,
     bool? isLoading,
@@ -113,6 +119,7 @@ class MatchResultState {
     leftPlayer: leftPlayer ?? this.leftPlayer,
     rightPlayer: rightPlayer ?? this.rightPlayer,
     isCurrentUserPlayer1: isCurrentUserPlayer1 ?? this.isCurrentUserPlayer1,
+    isReadOnly: isReadOnly ?? this.isReadOnly,
     contract: clearContract ? null : (contract ?? this.contract),
     isLoading: isLoading ?? this.isLoading,
     isSubmitting: isSubmitting ?? this.isSubmitting,
@@ -125,6 +132,7 @@ class MatchResultState {
     required String gameId,
     required String challengerName,
     required String opponentName,
+    required bool readOnly,
     String opponentAvatarUrl = '',
   }) {
     return MatchResultState(
@@ -148,6 +156,7 @@ class MatchResultState {
         score: null,
       ),
       isCurrentUserPlayer1: true,
+      isReadOnly: readOnly,
       contract: null,
       isLoading: true,
       isSubmitting: false,

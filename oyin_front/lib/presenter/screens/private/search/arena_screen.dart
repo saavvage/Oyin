@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../app/localization/locale_keys.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
@@ -8,7 +9,9 @@ import 'contract_setup_screen.dart';
 import 'match_result_screen.dart';
 
 class ArenaScreen extends StatefulWidget {
-  const ArenaScreen({super.key});
+  const ArenaScreen({super.key, this.isActive = false});
+
+  final bool isActive;
 
   @override
   State<ArenaScreen> createState() => _ArenaScreenState();
@@ -22,6 +25,7 @@ class _ArenaScreenState extends State<ArenaScreen> {
   int _currentUserRating = 0;
   int? _currentUserRank;
   List<_Player> _players = const [];
+  List<_MatchingContract> _matchingContracts = const [];
 
   @override
   void initState() {
@@ -29,17 +33,34 @@ class _ArenaScreenState extends State<ArenaScreen> {
     _load();
   }
 
+  @override
+  void didUpdateWidget(covariant ArenaScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isActive && !oldWidget.isActive) {
+      _load();
+    }
+  }
+
   Future<void> _load() async {
     setState(() => _isLoading = true);
+
+    String nextCurrentUserId = _currentUserId;
+    String nextCurrentUserName = _currentUserName;
+    int nextCurrentUserRating = _currentUserRating;
+    int? nextCurrentUserRank = _currentUserRank;
+    List<_Player> nextPlayers = _players;
+    List<_MatchingContract> nextMatchingContracts = _matchingContracts;
 
     try {
       final results = await Future.wait<dynamic>([
         ArenaApi.getLeaderboard(sport: 'TENNIS'),
         UsersApi.getMe(),
+        ChatApi.getThreads(),
       ]);
 
       final leaderboard = results[0] as List<ArenaPlayerDto>;
       final me = (results[1] as Map<String, dynamic>);
+      final threads = results[2] as ChatThreadsResponse;
 
       final userId = (me['id'] ?? '').toString();
       final userName = (me['name'] ?? '').toString().trim();
@@ -62,34 +83,72 @@ class _ArenaScreenState extends State<ArenaScreen> {
         orElse: () => null,
       );
 
-      if (!mounted) return;
-      setState(() {
-        _currentUserId = userId;
-        _currentUserName = userName.isEmpty ? 'You' : userName;
-        _currentUserRating =
-            (me['sportProfiles'] is List &&
-                (me['sportProfiles'] as List).isNotEmpty)
-            ? ((me['sportProfiles'] as List).first['eloRating'] as num?)
-                      ?.toInt() ??
-                  0
-            : 0;
-        _currentUserRank = rank?.rank;
-        _players = mapped.isEmpty ? _mockPlayers : mapped;
-      });
+      nextCurrentUserId = userId;
+      nextCurrentUserName = userName.isEmpty ? 'You' : userName;
+      nextCurrentUserRating =
+          (me['sportProfiles'] is List &&
+              (me['sportProfiles'] as List).isNotEmpty)
+          ? ((me['sportProfiles'] as List).first['eloRating'] as num?)
+                    ?.toInt() ??
+                0
+          : 0;
+      nextCurrentUserRank = rank?.rank;
+      nextPlayers = mapped.isEmpty ? _mockPlayers : mapped;
+      nextMatchingContracts = _extractMatchingContracts(threads);
     } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _currentUserId = 'me-local';
-        _currentUserName = 'You';
-        _currentUserRating = 1450;
-        _currentUserRank = 42;
-        _players = _mockPlayers;
-      });
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
+      nextCurrentUserId = 'me-local';
+      nextCurrentUserName = 'You';
+      nextCurrentUserRating = 1450;
+      nextCurrentUserRank = 42;
+      nextPlayers = _mockPlayers;
+
+      try {
+        final threads = await ChatApi.getThreads();
+        nextMatchingContracts = _extractMatchingContracts(threads);
+      } catch (_) {
+        nextMatchingContracts = const [];
       }
     }
+
+    if (!mounted) return;
+    setState(() {
+      _currentUserId = nextCurrentUserId;
+      _currentUserName = nextCurrentUserName;
+      _currentUserRating = nextCurrentUserRating;
+      _currentUserRank = nextCurrentUserRank;
+      _players = nextPlayers;
+      _matchingContracts = nextMatchingContracts;
+      _isLoading = false;
+    });
+  }
+
+  List<_MatchingContract> _extractMatchingContracts(ChatThreadsResponse data) {
+    final byGameId = <String, _MatchingContract>{};
+    final allThreads = <ChatThreadDto>[
+      ...data.actionRequired,
+      ...data.upcoming,
+    ];
+
+    for (final item in allThreads) {
+      final gameId = item.gameId?.trim() ?? '';
+      if (gameId.isEmpty) {
+        continue;
+      }
+      if (item.statusKey != LocaleKeys.statusDraftingContract &&
+          item.statusKey != LocaleKeys.statusMatched) {
+        continue;
+      }
+
+      byGameId[gameId] = _MatchingContract(
+        gameId: gameId,
+        partnerName: item.name.trim().isEmpty ? 'Opponent' : item.name.trim(),
+        partnerAvatarUrl: item.avatarUrl,
+        subtitle: item.subtitle,
+        statusKey: item.statusKey,
+      );
+    }
+
+    return byGameId.values.toList();
   }
 
   Future<void> _challenge(_Player player) async {
@@ -141,6 +200,27 @@ class _ArenaScreenState extends State<ArenaScreen> {
     );
   }
 
+  Future<void> _openMatchingContract(_MatchingContract contract) async {
+    final confirmed = await Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => ContractSetupScreen(gameId: contract.gameId),
+      ),
+    );
+
+    if (!mounted || confirmed != true) return;
+
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => MatchResultScreen(
+          gameId: contract.gameId,
+          challengerName: _currentUserName,
+          opponentName: contract.partnerName,
+          opponentAvatarUrl: contract.partnerAvatarUrl,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -171,6 +251,26 @@ class _ArenaScreenState extends State<ArenaScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (_matchingContracts.isNotEmpty) ...[
+                      Text(
+                        l10n.arenaMatching.toUpperCase(),
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: palette.muted,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      12.vSpacing,
+                      ..._matchingContracts.map(
+                        (contract) => _MatchingContractRow(
+                          contract: contract,
+                          palette: palette,
+                          l10n: l10n,
+                          onOpen: () => _openMatchingContract(contract),
+                        ),
+                      ),
+                      16.vSpacing,
+                    ],
                     _StandingCard(
                       palette: palette,
                       standingLabel: l10n.arenaStanding,
@@ -377,6 +477,93 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
+class _MatchingContractRow extends StatelessWidget {
+  const _MatchingContractRow({
+    required this.contract,
+    required this.palette,
+    required this.l10n,
+    required this.onOpen,
+  });
+
+  final _MatchingContract contract;
+  final AppPalette palette;
+  final AppLocalizations l10n;
+  final VoidCallback onOpen;
+
+  String _statusText() {
+    switch (contract.statusKey) {
+      case LocaleKeys.statusDraftingContract:
+        return l10n.statusDraftingContract;
+      case LocaleKeys.statusMatched:
+        return l10n.statusMatched;
+      default:
+        return l10n.statusMatched;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final avatarUrl = contract.partnerAvatarUrl.trim();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: palette.card,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: palette.badge),
+      ),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: palette.accent,
+            backgroundImage: avatarUrl.isNotEmpty
+                ? NetworkImage(avatarUrl)
+                : null,
+            child: avatarUrl.isEmpty
+                ? Icon(Icons.person, color: palette.muted)
+                : null,
+          ),
+          12.hSpacing,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  contract.partnerName,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                4.vSpacing,
+                Text(
+                  contract.subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                ),
+                6.vSpacing,
+                Text(
+                  _statusText(),
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: palette.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          8.hSpacing,
+          _ActionButton(label: l10n.viewProposal, onPressed: onOpen),
+        ],
+      ),
+    );
+  }
+}
+
 class _PlayerRow extends StatelessWidget {
   const _PlayerRow({
     required this.player,
@@ -475,6 +662,22 @@ class _PlayerRow extends StatelessWidget {
       ),
     );
   }
+}
+
+class _MatchingContract {
+  const _MatchingContract({
+    required this.gameId,
+    required this.partnerName,
+    required this.partnerAvatarUrl,
+    required this.subtitle,
+    required this.statusKey,
+  });
+
+  final String gameId;
+  final String partnerName;
+  final String partnerAvatarUrl;
+  final String subtitle;
+  final String statusKey;
 }
 
 class _ActionButton extends StatelessWidget {

@@ -17,12 +17,14 @@ class MatchResultScreen extends StatelessWidget {
     this.challengerName = 'You',
     this.opponentName = 'Opponent',
     this.opponentAvatarUrl = '',
+    this.readOnly = false,
   });
 
   final String gameId;
   final String challengerName;
   final String opponentName;
   final String opponentAvatarUrl;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class MatchResultScreen extends StatelessWidget {
         challengerName: challengerName,
         opponentName: opponentName,
         opponentAvatarUrl: opponentAvatarUrl,
+        readOnly: readOnly,
       ),
       child: const _MatchResultView(),
     );
@@ -54,6 +57,7 @@ class _MatchResultView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           child: BlocBuilder<MatchResultCubit, MatchResultState>(
             builder: (context, state) {
+              final readOnly = state.isReadOnly;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -75,9 +79,11 @@ class _MatchResultView extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: state.isLoading
                           ? null
+                          : readOnly && !state.hasContract
+                          ? null
                           : () => _openContract(
                               context,
-                              forceReadOnly: state.hasContract,
+                              forceReadOnly: readOnly || state.hasContract,
                             ),
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(
@@ -137,6 +143,8 @@ class _MatchResultView extends StatelessWidget {
                         player: state.leftPlayer,
                         onTap: state.isLoading
                             ? () {}
+                            : readOnly
+                            ? () {}
                             : () => _pickScore(
                                 context,
                                 onPicked: (value) {
@@ -157,6 +165,8 @@ class _MatchResultView extends StatelessWidget {
                       PlayerScoreCard(
                         player: state.rightPlayer,
                         onTap: state.isLoading
+                            ? () {}
+                            : readOnly
                             ? () {}
                             : () => _pickScore(
                                 context,
@@ -206,6 +216,7 @@ class _MatchResultView extends StatelessWidget {
   Future<void> _submitResult(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<MatchResultCubit>();
+    if (cubit.state.isReadOnly) return;
     final hasContract = await _ensureContractBeforeAction(context);
     if (!context.mounted || !hasContract) return;
 
@@ -251,6 +262,7 @@ class _MatchResultView extends StatelessWidget {
   Future<void> _openDisputeFlow(BuildContext context) async {
     final cubit = context.read<MatchResultCubit>();
     var state = cubit.state;
+    if (state.isReadOnly) return;
 
     final hasContract = await _ensureContractBeforeAction(context);
     if (!context.mounted || !hasContract) return;

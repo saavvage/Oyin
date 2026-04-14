@@ -1,5 +1,6 @@
 import 'api_client.dart';
 import 'api_endpoints.dart';
+import 'mock_demo_runtime.dart';
 
 class GameUserDto {
   const GameUserDto({
@@ -172,17 +173,58 @@ class GameHistoryDto {
 
 class GamesApi {
   static Future<List<GameHistoryDto>> getMyGames(String myUserId) async {
-    final data = await ApiClient.instance.get(ApiEndpoints.gamesMy);
-    if (data is! List) return const [];
-    return data
-        .whereType<Map>()
-        .map((e) => GameHistoryDto.fromMap(e.cast<String, dynamic>(), myUserId))
+    final runtime = MockDemoRuntime.instance;
+    final localMaps = runtime.myGames(myUserId);
+    final localMyUserId = runtime.currentUserId;
+    final local = localMaps
+        .map((e) => GameHistoryDto.fromMap(e, localMyUserId))
         .toList();
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.gamesMy);
+      if (data is! List) return local;
+
+      final remote = data
+          .whereType<Map>()
+          .map(
+            (e) => GameHistoryDto.fromMap(e.cast<String, dynamic>(), myUserId),
+          )
+          .toList();
+
+      if (remote.isEmpty) {
+        return local;
+      }
+
+      final byId = <String, GameHistoryDto>{};
+      for (final game in remote) {
+        byId[game.id] = game;
+      }
+      for (final game in local) {
+        byId[game.id] = game;
+      }
+      final merged = byId.values.toList()
+        ..sort(
+          (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0))
+              .compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)),
+        );
+      return merged;
+    } catch (_) {
+      return local;
+    }
   }
 
   static Future<GameDetailsDto> getById(String gameId) async {
-    final data = await ApiClient.instance.get(ApiEndpoints.gamesById(gameId));
-    return GameDetailsDto.fromMap((data as Map).cast<String, dynamic>());
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.hasLocalGame(gameId) || gameId.startsWith('demo-game-')) {
+      return GameDetailsDto.fromMap(runtime.gameById(gameId));
+    }
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.gamesById(gameId));
+      return GameDetailsDto.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      return GameDetailsDto.fromMap(runtime.gameById(gameId));
+    }
   }
 
   static Future<GameDetailsDto> proposeContract({
@@ -192,17 +234,41 @@ class GamesApi {
     bool reminder = true,
     String? venueId,
   }) async {
-    await ApiClient.instance.post(
-      ApiEndpoints.gamesContract(gameId),
-      data: {
-        'date': dateTime.toIso8601String(),
-        'location': location,
-        'reminder': reminder,
-        if (venueId != null && venueId.isNotEmpty) 'venueId': venueId,
-      },
-    );
+    final payload = {
+      'date': dateTime.toIso8601String(),
+      'location': location,
+      'reminder': reminder,
+      if (venueId != null && venueId.isNotEmpty) 'venueId': venueId,
+    };
 
-    return getById(gameId);
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.hasLocalGame(gameId) || gameId.startsWith('demo-game-')) {
+      final data = runtime.proposeContract(
+        gameId: gameId,
+        dateTime: dateTime,
+        location: location,
+        reminder: reminder,
+        venueId: venueId,
+      );
+      return GameDetailsDto.fromMap(data);
+    }
+
+    try {
+      await ApiClient.instance.post(
+        ApiEndpoints.gamesContract(gameId),
+        data: payload,
+      );
+      return getById(gameId);
+    } catch (_) {
+      final data = runtime.proposeContract(
+        gameId: gameId,
+        dateTime: dateTime,
+        location: location,
+        reminder: reminder,
+        venueId: venueId,
+      );
+      return GameDetailsDto.fromMap(data);
+    }
   }
 
   static Future<GameResultResponse> submitResult({
@@ -210,14 +276,34 @@ class GamesApi {
     required int myScore,
     required int opponentScore,
   }) async {
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.gamesResult(gameId),
-      data: {
-        'myScore': myScore.toString(),
-        'opponentScore': opponentScore.toString(),
-      },
-    );
+    final payload = {
+      'myScore': myScore.toString(),
+      'opponentScore': opponentScore.toString(),
+    };
 
-    return GameResultResponse.fromMap((data as Map).cast<String, dynamic>());
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.hasLocalGame(gameId) || gameId.startsWith('demo-game-')) {
+      final data = runtime.submitResult(
+        gameId: gameId,
+        myScore: myScore,
+        opponentScore: opponentScore,
+      );
+      return GameResultResponse.fromMap(data);
+    }
+
+    try {
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.gamesResult(gameId),
+        data: payload,
+      );
+      return GameResultResponse.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      final data = runtime.submitResult(
+        gameId: gameId,
+        myScore: myScore,
+        opponentScore: opponentScore,
+      );
+      return GameResultResponse.fromMap(data);
+    }
   }
 }

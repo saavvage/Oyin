@@ -10,18 +10,45 @@ import '../wallet/wallet_screen.dart';
 import 'cubit/_export.dart';
 import 'availability_screen.dart';
 import 'match_history_screen.dart';
+import '../search/match_result_screen.dart';
 import 'sport_preferences_screen.dart';
 import 'widgets/_export.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key, this.isActive = false});
+
+  final bool isActive;
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late final ProfileCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = ProfileCubit();
+  }
+
+  @override
+  void didUpdateWidget(covariant ProfileScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isActive && !oldWidget.isActive) {
+      _cubit.refreshProfile();
+    }
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ProfileCubit(),
-      child: const _ProfileView(),
-    );
+    return BlocProvider.value(value: _cubit, child: const _ProfileView());
   }
 }
 
@@ -69,7 +96,13 @@ class _ProfileView extends StatelessWidget {
                   16.vSpacing,
                   const WalletEntryButton(),
                   20.vSpacing,
-                  NextMatchCard(l10n: l10n, match: state.nextMatch),
+                  NextMatchCard(
+                    l10n: l10n,
+                    match: state.nextMatch,
+                    onOpenMatch: state.nextMatch == null
+                        ? null
+                        : () => _openNextMatchResult(context, state),
+                  ),
                   20.vSpacing,
                   ProfileSettingsList(
                     l10n: l10n,
@@ -195,6 +228,30 @@ class _ProfileView extends StatelessWidget {
       default:
         break;
     }
+  }
+
+  Future<void> _openNextMatchResult(
+    BuildContext context,
+    ProfileState state,
+  ) async {
+    final match = state.nextMatch;
+    if (match == null) return;
+
+    await Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute(
+        builder: (_) => MatchResultScreen(
+          gameId: match.gameId,
+          challengerName: state.name.trim().isNotEmpty
+              ? state.name.trim()
+              : AppLocalizations.of(context).you,
+          opponentName: match.opponentName,
+          opponentAvatarUrl: match.opponentAvatar,
+        ),
+      ),
+    );
+
+    if (!context.mounted) return;
+    await context.read<ProfileCubit>().refreshProfile();
   }
 }
 

@@ -1,5 +1,6 @@
 import 'api_client.dart';
 import 'api_endpoints.dart';
+import 'mock_demo_runtime.dart';
 
 class ChatThreadsResponse {
   const ChatThreadsResponse({
@@ -35,6 +36,8 @@ class ChatThreadDto {
     required this.statusKey,
     required this.timestamp,
     required this.isBlocked,
+    this.partnerUserId,
+    this.gameId,
     this.badgeCount,
     this.accent,
     this.highlight,
@@ -48,6 +51,8 @@ class ChatThreadDto {
   final String statusKey;
   final String timestamp;
   final bool isBlocked;
+  final String? partnerUserId;
+  final String? gameId;
   final int? badgeCount;
   final String? accent;
   final bool? highlight;
@@ -62,6 +67,8 @@ class ChatThreadDto {
       statusKey: (map['statusKey'] ?? '').toString(),
       timestamp: (map['timestamp'] ?? '').toString(),
       isBlocked: map['isBlocked'] == true,
+      partnerUserId: map['partnerUserId']?.toString(),
+      gameId: map['gameId']?.toString(),
       badgeCount: map['badgeCount'] is int ? map['badgeCount'] as int : null,
       accent: map['accent']?.toString(),
       highlight: map['highlight'] == true,
@@ -165,33 +172,74 @@ class ChatApi {
   }
 
   static Future<ChatThreadsResponse> getThreads() async {
-    final data = await ApiClient.instance.get(ApiEndpoints.chatsThreads);
-    return ChatThreadsResponse.fromMap((data as Map).cast<String, dynamic>());
+    final runtime = MockDemoRuntime.instance;
+    final local = runtime.chatThreads();
+    final localAction = _threadsFromRaw(local['actionRequired']);
+    final localUpcoming = _threadsFromRaw(local['upcoming']);
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.chatsThreads);
+      final remote = ChatThreadsResponse.fromMap(
+        (data as Map).cast<String, dynamic>(),
+      );
+
+      return ChatThreadsResponse(
+        actionRequired: _mergeThreads(remote.actionRequired, localAction),
+        upcoming: _mergeThreads(remote.upcoming, localUpcoming),
+      );
+    } catch (_) {
+      return ChatThreadsResponse(
+        actionRequired: localAction,
+        upcoming: localUpcoming,
+      );
+    }
   }
 
   static Future<List<ChatThreadDto>> getBlockedThreads() async {
-    final data = await ApiClient.instance.get(ApiEndpoints.chatsBlocked);
-    if (data is! List) return const [];
-    return data
-        .whereType<Map>()
-        .map((item) => ChatThreadDto.fromMap(item.cast<String, dynamic>()))
-        .toList();
+    final local = _threadsFromRaw(MockDemoRuntime.instance.blockedThreads());
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.chatsBlocked);
+      if (data is! List) return local;
+      final remote = data
+          .whereType<Map>()
+          .map((item) => ChatThreadDto.fromMap(item.cast<String, dynamic>()))
+          .toList();
+      return _mergeThreads(remote, local);
+    } catch (_) {
+      return local;
+    }
   }
 
   static Future<List<ChatMessageDto>> getMessages(
     String threadId, {
     DateTime? before,
   }) async {
-    final data = await ApiClient.instance.get(
-      ApiEndpoints.chatsMessages(threadId),
-      query: {if (before != null) 'before': before.toIso8601String()},
+    final runtime = MockDemoRuntime.instance;
+    final local = _messagesFromRaw(
+      runtime.threadMessages(threadId, before: before),
     );
 
-    if (data is! List) return const [];
-    return data
-        .whereType<Map>()
-        .map((item) => ChatMessageDto.fromMap(item.cast<String, dynamic>()))
-        .toList();
+    if (runtime.isLocalThread(threadId)) {
+      return local;
+    }
+
+    try {
+      final data = await ApiClient.instance.get(
+        ApiEndpoints.chatsMessages(threadId),
+        query: {if (before != null) 'before': before.toIso8601String()},
+      );
+
+      if (data is! List) return local;
+      final remote = data
+          .whereType<Map>()
+          .map((item) => ChatMessageDto.fromMap(item.cast<String, dynamic>()))
+          .toList();
+      if (remote.isNotEmpty) return remote;
+      return local;
+    } catch (_) {
+      return local;
+    }
   }
 
   static Future<ChatMessageDto> sendMessage(
@@ -199,34 +247,123 @@ class ChatApi {
     String? text,
     List<ChatAttachmentInput> attachments = const [],
   }) async {
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.chatsMessages(threadId),
-      data: {
-        if (text != null) 'text': text,
-        if (attachments.isNotEmpty)
-          'attachments': attachments.map((e) => e.toMap()).toList(),
-      },
-    );
+    final runtime = MockDemoRuntime.instance;
+    final payload = {
+      if (text != null) 'text': text,
+      if (attachments.isNotEmpty)
+        'attachments': attachments.map((e) => e.toMap()).toList(),
+    };
 
-    return ChatMessageDto.fromMap((data as Map).cast<String, dynamic>());
+    if (runtime.isLocalThread(threadId)) {
+      final local = runtime.sendMessage(
+        threadId,
+        text: text,
+        attachments: attachments.map((e) => e.toMap()).toList(),
+      );
+      return ChatMessageDto.fromMap(local);
+    }
+
+    try {
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.chatsMessages(threadId),
+        data: payload,
+      );
+
+      return ChatMessageDto.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      final local = runtime.sendMessage(
+        threadId,
+        text: text,
+        attachments: attachments.map((e) => e.toMap()).toList(),
+      );
+      return ChatMessageDto.fromMap(local);
+    }
   }
 
   static Future<void> deleteThread(String threadId) async {
-    await ApiClient.instance.delete(ApiEndpoints.chatsDelete(threadId));
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.isLocalThread(threadId)) {
+      runtime.deleteThread(threadId);
+      return;
+    }
+
+    try {
+      await ApiClient.instance.delete(ApiEndpoints.chatsDelete(threadId));
+    } catch (_) {
+      runtime.deleteThread(threadId);
+    }
   }
 
   static Future<void> blockThread(String threadId) async {
-    await ApiClient.instance.post(ApiEndpoints.chatsBlock(threadId));
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.isLocalThread(threadId)) {
+      runtime.setThreadBlocked(threadId, true);
+      return;
+    }
+
+    try {
+      await ApiClient.instance.post(ApiEndpoints.chatsBlock(threadId));
+    } catch (_) {
+      runtime.setThreadBlocked(threadId, true);
+    }
   }
 
   static Future<void> unblockThread(String threadId) async {
-    await ApiClient.instance.post(ApiEndpoints.chatsUnblock(threadId));
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.isLocalThread(threadId)) {
+      runtime.setThreadBlocked(threadId, false);
+      return;
+    }
+
+    try {
+      await ApiClient.instance.post(ApiEndpoints.chatsUnblock(threadId));
+    } catch (_) {
+      runtime.setThreadBlocked(threadId, false);
+    }
   }
 
   static Future<void> reportThread(String threadId, {String? reason}) async {
-    await ApiClient.instance.post(
-      ApiEndpoints.chatsReport(threadId),
-      data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
-    );
+    if (MockDemoRuntime.instance.isLocalThread(threadId)) {
+      return;
+    }
+
+    try {
+      await ApiClient.instance.post(
+        ApiEndpoints.chatsReport(threadId),
+        data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+      );
+    } catch (_) {
+      // ignore for mock-only chats
+    }
+  }
+
+  static List<ChatThreadDto> _threadsFromRaw(dynamic raw) {
+    if (raw is! List) return const [];
+    return raw
+        .whereType<Map>()
+        .map((item) => ChatThreadDto.fromMap(item.cast<String, dynamic>()))
+        .toList();
+  }
+
+  static List<ChatThreadDto> _mergeThreads(
+    List<ChatThreadDto> remote,
+    List<ChatThreadDto> local,
+  ) {
+    final byId = <String, ChatThreadDto>{};
+    for (final item in remote) {
+      byId[item.id] = item;
+    }
+    for (final item in local) {
+      byId[item.id] = item;
+    }
+    return byId.values.toList();
+  }
+
+  static List<ChatMessageDto> _messagesFromRaw(dynamic raw) {
+    if (raw is! List) return const [];
+    return raw
+        .whereType<Map>()
+        .map((item) => ChatMessageDto.fromMap(item.cast<String, dynamic>()))
+        .toList();
   }
 }

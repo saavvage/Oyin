@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import 'api_client.dart';
 import 'api_endpoints.dart';
+import 'mock_demo_runtime.dart';
 
 class DisputeEvidenceInput {
   const DisputeEvidenceInput({
@@ -419,82 +420,194 @@ class DisputesApi {
     String? defendantStatement,
     List<DisputeEvidenceInput> evidenceItems = const [],
   }) async {
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.disputesCreate,
-      data: {
-        'gameId': gameId,
-        'comment': comment,
-        if (evidenceUrl != null && evidenceUrl.isNotEmpty)
-          'evidenceUrl': evidenceUrl,
-        if (subject != null && subject.isNotEmpty) 'subject': subject,
-        if (sport != null && sport.isNotEmpty) 'sport': sport,
-        if (locationLabel != null && locationLabel.isNotEmpty)
-          'locationLabel': locationLabel,
-        if (plaintiffStatement != null && plaintiffStatement.isNotEmpty)
-          'plaintiffStatement': plaintiffStatement,
-        if (defendantStatement != null && defendantStatement.isNotEmpty)
-          'defendantStatement': defendantStatement,
-        if (evidenceItems.isNotEmpty)
-          'evidenceItems': evidenceItems.map((e) => e.toMap()).toList(),
-      },
-    );
+    final payload = {
+      'gameId': gameId,
+      'comment': comment,
+      if (evidenceUrl != null && evidenceUrl.isNotEmpty)
+        'evidenceUrl': evidenceUrl,
+      if (subject != null && subject.isNotEmpty) 'subject': subject,
+      if (sport != null && sport.isNotEmpty) 'sport': sport,
+      if (locationLabel != null && locationLabel.isNotEmpty)
+        'locationLabel': locationLabel,
+      if (plaintiffStatement != null && plaintiffStatement.isNotEmpty)
+        'plaintiffStatement': plaintiffStatement,
+      if (defendantStatement != null && defendantStatement.isNotEmpty)
+        'defendantStatement': defendantStatement,
+      if (evidenceItems.isNotEmpty)
+        'evidenceItems': evidenceItems.map((e) => e.toMap()).toList(),
+    };
 
-    return CreateDisputeResponse.fromMap((data as Map).cast<String, dynamic>());
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.hasLocalGame(gameId) || gameId.startsWith('demo-game-')) {
+      final local = runtime.createDispute(
+        gameId: gameId,
+        comment: comment,
+        evidenceUrl: evidenceUrl,
+        subject: subject,
+        sport: sport,
+        locationLabel: locationLabel,
+        plaintiffStatement: plaintiffStatement,
+        defendantStatement: defendantStatement,
+        evidenceItems: evidenceItems.map((e) => e.toMap()).toList(),
+      );
+      return CreateDisputeResponse.fromMap(local);
+    }
+
+    try {
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.disputesCreate,
+        data: payload,
+      );
+      return CreateDisputeResponse.fromMap(
+        (data as Map).cast<String, dynamic>(),
+      );
+    } catch (_) {
+      final local = runtime.createDispute(
+        gameId: gameId,
+        comment: comment,
+        evidenceUrl: evidenceUrl,
+        subject: subject,
+        sport: sport,
+        locationLabel: locationLabel,
+        plaintiffStatement: plaintiffStatement,
+        defendantStatement: defendantStatement,
+        evidenceItems: evidenceItems.map((e) => e.toMap()).toList(),
+      );
+      return CreateDisputeResponse.fromMap(local);
+    }
   }
 
   static Future<DisputeEvidenceUploadDto?> uploadEvidenceFile(File file) async {
-    final formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(
-        file.path,
-        filename: file.path.split(Platform.pathSeparator).last,
-      ),
-    });
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(
+          file.path,
+          filename: file.path.split(Platform.pathSeparator).last,
+        ),
+      });
 
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.disputesEvidenceUpload,
-      data: formData,
-    );
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.disputesEvidenceUpload,
+        data: formData,
+      );
 
-    if (data is! Map) return null;
-    return DisputeEvidenceUploadDto.fromMap((data).cast<String, dynamic>());
+      if (data is! Map) return null;
+      return DisputeEvidenceUploadDto.fromMap((data).cast<String, dynamic>());
+    } catch (_) {
+      final data = MockDemoRuntime.instance.mockEvidenceUpload(file.path);
+      return DisputeEvidenceUploadDto.fromMap(data);
+    }
   }
 
   static Future<List<DisputeDetailsDto>> getJuryDuty() async {
-    final data = await ApiClient.instance.get(ApiEndpoints.disputesJuryDuty);
-    if (data is! List) return const [];
-
-    return data
-        .whereType<Map>()
-        .map((item) => DisputeDetailsDto.fromMap(item.cast<String, dynamic>()))
+    final me = MockDemoRuntime.instance.currentUser();
+    final userId = (me['id'] ?? '').toString();
+    final local = MockDemoRuntime.instance
+        .juryDuty(userId)
+        .map(DisputeDetailsDto.fromMap)
         .toList();
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.disputesJuryDuty);
+      if (data is! List) return local;
+
+      final remote = data
+          .whereType<Map>()
+          .map(
+            (item) => DisputeDetailsDto.fromMap(item.cast<String, dynamic>()),
+          )
+          .toList();
+
+      return _mergeDisputes(remote, local);
+    } catch (_) {
+      return local;
+    }
   }
 
   static Future<List<DisputeDetailsDto>> getMyDisputes() async {
-    final data = await ApiClient.instance.get(ApiEndpoints.disputesMy);
-    if (data is! List) return const [];
-
-    return data
-        .whereType<Map>()
-        .map((item) => DisputeDetailsDto.fromMap(item.cast<String, dynamic>()))
+    final me = MockDemoRuntime.instance.currentUser();
+    final userId = (me['id'] ?? '').toString();
+    final local = MockDemoRuntime.instance
+        .myDisputes(userId)
+        .map(DisputeDetailsDto.fromMap)
         .toList();
+
+    try {
+      final data = await ApiClient.instance.get(ApiEndpoints.disputesMy);
+      if (data is! List) return local;
+
+      final remote = data
+          .whereType<Map>()
+          .map(
+            (item) => DisputeDetailsDto.fromMap(item.cast<String, dynamic>()),
+          )
+          .toList();
+
+      return _mergeDisputes(remote, local);
+    } catch (_) {
+      return local;
+    }
   }
 
   static Future<DisputeDetailsDto> getById(String disputeId) async {
-    final data = await ApiClient.instance.get(
-      ApiEndpoints.disputesById(disputeId),
-    );
-    return DisputeDetailsDto.fromMap((data as Map).cast<String, dynamic>());
+    final runtime = MockDemoRuntime.instance;
+    final me = runtime.currentUser();
+    final userId = (me['id'] ?? '').toString();
+
+    if (runtime.hasLocalDispute(disputeId)) {
+      return DisputeDetailsDto.fromMap(runtime.disputeById(disputeId, userId));
+    }
+
+    try {
+      final data = await ApiClient.instance.get(
+        ApiEndpoints.disputesById(disputeId),
+      );
+      return DisputeDetailsDto.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      return DisputeDetailsDto.fromMap(runtime.disputeById(disputeId, userId));
+    }
   }
 
   static Future<DisputeVoteResponse> vote({
     required String disputeId,
     required String winner,
   }) async {
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.disputesVote(disputeId),
-      data: {'winner': winner},
-    );
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.hasLocalDispute(disputeId)) {
+      final data = runtime.vote(disputeId: disputeId, winner: winner);
+      return DisputeVoteResponse.fromMap(data);
+    }
 
-    return DisputeVoteResponse.fromMap((data as Map).cast<String, dynamic>());
+    try {
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.disputesVote(disputeId),
+        data: {'winner': winner},
+      );
+
+      return DisputeVoteResponse.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      final data = runtime.vote(disputeId: disputeId, winner: winner);
+      return DisputeVoteResponse.fromMap(data);
+    }
+  }
+
+  static List<DisputeDetailsDto> _mergeDisputes(
+    List<DisputeDetailsDto> remote,
+    List<DisputeDetailsDto> local,
+  ) {
+    final byId = <String, DisputeDetailsDto>{};
+    for (final item in remote) {
+      byId[item.id] = item;
+    }
+    for (final item in local) {
+      byId[item.id] = item;
+    }
+
+    final merged = byId.values.toList()
+      ..sort(
+        (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0))
+            .compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)),
+      );
+    return merged;
   }
 }

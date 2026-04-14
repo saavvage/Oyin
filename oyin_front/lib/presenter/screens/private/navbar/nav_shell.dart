@@ -21,13 +21,6 @@ class _NavShellState extends State<NavShell> with RouteAware {
   bool _showNavBar = true;
   PageRoute<dynamic>? _route;
 
-  late final pages = [
-    const MatchScreen(),
-    const ArenaScreen(),
-    const ChatScreen(),
-    const ProfileScreen(),
-  ];
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -93,7 +86,15 @@ class _NavShellState extends State<NavShell> with RouteAware {
     ];
 
     return Scaffold(
-      body: IndexedStack(index: _index, children: pages),
+      body: IndexedStack(
+        index: _index,
+        children: [
+          const MatchScreen(),
+          ArenaScreen(isActive: _index == 1),
+          ChatScreen(isActive: _index == 2),
+          ProfileScreen(isActive: _index == 3),
+        ],
+      ),
       bottomNavigationBar: _showNavBar
           ? AdaptiveNavBar(
               currentIndex: _index,

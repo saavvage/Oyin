@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../infrastructure/export.dart';
+import '../../../../../infrastructure/services/network/mock_demo_runtime.dart';
 import '../contract_draft_store.dart';
 import 'match_result_state.dart';
 
@@ -9,12 +10,14 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     required String gameId,
     required String challengerName,
     required String opponentName,
+    bool readOnly = false,
     String opponentAvatarUrl = '',
   }) : super(
          MatchResultState.initial(
            gameId: gameId,
            challengerName: challengerName,
            opponentName: opponentName,
+           readOnly: readOnly,
            opponentAvatarUrl: opponentAvatarUrl,
          ),
        ) {
@@ -25,34 +28,22 @@ class MatchResultCubit extends Cubit<MatchResultState> {
 
   Future<void> loadGame() async {
     if (_isDemoGame) {
-      final draft = ContractDraftStore.get(state.gameId);
-      final hasConfirmedContract =
-          draft?.confirmed == true && draft?.dateTime != null;
-      final contract = hasConfirmedContract
-          ? MatchResultContract(
-              dateTime: draft!.dateTime!,
-              location: draft.location,
-              reminder: draft.reminder,
-            )
-          : null;
-
-      final status = hasConfirmedContract ? 'SCHEDULED' : 'PENDING';
-      emit(
-        state.copyWith(
-          isLoading: false,
-          clearError: true,
-          statusLabel: status,
-          title: _statusTitle(status, hasContract: hasConfirmedContract),
-          dateLabel: contract != null
-              ? _formatContractDate(contract.dateTime)
-              : _statusDateLabel(status),
-          locationLabel: contract != null && contract.location.trim().isNotEmpty
-              ? contract.location
-              : 'Court TBD',
-          contract: contract,
-        ),
+      MockDemoRuntime.instance.ensureDemoGame(
+        gameId: state.gameId,
+        challengerName: state.leftPlayer.name,
+        opponentName: state.rightPlayer.name,
+        opponentAvatarUrl: state.rightPlayer.avatarUrl,
       );
-      return;
+
+      final draft = ContractDraftStore.get(state.gameId);
+      if (draft?.confirmed == true && draft?.dateTime != null) {
+        await GamesApi.proposeContract(
+          gameId: state.gameId,
+          dateTime: draft!.dateTime!,
+          location: draft.location,
+          reminder: draft.reminder,
+        );
+      }
     }
 
     emit(state.copyWith(isLoading: true, clearError: true));
@@ -95,27 +86,6 @@ class MatchResultCubit extends Cubit<MatchResultState> {
     final myScore = state.isCurrentUserPlayer1 ? left : right;
     final opponentScore = state.isCurrentUserPlayer1 ? right : left;
 
-    if (_isDemoGame) {
-      emit(state.copyWith(isSubmitting: true, clearError: true));
-      await Future.delayed(const Duration(milliseconds: 500));
-      final status = myScore == opponentScore ? 'PLAYED' : 'PLAYED';
-      emit(
-        state.copyWith(
-          isSubmitting: false,
-          statusLabel: status,
-          title: 'Result Confirmed',
-          dateLabel: 'Completed',
-        ),
-      );
-      return GameResultResponse(
-        success: true,
-        gameId: state.gameId,
-        status: status,
-        scoresMatch: true,
-        game: null,
-      );
-    }
-
     emit(state.copyWith(isSubmitting: true, clearError: true));
 
     try {
@@ -151,20 +121,6 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   }) async {
     if (state.isCreatingDispute) {
       return state.disputeId;
-    }
-
-    if (_isDemoGame) {
-      emit(state.copyWith(isCreatingDispute: true, clearError: true));
-      await Future.delayed(const Duration(milliseconds: 400));
-      final demoDisputeId = 'seed-dispute-${state.gameId}';
-      emit(
-        state.copyWith(
-          isCreatingDispute: false,
-          disputeId: demoDisputeId,
-          statusLabel: 'DISPUTED',
-        ),
-      );
-      return demoDisputeId;
     }
 
     emit(state.copyWith(isCreatingDispute: true, clearError: true));
@@ -211,8 +167,6 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   }
 
   Future<String?> _resolveMyDisputeId() async {
-    if (_isDemoGame) return state.disputeId;
-
     try {
       final disputes = await DisputesApi.getMyDisputes();
       final target = disputes.cast<DisputeDetailsDto?>().firstWhere(
@@ -232,7 +186,10 @@ class MatchResultCubit extends Cubit<MatchResultState> {
   }
 
   void _applyGame(GameDetailsDto game, {required String currentUserId}) {
-    final isPlayer1 = game.player1.id == currentUserId;
+    final isPlayer1 = _resolveCurrentUserAsPlayer1(
+      game: game,
+      currentUserId: currentUserId,
+    );
     final scorePair = _pickScorePair(game);
     final contract = _mapContract(game.contractData);
 
@@ -262,6 +219,44 @@ class MatchResultCubit extends Cubit<MatchResultState> {
         isLoading: false,
       ),
     );
+  }
+
+  bool _resolveCurrentUserAsPlayer1({
+    required GameDetailsDto game,
+    required String currentUserId,
+  }) {
+    // Demo/mock games are generated with current user as player1.
+    if (_isDemoGame) {
+      return true;
+    }
+
+    final meId = currentUserId.trim();
+    final player1Id = game.player1.id.trim();
+    final player2Id = game.player2.id.trim();
+
+    if (meId.isNotEmpty) {
+      if (player1Id == meId) return true;
+      if (player2Id == meId) return false;
+    }
+
+    final runtimeUserId = (MockDemoRuntime.instance.currentUser()['id'] ?? '')
+        .toString()
+        .trim();
+    if (runtimeUserId.isNotEmpty) {
+      if (player1Id == runtimeUserId) return true;
+      if (player2Id == runtimeUserId) return false;
+    }
+
+    // Name fallback for partially mocked records.
+    final expectedMeName = state.leftPlayer.name.trim().toLowerCase();
+    if (expectedMeName.isNotEmpty) {
+      if (game.player1.name.trim().toLowerCase() == expectedMeName) return true;
+      if (game.player2.name.trim().toLowerCase() == expectedMeName) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   (int, int)? _pickScorePair(GameDetailsDto game) {

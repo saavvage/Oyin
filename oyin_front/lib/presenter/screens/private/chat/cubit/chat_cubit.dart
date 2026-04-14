@@ -4,6 +4,7 @@ import 'chat_state.dart';
 import '../../../../../app/localization/locale_keys.dart';
 import '../../../../../infrastructure/services/network/chat_api.dart';
 import '../../../../../infrastructure/services/network/disputes_api.dart';
+import '../../../../../infrastructure/services/network/users_api.dart';
 
 class ChatCubit extends Cubit<ChatState> {
   ChatCubit()
@@ -39,10 +40,63 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> loadDisputes() async {
     emit(state.copyWith(isLoadingDisputes: true));
     try {
-      final disputes = await DisputesApi.getMyDisputes();
-      emit(state.copyWith(disputes: disputes, isLoadingDisputes: false));
+      final values = await Future.wait<dynamic>([
+        UsersApi.getMe(),
+        DisputesApi.getMyDisputes(),
+        DisputesApi.getJuryDuty(),
+      ]);
+
+      final me = values[0] as Map<String, dynamic>;
+      final myId = (me['id'] ?? '').toString();
+      final myDisputes = values[1] as List<DisputeDetailsDto>;
+      final juryDisputes = values[2] as List<DisputeDetailsDto>;
+
+      final mineById = <String, DisputeDetailsDto>{};
+      final communityById = <String, DisputeDetailsDto>{};
+
+      for (final item in myDisputes) {
+        mineById[item.id] = item;
+      }
+
+      for (final item in juryDisputes) {
+        final isMine =
+            item.plaintiff.id == myId ||
+            item.defendant.id == myId ||
+            item.player1.id == myId ||
+            item.player2.id == myId;
+        if (isMine) {
+          mineById[item.id] = item;
+        } else {
+          communityById[item.id] = item;
+        }
+      }
+
+      final mine = mineById.values.toList()
+        ..sort(
+          (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0))
+              .compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)),
+        );
+      final community = communityById.values.toList()
+        ..sort(
+          (a, b) => (b.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0))
+              .compareTo(a.createdAt ?? DateTime.fromMillisecondsSinceEpoch(0)),
+        );
+
+      emit(
+        state.copyWith(
+          myDisputes: mine,
+          communityDisputes: community,
+          isLoadingDisputes: false,
+        ),
+      );
     } catch (_) {
-      emit(state.copyWith(disputes: const [], isLoadingDisputes: false));
+      emit(
+        state.copyWith(
+          myDisputes: const [],
+          communityDisputes: const [],
+          isLoadingDisputes: false,
+        ),
+      );
     }
   }
 

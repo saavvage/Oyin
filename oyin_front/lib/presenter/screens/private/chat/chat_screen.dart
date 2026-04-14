@@ -9,15 +9,44 @@ import '../search/dispute_screen.dart';
 import 'cubit/_export.dart';
 import 'widgets/_export.dart';
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key, this.isActive = false});
+
+  final bool isActive;
+
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  late final ChatCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = ChatCubit()..loadThreads();
+  }
+
+  @override
+  void didUpdateWidget(covariant ChatScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isActive && !oldWidget.isActive) {
+      _cubit.loadThreads();
+      if (_cubit.state.activeTab == 1) {
+        _cubit.loadDisputes();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ChatCubit()..loadThreads(),
-      child: const _ChatView(),
-    );
+    return BlocProvider.value(value: _cubit, child: const _ChatView());
   }
 }
 
@@ -107,7 +136,8 @@ class _ChatView extends StatelessWidget {
                     ),
                   ] else ...[
                     _DisputesTab(
-                      disputes: state.disputes,
+                      myDisputes: state.myDisputes,
+                      communityDisputes: state.communityDisputes,
                       isLoading: state.isLoadingDisputes,
                       noDisputesLabel: l10n.noDisputes,
                     ),
@@ -124,12 +154,14 @@ class _ChatView extends StatelessWidget {
 
 class _DisputesTab extends StatelessWidget {
   const _DisputesTab({
-    required this.disputes,
+    required this.myDisputes,
+    required this.communityDisputes,
     required this.isLoading,
     required this.noDisputesLabel,
   });
 
-  final List<DisputeDetailsDto> disputes;
+  final List<DisputeDetailsDto> myDisputes;
+  final List<DisputeDetailsDto> communityDisputes;
   final bool isLoading;
   final String noDisputesLabel;
 
@@ -144,7 +176,7 @@ class _DisputesTab extends StatelessWidget {
       );
     }
 
-    if (disputes.isEmpty) {
+    if (myDisputes.isEmpty && communityDisputes.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 40),
         child: Center(
@@ -154,10 +186,9 @@ class _DisputesTab extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 noDisputesLabel,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: palette.muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: palette.muted),
               ),
             ],
           ),
@@ -166,7 +197,34 @@ class _DisputesTab extends StatelessWidget {
     }
 
     return Column(
-      children: disputes.map((d) => _DisputeCard(dispute: d)).toList(),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (myDisputes.isNotEmpty) ...[
+          Text(
+            AppLocalizations.of(context).myDisputes.toUpperCase(),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+              color: palette.muted,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...myDisputes.map((d) => _DisputeCard(dispute: d)),
+          const SizedBox(height: 8),
+        ],
+        if (communityDisputes.isNotEmpty) ...[
+          Text(
+            AppLocalizations.of(context).communityDisputes.toUpperCase(),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+              color: palette.muted,
+            ),
+          ),
+          const SizedBox(height: 10),
+          ...communityDisputes.map((d) => _DisputeCard(dispute: d)),
+        ],
+      ],
     );
   }
 }
@@ -194,6 +252,7 @@ class _DisputeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
     final statusColor = _statusColor(context);
 
     return GestureDetector(
@@ -241,10 +300,9 @@ class _DisputeCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '${dispute.sport} • ${dispute.locationLabel}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: palette.muted),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: palette.muted),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -259,7 +317,7 @@ class _DisputeCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                dispute.status,
+                _statusText(l10n),
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: statusColor,
                   fontWeight: FontWeight.w700,
@@ -270,5 +328,19 @@ class _DisputeCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _statusText(AppLocalizations l10n) {
+    switch (dispute.status) {
+      case 'OPEN':
+      case 'VOTING':
+        return l10n.statusDisputeOpen;
+      case 'RESOLVED':
+        return l10n.statusConfirmed;
+      case 'CANCELLED':
+        return l10n.statusPendingResult;
+      default:
+        return l10n.pending;
+    }
   }
 }

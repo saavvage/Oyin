@@ -303,6 +303,8 @@ class AppLocalizations {
   String get tabArchived => _string(LocaleKeys.tabArchived);
   String get tabDisputes => _string(LocaleKeys.tabDisputes);
   String get noDisputes => _string(LocaleKeys.noDisputes);
+  String get myDisputes => _string(LocaleKeys.myDisputes);
+  String get communityDisputes => _string(LocaleKeys.communityDisputes);
   String get actionRequired => _string(LocaleKeys.actionRequired);
   String get upcoming => _string(LocaleKeys.upcoming);
   String get resolveDispute => _string(LocaleKeys.resolveDispute);
@@ -337,6 +339,7 @@ class AppLocalizations {
       _string(LocaleKeys.arenaRating).replaceFirst('{value}', value);
   String get arenaAllPlayers => _string(LocaleKeys.arenaAllPlayers);
   String get arenaFairFight => _string(LocaleKeys.arenaFairFight);
+  String get arenaMatching => _string(LocaleKeys.arenaMatching);
   String get arenaInRange => _string(LocaleKeys.arenaInRange);
   String get arenaChallenge => _string(LocaleKeys.arenaChallenge);
   String get arenaPending => _string(LocaleKeys.arenaPending);
@@ -740,7 +743,12 @@ class AppLocalizations {
   String get returnToDashboard => _string(LocaleKeys.returnToDashboard);
   String get ok => _string(LocaleKeys.ok);
   String get pickScore => _string(LocaleKeys.pickScore);
+  String get statusWin => _string(LocaleKeys.statusWin);
+  String get statusLoss => _string(LocaleKeys.statusLoss);
   String get draw => _string(LocaleKeys.draw);
+  String get statusPendingResult => _string(LocaleKeys.statusPendingResult);
+  String get statusConflict => _string(LocaleKeys.statusConflict);
+  String get statusDispute => _string(LocaleKeys.statusDispute);
   String get coinsLabel => _string(LocaleKeys.coinsLabel);
 
   // Form labels
@@ -1042,6 +1050,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.tabArchived: 'Archived',
     LocaleKeys.tabDisputes: 'Disputes',
     LocaleKeys.noDisputes: 'No disputes yet',
+    LocaleKeys.myDisputes: 'My disputes',
+    LocaleKeys.communityDisputes: 'Community disputes',
     LocaleKeys.actionRequired: 'Action Required',
     LocaleKeys.upcoming: 'Upcoming',
     LocaleKeys.resolveDispute: 'Resolve Dispute',
@@ -1074,6 +1084,7 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.arenaRating: 'Rating: {value}',
     LocaleKeys.arenaAllPlayers: 'All Players',
     LocaleKeys.arenaFairFight: 'Fair Fight (+/- 200)',
+    LocaleKeys.arenaMatching: 'Matching',
     LocaleKeys.arenaInRange: 'In your range',
     LocaleKeys.arenaChallenge: 'Challenge',
     LocaleKeys.arenaPending: 'Pending',
@@ -1439,7 +1450,12 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.returnToDashboard: 'Return to dashboard',
     LocaleKeys.ok: 'OK',
     LocaleKeys.pickScore: 'Pick score',
+    LocaleKeys.statusWin: 'WIN',
+    LocaleKeys.statusLoss: 'LOSS',
     LocaleKeys.draw: 'Draw',
+    LocaleKeys.statusPendingResult: 'PENDING',
+    LocaleKeys.statusConflict: 'Conflict',
+    LocaleKeys.statusDispute: 'Dispute',
     LocaleKeys.coinsLabel: 'coins',
     // Form labels
     LocaleKeys.disputeCommentLabel: 'Dispute comment *',
@@ -1682,6 +1698,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.tabArchived: 'Архив',
     LocaleKeys.tabDisputes: 'Споры',
     LocaleKeys.noDisputes: 'Споров пока нет',
+    LocaleKeys.myDisputes: 'Мои споры',
+    LocaleKeys.communityDisputes: 'Споры других',
     LocaleKeys.actionRequired: 'Требуют действий',
     LocaleKeys.upcoming: 'Скоро',
     LocaleKeys.resolveDispute: 'Решить спор',
@@ -1715,6 +1733,7 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.arenaRating: 'Рейтинг: {value}',
     LocaleKeys.arenaAllPlayers: 'Все игроки',
     LocaleKeys.arenaFairFight: 'Честный бой (+/- 200)',
+    LocaleKeys.arenaMatching: 'Матчинг',
     LocaleKeys.arenaInRange: 'В твоём диапазоне',
     LocaleKeys.arenaChallenge: 'Бросить вызов',
     LocaleKeys.arenaPending: 'Ожидание',
@@ -2081,7 +2100,12 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.returnToDashboard: 'Вернуться на главную',
     LocaleKeys.ok: 'OK',
     LocaleKeys.pickScore: 'Выберите счёт',
+    LocaleKeys.statusWin: 'ПОБЕДА',
+    LocaleKeys.statusLoss: 'ПОРАЖЕНИЕ',
     LocaleKeys.draw: 'Ничья',
+    LocaleKeys.statusPendingResult: 'В ОЖИДАНИИ',
+    LocaleKeys.statusConflict: 'Конфликт',
+    LocaleKeys.statusDispute: 'Спор',
     LocaleKeys.coinsLabel: 'монет',
     // Form labels
     LocaleKeys.disputeCommentLabel: 'Комментарий к спору *',
@@ -2323,6 +2347,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.tabArchived: 'Архив',
     LocaleKeys.tabDisputes: 'Даулар',
     LocaleKeys.noDisputes: 'Даулар әлі жоқ',
+    LocaleKeys.myDisputes: 'Менің дауларым',
+    LocaleKeys.communityDisputes: 'Басқалардың даулары',
     LocaleKeys.actionRequired: 'Әрекет қажет',
     LocaleKeys.upcoming: 'Жақында',
     LocaleKeys.resolveDispute: 'Дауды шешу',
@@ -2355,6 +2381,7 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.arenaRating: 'Рейтинг: {value}',
     LocaleKeys.arenaAllPlayers: 'Барлық ойыншылар',
     LocaleKeys.arenaFairFight: 'Әділ жекпе-жек (+/- 200)',
+    LocaleKeys.arenaMatching: 'Матчинг',
     LocaleKeys.arenaInRange: 'Сенің диапазонда',
     LocaleKeys.arenaChallenge: 'Шақыру',
     LocaleKeys.arenaPending: 'Күту',
@@ -2719,7 +2746,12 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.returnToDashboard: 'Басты бетке оралу',
     LocaleKeys.ok: 'OK',
     LocaleKeys.pickScore: 'Есепті таңдаңыз',
+    LocaleKeys.statusWin: 'ЖЕҢІС',
+    LocaleKeys.statusLoss: 'ЖЕҢІЛІС',
     LocaleKeys.draw: 'Тең',
+    LocaleKeys.statusPendingResult: 'КҮТІЛУДЕ',
+    LocaleKeys.statusConflict: 'Қақтығыс',
+    LocaleKeys.statusDispute: 'Дау',
     LocaleKeys.coinsLabel: 'монета',
     // Form labels
     LocaleKeys.disputeCommentLabel: 'Дауға пікір *',

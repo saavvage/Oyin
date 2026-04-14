@@ -31,28 +31,33 @@ class ChatState {
     required this.activeTab,
     required this.actionRequired,
     required this.upcoming,
-    this.disputes = const [],
+    this.myDisputes = const [],
+    this.communityDisputes = const [],
     this.isLoadingDisputes = false,
   });
 
   final int activeTab; // 0 active, 1 disputes
   final List<ChatCard> actionRequired;
   final List<ChatCard> upcoming;
-  final List<DisputeDetailsDto> disputes;
+  final List<DisputeDetailsDto> myDisputes;
+  final List<DisputeDetailsDto> communityDisputes;
   final bool isLoadingDisputes;
+
+  List<DisputeDetailsDto> get disputes => [...myDisputes, ...communityDisputes];
 
   ChatState copyWith({
     int? activeTab,
     List<ChatCard>? actionRequired,
     List<ChatCard>? upcoming,
-    List<DisputeDetailsDto>? disputes,
+    List<DisputeDetailsDto>? myDisputes,
+    List<DisputeDetailsDto>? communityDisputes,
     bool? isLoadingDisputes,
-  }) =>
-      ChatState(
-        activeTab: activeTab ?? this.activeTab,
-        actionRequired: actionRequired ?? this.actionRequired,
-        upcoming: upcoming ?? this.upcoming,
-        disputes: disputes ?? this.disputes,
-        isLoadingDisputes: isLoadingDisputes ?? this.isLoadingDisputes,
-      );
+  }) => ChatState(
+    activeTab: activeTab ?? this.activeTab,
+    actionRequired: actionRequired ?? this.actionRequired,
+    upcoming: upcoming ?? this.upcoming,
+    myDisputes: myDisputes ?? this.myDisputes,
+    communityDisputes: communityDisputes ?? this.communityDisputes,
+    isLoadingDisputes: isLoadingDisputes ?? this.isLoadingDisputes,
+  );
 }

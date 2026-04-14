@@ -17,6 +17,7 @@ class MatchCubit extends Cubit<MatchState> {
           isFinished: false,
           filters: MatchFilters.defaults,
           currentUserAvatarUrl: null,
+          mutualLikeMatch: null,
         ),
       ) {
     _loadInitial();
@@ -126,8 +127,14 @@ class MatchCubit extends Cubit<MatchState> {
   }
 
   Future<void> _swipe(String targetId, String action) async {
+    final current = state.currentProfile;
+    SwipeResultDto? swipeResult;
+
     try {
-      await MatchmakingApi.swipe(targetId: targetId, action: action);
+      swipeResult = await MatchmakingApi.swipe(
+        targetId: targetId,
+        action: action,
+      );
     } catch (_) {
       if (!_useTestCards) {
         return;
@@ -135,9 +142,34 @@ class MatchCubit extends Cubit<MatchState> {
     }
 
     if (action == 'DISLIKE') {
-      final current = state.currentProfile;
       if (current != null) {
         _dislikedProfiles.add(current);
+      }
+    }
+
+    MutualLikeMatch? mutualLikeMatch;
+    if (action == 'LIKE' &&
+        current != null &&
+        swipeResult != null &&
+        swipeResult.isMatch) {
+      var threadId = swipeResult.threadId;
+      if (threadId == null || threadId.isEmpty) {
+        try {
+          final thread = await ChatApi.createOrGetDirectThread(current.id);
+          threadId = thread.id;
+        } catch (_) {
+          threadId = null;
+        }
+      }
+
+      if (threadId != null && threadId.isNotEmpty) {
+        mutualLikeMatch = MutualLikeMatch(
+          threadId: threadId,
+          partnerUserId: current.id,
+          partnerName: current.name,
+          partnerAvatarUrl: current.imageUrl,
+          gameId: swipeResult.gameId,
+        );
       }
     }
 
@@ -145,11 +177,15 @@ class MatchCubit extends Cubit<MatchState> {
     if (updated.isNotEmpty) {
       updated.removeAt(0);
     }
-    emit(state.copyWith(profiles: updated));
+    emit(state.copyWith(profiles: updated, mutualLikeMatch: mutualLikeMatch));
 
     if (updated.isEmpty) {
       await _fetchFeed(showLoader: true);
     }
+  }
+
+  void clearMutualLikeMatch() {
+    emit(state.copyWith(clearMutualLikeMatch: true));
   }
 
   Future<void> updateFilters(MatchFilters filters) async {
@@ -231,7 +267,7 @@ class MatchCubit extends Cubit<MatchState> {
   static List<MatchProfile> _buildTestProfiles() {
     return [
       const MatchProfile(
-        id: 'test-1',
+        id: 'test-match-1',
         name: 'Murat',
         age: 25,
         city: 'Almaty',
@@ -246,7 +282,7 @@ class MatchCubit extends Cubit<MatchState> {
         verified: true,
       ),
       const MatchProfile(
-        id: 'test-2',
+        id: 'test-match-2',
         name: 'Anya',
         age: 22,
         city: 'Astana',
@@ -260,7 +296,7 @@ class MatchCubit extends Cubit<MatchState> {
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
       ),
       const MatchProfile(
-        id: 'test-3',
+        id: 'test-match-3',
         name: 'Daniyar',
         age: 29,
         city: 'Shymkent',
@@ -274,7 +310,7 @@ class MatchCubit extends Cubit<MatchState> {
             'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=1200&q=80',
       ),
       const MatchProfile(
-        id: 'test-4',
+        id: 'test-match-4',
         name: 'Aruzhan',
         age: 24,
         city: 'Karaganda',
@@ -288,7 +324,7 @@ class MatchCubit extends Cubit<MatchState> {
             'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80',
       ),
       const MatchProfile(
-        id: 'test-5',
+        id: 'test-match-5',
         name: 'Timur',
         age: 31,
         city: 'Aktobe',

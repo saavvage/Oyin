@@ -4,7 +4,10 @@ import '../../../../app/errors/app_errors.dart';
 import '../../../../app/localization/app_localizations.dart';
 import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
+import '../../../widgets/_export.dart';
 import '../search/dispute_screen.dart';
+import '../search/dispute_evidence_screen.dart';
+import '../search/match_result_screen.dart';
 
 class MatchHistoryScreen extends StatefulWidget {
   const MatchHistoryScreen({super.key});
@@ -158,17 +161,77 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
         separatorBuilder: (_, _) => 8.vSpacing,
         itemBuilder: (context, index) => _GameCard(
           game: _games[index],
+          onTap: () => _openGameDetails(_games[index]),
           onDisputeTap: _games[index].disputeId != null
               ? () => _openDispute(_games[index].disputeId!)
+              : null,
+          onCreateDisputeTap: _canCreateDispute(_games[index])
+              ? () => _createDispute(_games[index])
               : null,
         ),
       ),
     );
   }
 
+  bool _canCreateDispute(GameHistoryDto game) {
+    final hasDispute = game.disputeId != null && game.disputeId!.isNotEmpty;
+    return !hasDispute && game.status != 'DISPUTED';
+  }
+
+  Future<void> _createDispute(GameHistoryDto game) async {
+    final draft = await Navigator.of(context, rootNavigator: true)
+        .push<DisputeEvidenceDraft>(
+          MaterialPageRoute(builder: (_) => const DisputeEvidenceScreen()),
+        );
+    if (!mounted || draft == null) return;
+
+    try {
+      final response = await DisputesApi.createDispute(
+        gameId: game.id,
+        comment: draft.comment,
+        subject: 'Result dispute',
+        plaintiffStatement: draft.plaintiffStatement,
+        defendantStatement: draft.defendantStatement,
+        evidenceUrl: draft.evidenceUrl,
+        evidenceItems: draft.evidenceItems,
+      );
+
+      if (!mounted) return;
+
+      AppNotifier.showSuccess(
+        context,
+        AppLocalizations.of(context).statusDisputeOpen,
+      );
+      await _load();
+
+      if (!mounted) return;
+      final disputeId = response.disputeId;
+      if (disputeId.isNotEmpty) {
+        _openDispute(disputeId);
+      }
+    } catch (error) {
+      if (!mounted) return;
+      AppNotifier.showError(context, error);
+    }
+  }
+
   void _openDispute(String disputeId) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => DisputeScreen(disputeId: disputeId)),
+    );
+  }
+
+  void _openGameDetails(GameHistoryDto game) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => MatchResultScreen(
+          gameId: game.id,
+          challengerName: 'You',
+          opponentName: game.opponentName,
+          opponentAvatarUrl: game.opponentAvatarUrl,
+          readOnly: true,
+        ),
+      ),
     );
   }
 
@@ -212,115 +275,150 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
 }
 
 class _GameCard extends StatelessWidget {
-  const _GameCard({required this.game, this.onDisputeTap});
+  const _GameCard({
+    required this.game,
+    required this.onTap,
+    this.onDisputeTap,
+    this.onCreateDisputeTap,
+  });
 
   final GameHistoryDto game;
+  final VoidCallback onTap;
   final VoidCallback? onDisputeTap;
+  final VoidCallback? onCreateDisputeTap;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
+    final hasDispute = game.disputeId != null && game.disputeId!.isNotEmpty;
     final resultColor = _resultColor(game.result, palette);
-    final resultLabel = _resultLabel(game.result);
+    final resultLabel = _resultLabel(game.result, l10n);
     final dateLabel = game.createdAt != null
         ? '${game.createdAt!.day.toString().padLeft(2, '0')}.${game.createdAt!.month.toString().padLeft(2, '0')}.${game.createdAt!.year}'
         : '';
 
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: palette.card,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: palette.accent,
-            backgroundImage: game.opponentAvatarUrl.isNotEmpty
-                ? NetworkImage(game.opponentAvatarUrl)
-                : null,
-            child: game.opponentAvatarUrl.isEmpty
-                ? Icon(Icons.person, color: palette.muted)
-                : null,
-          ),
-          12.hSpacing,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  game.opponentName,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                4.vSpacing,
-                Row(
-                  children: [
-                    if (game.score != null) ...[
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: palette.card,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: palette.accent,
+              backgroundImage: game.opponentAvatarUrl.isNotEmpty
+                  ? NetworkImage(game.opponentAvatarUrl)
+                  : null,
+              child: game.opponentAvatarUrl.isEmpty
+                  ? Icon(Icons.person, color: palette.muted)
+                  : null,
+            ),
+            12.hSpacing,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    game.opponentName,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  4.vSpacing,
+                  Row(
+                    children: [
+                      if (game.score != null) ...[
+                        Text(
+                          game.score!,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                        ),
+                        8.hSpacing,
+                      ],
                       Text(
-                        game.score!,
+                        dateLabel,
                         style: Theme.of(
                           context,
                         ).textTheme.bodySmall?.copyWith(color: palette.muted),
                       ),
-                      8.hSpacing,
                     ],
-                    Text(
-                      dateLabel,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: palette.muted),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: resultColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    resultLabel,
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: resultColor,
+                      fontWeight: FontWeight.w700,
                     ),
-                  ],
+                  ),
                 ),
+                if (hasDispute) ...[
+                  6.vSpacing,
+                  GestureDetector(
+                    onTap: onDisputeTap,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.gavel, size: 14, color: Colors.orange[700]),
+                        4.hSpacing,
+                        Text(
+                          game.status == 'DISPUTED'
+                              ? l10n.statusDispute
+                              : l10n.statusConflict,
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Colors.orange[700],
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else if (onCreateDisputeTap != null) ...[
+                  6.vSpacing,
+                  GestureDetector(
+                    onTap: onCreateDisputeTap,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.gavel, size: 14, color: Colors.orange[700]),
+                        4.hSpacing,
+                        Text(
+                          l10n.openDispute,
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: Colors.orange[700],
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: resultColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  resultLabel,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: resultColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              if (game.status == 'CONFLICT' || game.status == 'DISPUTED') ...[
-                6.vSpacing,
-                GestureDetector(
-                  onTap: onDisputeTap,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.gavel, size: 14, color: Colors.orange[700]),
-                      4.hSpacing,
-                      Text(
-                        game.status == 'DISPUTED' ? 'Dispute' : 'Conflict',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.orange[700],
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -338,16 +436,16 @@ class _GameCard extends StatelessWidget {
     }
   }
 
-  String _resultLabel(String result) {
+  String _resultLabel(String result, AppLocalizations l10n) {
     switch (result) {
       case 'win':
-        return 'WIN';
+        return l10n.statusWin;
       case 'loss':
-        return 'LOSS';
+        return l10n.statusLoss;
       case 'draw':
-        return 'DRAW';
+        return l10n.draw.toUpperCase();
       default:
-        return 'PENDING';
+        return l10n.statusPendingResult;
     }
   }
 }
