@@ -111,7 +111,15 @@ class AuthEntryScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.sports_mma, color: context.palette.primary),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              'assets/logo/logo.png',
+              width: 22,
+              height: 22,
+              fit: BoxFit.cover,
+            ),
+          ),
           8.hSpacing,
           Text(
             'Oyin',

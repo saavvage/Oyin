@@ -86,22 +86,31 @@ class _NavShellState extends State<NavShell> with RouteAware {
     ];
 
     return Scaffold(
-      body: IndexedStack(
-        index: _index,
+      extendBody: true,
+      body: Stack(
+        fit: StackFit.expand,
+        clipBehavior: Clip.none,
         children: [
-          const MatchScreen(),
-          ArenaScreen(isActive: _index == 1),
-          ChatScreen(isActive: _index == 2),
-          ProfileScreen(isActive: _index == 3),
+          IndexedStack(
+            index: _index,
+            children: [
+              const MatchScreen(),
+              ArenaScreen(isActive: _index == 1),
+              ChatScreen(isActive: _index == 2),
+              ProfileScreen(isActive: _index == 3),
+            ],
+          ),
+          if (_showNavBar)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: AdaptiveNavBar(
+                currentIndex: _index,
+                items: items,
+                onTap: (value) => setState(() => _index = value),
+              ),
+            ),
         ],
       ),
-      bottomNavigationBar: _showNavBar
-          ? AdaptiveNavBar(
-              currentIndex: _index,
-              items: items,
-              onTap: (value) => setState(() => _index = value),
-            )
-          : null,
     );
   }
 }

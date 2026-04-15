@@ -63,10 +63,13 @@ class _AdaptiveNavBarState extends State<AdaptiveNavBar> {
 
         if (navType == _NavPresentation.cupertino) {
           return SafeArea(
+            top: false,
             bottom: false,
+            minimum: EdgeInsets.zero,
             child: CNTabBar(
               currentIndex: widget.currentIndex,
               onTap: widget.onTap,
+              backgroundColor: Colors.transparent,
               items: [
                 for (final item in widget.items)
                   CNTabBarItem(

@@ -145,13 +145,15 @@ class _ChatView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
+    final navOverlayInset = MediaQuery.of(context).viewPadding.bottom + 82;
 
     return Scaffold(
       backgroundColor: palette.background,
       body: SafeArea(
-        bottom: true,
+        bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(20, 16, 20, navOverlayInset),
           child: BlocBuilder<ChatCubit, ChatState>(
             builder: (context, state) {
               return Column(

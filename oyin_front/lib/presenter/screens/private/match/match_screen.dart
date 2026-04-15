@@ -33,6 +33,8 @@ class _MatchViewState extends State<_MatchView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
+    final navOverlayInset = MediaQuery.of(context).viewPadding.bottom + 82;
+
     return Scaffold(
       backgroundColor: palette.background,
       body: SafeArea(
@@ -100,7 +102,7 @@ class _MatchViewState extends State<_MatchView> {
                   ),
                 if (!state.isLoading && !state.isFinished && profile != null)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, navOverlayInset),
                     child: MatchActionsRow(
                       l10n: l10n,
                       onDislike: () => _swipeController.swipeLeft(),

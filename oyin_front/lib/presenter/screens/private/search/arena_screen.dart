@@ -227,10 +227,12 @@ class _ArenaScreenState extends State<ArenaScreen> {
     final l10n = AppLocalizations.of(context);
     final topPlayers = _players.take(3).toList();
     final inRange = _players.skip(3).take(8).toList();
+    final navOverlayInset = MediaQuery.of(context).viewPadding.bottom + 82;
 
     return Scaffold(
       backgroundColor: palette.background,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(l10n.arenaTitle),
         actions: [
           IconButton(
@@ -244,9 +246,12 @@ class _ArenaScreenState extends State<ArenaScreen> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  16,
+                  12,
+                  16,
+                  navOverlayInset,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
