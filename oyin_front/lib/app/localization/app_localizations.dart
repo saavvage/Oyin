@@ -226,6 +226,8 @@ class AppLocalizations {
   String get accountOverviewLosses => _string(LocaleKeys.accountOverviewLosses);
   String get accountOverviewDraws => _string(LocaleKeys.accountOverviewDraws);
   String get notSet => _string(LocaleKeys.notSet);
+  String get commonYes => _string(LocaleKeys.commonYes);
+  String get commonNo => _string(LocaleKeys.commonNo);
   String get verified => _string(LocaleKeys.verified);
   String get notVerified => _string(LocaleKeys.notVerified);
   String get securityContactsTitle => _string(LocaleKeys.securityContactsTitle);
@@ -483,6 +485,19 @@ class AppLocalizations {
   String get messengerReportSent => _string(LocaleKeys.messengerReportSent);
   String get messengerSomethingWrong =>
       _string(LocaleKeys.messengerSomethingWrong);
+  String get messengerReportTargetLabel =>
+      _string(LocaleKeys.messengerReportTargetLabel);
+  String get messengerReportDescriptionTitle =>
+      _string(LocaleKeys.messengerReportDescriptionTitle);
+  String get messengerReportDescriptionHint =>
+      _string(LocaleKeys.messengerReportDescriptionHint);
+  String get messengerReportDescriptionRequired =>
+      _string(LocaleKeys.messengerReportDescriptionRequired);
+  String messengerReportCounter(int used, int max, int left) =>
+      _string(LocaleKeys.messengerReportCounter)
+          .replaceFirst('{used}', used.toString())
+          .replaceFirst('{max}', max.toString())
+          .replaceFirst('{left}', left.toString());
   String get messengerAttachmentCamera =>
       _string(LocaleKeys.messengerAttachmentCamera);
   String get messengerAttachmentLibrary =>
@@ -967,6 +982,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.accountOverviewLosses: 'Losses',
     LocaleKeys.accountOverviewDraws: 'Draws',
     LocaleKeys.notSet: 'Not set',
+    LocaleKeys.commonYes: 'Yes',
+    LocaleKeys.commonNo: 'No',
     LocaleKeys.verified: 'Verified',
     LocaleKeys.notVerified: 'Not verified',
     LocaleKeys.securityContactsTitle: 'Recovery contacts',
@@ -1198,6 +1215,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.messengerUserBlocked: 'User blocked',
     LocaleKeys.messengerReportSent: 'Report sent',
     LocaleKeys.messengerSomethingWrong: 'Something went wrong',
+    LocaleKeys.messengerReportTargetLabel: 'User nickname',
+    LocaleKeys.messengerReportDescriptionTitle: 'Problem description',
+    LocaleKeys.messengerReportDescriptionHint:
+        'Describe what happened (max 500 characters)',
+    LocaleKeys.messengerReportDescriptionRequired:
+        'Please describe the problem.',
+    LocaleKeys.messengerReportCounter: '{used}/{max} • Left: {left}',
     LocaleKeys.messengerAttachmentCamera: 'Take photo',
     LocaleKeys.messengerAttachmentLibrary: 'Add photo/video',
     LocaleKeys.messengerAttachmentFile: 'Attach file',
@@ -1614,6 +1638,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.accountOverviewLosses: 'Поражения',
     LocaleKeys.accountOverviewDraws: 'Ничьи',
     LocaleKeys.notSet: 'Не указано',
+    LocaleKeys.commonYes: 'Да',
+    LocaleKeys.commonNo: 'Нет',
     LocaleKeys.verified: 'Подтверждено',
     LocaleKeys.notVerified: 'Не подтверждено',
     LocaleKeys.securityContactsTitle: 'Контакты для восстановления',
@@ -1630,7 +1656,7 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Выберите email или телефон для подтверждения.',
     LocaleKeys.securityPhoneNotSet: 'Номер телефона не указан.',
     LocaleKeys.securityCodeSent: 'Код подтверждения отправлен.',
-    LocaleKeys.securityCodeRequired: 'Введите код подтверждения.',
+    LocaleKeys.securityCodeRequired: 'Введите код.',
     LocaleKeys.securityPasswordChanged: 'Пароль успешно обновлён.',
     LocaleKeys.securityEmailTitle: 'Смена email',
     LocaleKeys.securityChangeEmailAction: 'Подтвердить и сменить email',
@@ -1786,7 +1812,7 @@ const Map<String, Map<String, String>> _localizedValues = {
         'Укажи телефон, чтобы подтвердить аккаунт и найти спарринг-партнёров.',
     LocaleKeys.termsAgree:
         'Продолжая, вы соглашаетесь с Условиями и Политикой конфиденциальности.',
-    LocaleKeys.verificationTitle: 'Введите код подтверждения',
+    LocaleKeys.verificationTitle: 'Введите код',
     LocaleKeys.verificationSubtitle:
         'Мы отправили код на {phone}. Введите его ниже, чтобы продолжить.',
     LocaleKeys.resendCode: 'Отправить ещё раз',
@@ -1848,6 +1874,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.messengerUserBlocked: 'Пользователь заблокирован',
     LocaleKeys.messengerReportSent: 'Жалоба отправлена',
     LocaleKeys.messengerSomethingWrong: 'Что-то пошло не так',
+    LocaleKeys.messengerReportTargetLabel: 'Никнейм пользователя',
+    LocaleKeys.messengerReportDescriptionTitle: 'Описание проблемы',
+    LocaleKeys.messengerReportDescriptionHint:
+        'Опишите проблему (максимум 500 символов)',
+    LocaleKeys.messengerReportDescriptionRequired:
+        'Опишите проблему перед отправкой.',
+    LocaleKeys.messengerReportCounter: '{used}/{max} • Осталось: {left}',
     LocaleKeys.messengerAttachmentCamera: 'Сделать фото',
     LocaleKeys.messengerAttachmentLibrary: 'Добавить фото/видео',
     LocaleKeys.messengerAttachmentFile: 'Прикрепить файл',
@@ -2263,6 +2296,8 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.accountOverviewLosses: 'Жеңіліс',
     LocaleKeys.accountOverviewDraws: 'Тең ойын',
     LocaleKeys.notSet: 'Көрсетілмеген',
+    LocaleKeys.commonYes: 'Иә',
+    LocaleKeys.commonNo: 'Жоқ',
     LocaleKeys.verified: 'Расталған',
     LocaleKeys.notVerified: 'Расталмаған',
     LocaleKeys.securityContactsTitle: 'Қалпына келтіру байланыстары',
@@ -2493,6 +2528,13 @@ const Map<String, Map<String, String>> _localizedValues = {
     LocaleKeys.messengerUserBlocked: 'Пайдаланушы бұғатталды',
     LocaleKeys.messengerReportSent: 'Шағым жіберілді',
     LocaleKeys.messengerSomethingWrong: 'Қате орын алды',
+    LocaleKeys.messengerReportTargetLabel: 'Пайдаланушы никнеймі',
+    LocaleKeys.messengerReportDescriptionTitle: 'Мәселе сипаттамасы',
+    LocaleKeys.messengerReportDescriptionHint:
+        'Мәселені сипаттаңыз (ең көбі 500 таңба)',
+    LocaleKeys.messengerReportDescriptionRequired:
+        'Жібермес бұрын мәселені сипаттаңыз.',
+    LocaleKeys.messengerReportCounter: '{used}/{max} • Қалды: {left}',
     LocaleKeys.messengerAttachmentCamera: 'Фото түсіру',
     LocaleKeys.messengerAttachmentLibrary: 'Фото/видео қосу',
     LocaleKeys.messengerAttachmentFile: 'Файлды тіркеу',

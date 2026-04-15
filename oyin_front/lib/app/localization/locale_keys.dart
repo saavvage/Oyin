@@ -90,6 +90,8 @@ class LocaleKeys {
   static const accountOverviewLosses = 'account_overview_losses';
   static const accountOverviewDraws = 'account_overview_draws';
   static const notSet = 'not_set';
+  static const commonYes = 'common_yes';
+  static const commonNo = 'common_no';
   static const verified = 'verified';
   static const notVerified = 'not_verified';
   static const securityContactsTitle = 'security_contacts_title';
@@ -302,6 +304,14 @@ class LocaleKeys {
   static const messengerUserBlocked = 'messenger_user_blocked';
   static const messengerReportSent = 'messenger_report_sent';
   static const messengerSomethingWrong = 'messenger_something_wrong';
+  static const messengerReportTargetLabel = 'messenger_report_target_label';
+  static const messengerReportDescriptionTitle =
+      'messenger_report_description_title';
+  static const messengerReportDescriptionHint =
+      'messenger_report_description_hint';
+  static const messengerReportDescriptionRequired =
+      'messenger_report_description_required';
+  static const messengerReportCounter = 'messenger_report_counter';
   static const messengerAttachmentCamera = 'messenger_attachment_camera';
   static const messengerAttachmentLibrary = 'messenger_attachment_library';
   static const messengerAttachmentFile = 'messenger_attachment_file';

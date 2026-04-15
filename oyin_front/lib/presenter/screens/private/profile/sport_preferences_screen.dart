@@ -71,7 +71,19 @@ class _SportPreferencesScreenState extends State<SportPreferencesScreen> {
       backgroundColor: palette.background,
       appBar: AppBar(
         backgroundColor: palette.background,
-        title: Text(l10n.sportPreferences),
+        centerTitle: false,
+        titleSpacing: 0,
+        title: SizedBox(
+          height: kToolbarHeight,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(l10n.sportPreferences, maxLines: 1),
+            ),
+          ),
+        ),
       ),
       body: SafeArea(
         child: Column(

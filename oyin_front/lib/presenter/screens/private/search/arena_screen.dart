@@ -532,6 +532,8 @@ class _MatchingContractRow extends StatelessWidget {
               children: [
                 Text(
                   contract.partnerName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
                   ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
@@ -622,13 +624,17 @@ class _PlayerRow extends StatelessWidget {
               children: [
                 Text(
                   player.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 4.vSpacing,
                 Text(
-                  'Rating: ${player.rating}',
+                  'Rating ${player.rating}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: palette.muted),
@@ -636,27 +642,43 @@ class _PlayerRow extends StatelessWidget {
               ],
             ),
           ),
-          if (player.delta != 0) ...[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: accentColor.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                '${player.delta > 0 ? '+' : ''}${player.delta}',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: accentColor,
-                  fontWeight: FontWeight.w700,
+          10.hSpacing,
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 96, maxWidth: 142),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (player.delta != 0) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: accentColor.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${player.delta > 0 ? '+' : ''}${player.delta}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: accentColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  8.vSpacing,
+                ],
+                _ActionButton(
+                  label: player.pending || disabled
+                      ? pendingLabel
+                      : challengeLabel,
+                  highlighted: !player.pending && !disabled,
+                  onPressed: player.pending || disabled ? null : onChallenge,
                 ),
-              ),
+              ],
             ),
-            10.hSpacing,
-          ],
-          _ActionButton(
-            label: player.pending || disabled ? pendingLabel : challengeLabel,
-            highlighted: !player.pending && !disabled,
-            onPressed: player.pending || disabled ? null : onChallenge,
           ),
         ],
       ),
@@ -698,10 +720,16 @@ class _ActionButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: highlighted ? Colors.blue : Colors.grey.shade800,
         foregroundColor: highlighted ? Colors.white : Colors.grey.shade300,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        minimumSize: const Size(0, 40),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontWeight: FontWeight.w700),
+      ),
     );
   }
 }

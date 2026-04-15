@@ -161,14 +161,73 @@ class ChatAttachmentInput {
 
 class ChatApi {
   static Future<ChatThreadDto> createOrGetDirectThread(
-    String partnerUserId,
-  ) async {
-    final data = await ApiClient.instance.post(
-      ApiEndpoints.chatsCreateThread,
-      data: {'partnerUserId': partnerUserId},
-    );
+    String partnerUserId, {
+    String? partnerName,
+    String? partnerAvatarUrl,
+  }) async {
+    try {
+      final data = await ApiClient.instance.post(
+        ApiEndpoints.chatsCreateThread,
+        data: {'partnerUserId': partnerUserId},
+      );
 
-    return ChatThreadDto.fromMap((data as Map).cast<String, dynamic>());
+      return ChatThreadDto.fromMap((data as Map).cast<String, dynamic>());
+    } catch (_) {
+      final data = MockDemoRuntime.instance.createOrGetDirectThread(
+        partnerUserId: partnerUserId,
+        partnerName: partnerName,
+        partnerAvatarUrl: partnerAvatarUrl,
+      );
+      return ChatThreadDto.fromMap(data);
+    }
+  }
+
+  static Future<void> blockByPartner({
+    required String partnerUserId,
+    String? partnerName,
+    String? partnerAvatarUrl,
+  }) async {
+    final thread = await createOrGetDirectThread(
+      partnerUserId,
+      partnerName: partnerName,
+      partnerAvatarUrl: partnerAvatarUrl,
+    );
+    await blockByThread(
+      threadId: thread.id,
+      partnerUserId: partnerUserId,
+      partnerName: partnerName,
+      partnerAvatarUrl: partnerAvatarUrl,
+    );
+  }
+
+  static Future<void> blockByThread({
+    required String threadId,
+    String? partnerUserId,
+    String? partnerName,
+    String? partnerAvatarUrl,
+  }) async {
+    final runtime = MockDemoRuntime.instance;
+    final normalizedId = threadId.trim();
+    if (normalizedId.isEmpty) {
+      throw StateError('threadId is required');
+    }
+
+    if (runtime.isLocalThread(normalizedId)) {
+      runtime.setThreadBlocked(normalizedId, true);
+      return;
+    }
+
+    try {
+      await ApiClient.instance.post(ApiEndpoints.chatsBlock(normalizedId));
+    } catch (_) {
+      final effectiveThreadId = _ensureLocalThreadForBlockFallback(
+        threadId: normalizedId,
+        partnerUserId: partnerUserId,
+        partnerName: partnerName,
+        partnerAvatarUrl: partnerAvatarUrl,
+      );
+      runtime.setThreadBlocked(effectiveThreadId, true);
+    }
   }
 
   static Future<ChatThreadsResponse> getThreads() async {
@@ -304,7 +363,10 @@ class ChatApi {
     try {
       await ApiClient.instance.post(ApiEndpoints.chatsBlock(threadId));
     } catch (_) {
-      runtime.setThreadBlocked(threadId, true);
+      final effectiveThreadId = _ensureLocalThreadForBlockFallback(
+        threadId: threadId,
+      );
+      runtime.setThreadBlocked(effectiveThreadId, true);
     }
   }
 
@@ -365,5 +427,34 @@ class ChatApi {
         .whereType<Map>()
         .map((item) => ChatMessageDto.fromMap(item.cast<String, dynamic>()))
         .toList();
+  }
+
+  static String _ensureLocalThreadForBlockFallback({
+    required String threadId,
+    String? partnerUserId,
+    String? partnerName,
+    String? partnerAvatarUrl,
+  }) {
+    final runtime = MockDemoRuntime.instance;
+    if (runtime.isLocalThread(threadId)) return threadId;
+
+    if (partnerUserId != null && partnerUserId.trim().isNotEmpty) {
+      final created = runtime.createOrGetDirectThread(
+        partnerUserId: partnerUserId.trim(),
+        partnerName: partnerName,
+        partnerAvatarUrl: partnerAvatarUrl,
+      );
+      final id = (created['id'] ?? '').toString().trim();
+      if (id.isNotEmpty) return id;
+    }
+
+    final created = runtime.ensureThread(
+      threadId: threadId.trim(),
+      partnerUserId: partnerUserId?.trim(),
+      partnerName: partnerName,
+      partnerAvatarUrl: partnerAvatarUrl,
+    );
+    final id = (created['id'] ?? '').toString().trim();
+    return id.isEmpty ? threadId : id;
   }
 }

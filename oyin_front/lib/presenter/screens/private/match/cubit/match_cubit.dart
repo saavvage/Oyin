@@ -126,6 +126,24 @@ class MatchCubit extends Cubit<MatchState> {
     await _swipe(profile.id, 'DISLIKE');
   }
 
+  Future<void> removeCurrentBlockedProfile(String profileId) async {
+    final normalized = profileId.trim();
+    final current = state.currentProfile;
+    if (normalized.isEmpty || current == null || current.id != normalized) {
+      return;
+    }
+
+    final updated = List<MatchProfile>.from(state.profiles);
+    if (updated.isNotEmpty) {
+      updated.removeAt(0);
+    }
+
+    emit(state.copyWith(profiles: updated));
+    if (updated.isEmpty) {
+      await _fetchFeed(showLoader: true);
+    }
+  }
+
   Future<void> _swipe(String targetId, String action) async {
     final current = state.currentProfile;
     SwipeResultDto? swipeResult;

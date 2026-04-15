@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:oyin_front/domain/export.dart';
 import '../../../../app/localization/app_localizations.dart';
+import '../../../../infrastructure/export.dart';
 import '../../../extensions/_export.dart';
 import '../../../widgets/_export.dart';
 import '../messanger/messanger_screen.dart';
@@ -187,7 +188,7 @@ class _MatchViewState extends State<_MatchView> {
   ) async {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
-    await showModalBottomSheet<void>(
+    final shouldBlock = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: palette.background,
@@ -289,12 +290,74 @@ class _MatchViewState extends State<_MatchView> {
                         .toList(),
                   ),
                 ],
+                20.vSpacing,
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    icon: const Icon(Icons.block_rounded),
+                    label: Text(l10n.messengerActionBlockUser),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: BorderSide(
+                        color: Colors.redAccent.withValues(alpha: 0.45),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
     );
+
+    if (!context.mounted || shouldBlock != true) return;
+    await _blockProfile(context, profile);
+  }
+
+  Future<void> _blockProfile(BuildContext context, MatchProfile profile) async {
+    final l10n = AppLocalizations.of(context);
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.messengerDialogBlockTitle),
+        content: Text(l10n.messengerDialogBlockDesc),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.messengerDialogCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.messengerDialogBlockConfirm),
+          ),
+        ],
+      ),
+    );
+
+    if (!context.mounted || confirm != true) return;
+
+    try {
+      await ChatApi.blockByPartner(
+        partnerUserId: profile.id,
+        partnerName: profile.name,
+        partnerAvatarUrl: profile.imageUrl,
+      );
+
+      if (!context.mounted) return;
+      final cubit = context.read<MatchCubit>();
+      final current = cubit.state.currentProfile;
+      if (current != null && current.id == profile.id) {
+        await cubit.removeCurrentBlockedProfile(profile.id);
+      }
+      if (!context.mounted) return;
+      AppNotifier.showSuccess(context, l10n.messengerUserBlocked);
+    } catch (error) {
+      if (!context.mounted) return;
+      AppNotifier.showError(context, error);
+    }
   }
 
   void _openMatchChat(BuildContext context, MutualLikeMatch match) {

@@ -122,7 +122,11 @@ class MessangerCubit extends Cubit<MessangerState> {
 
   Future<bool> blockUser() async {
     try {
-      await ChatApi.blockThread(chatId);
+      await ChatApi.blockByThread(
+        threadId: chatId,
+        partnerName: state.partnerName,
+        partnerAvatarUrl: state.partnerAvatarUrl,
+      );
       emit(state.copyWith(isBlocked: true));
       return true;
     } catch (_) {
@@ -130,9 +134,9 @@ class MessangerCubit extends Cubit<MessangerState> {
     }
   }
 
-  Future<bool> reportUser() async {
+  Future<bool> reportUser({String? reason}) async {
     try {
-      await ChatApi.reportThread(chatId);
+      await ChatApi.reportThread(chatId, reason: reason);
       return true;
     } catch (_) {
       return false;

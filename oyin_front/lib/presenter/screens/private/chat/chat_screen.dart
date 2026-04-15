@@ -74,6 +74,73 @@ class _ChatView extends StatelessWidget {
     );
   }
 
+  Future<bool> _confirmDeleteChat(BuildContext context, ChatCard card) async {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final cubit = context.read<ChatCubit>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: palette.card,
+        title: Text(l10n.messengerDialogDeleteTitle),
+        content: Text(l10n.messengerDialogDeleteDesc),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.commonNo),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.commonYes),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete != true) return false;
+
+    final deleted = await cubit.deleteThread(card.id);
+    if (!deleted) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.messengerSomethingWrong)),
+      );
+    }
+    return deleted;
+  }
+
+  Widget _buildDeleteBackground(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 14),
+      alignment: Alignment.centerRight,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFD32F2F),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: const Icon(
+        Icons.delete_outline_rounded,
+        color: Colors.white,
+        size: 28,
+      ),
+    );
+  }
+
+  Widget _buildSwipeCard(
+    BuildContext context,
+    ChatCard card, {
+    required String scope,
+  }) {
+    return Dismissible(
+      key: ValueKey('${scope}_${card.id}'),
+      direction: DismissDirection.endToStart,
+      background: _buildDeleteBackground(context),
+      confirmDismiss: (_) => _confirmDeleteChat(context, card),
+      child: ChatListCard(card: card, onTap: () => _openChat(context, card)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -113,10 +180,7 @@ class _ChatView extends StatelessWidget {
                     ),
                     10.vSpacing,
                     ...state.actionRequired.map(
-                      (card) => ChatListCard(
-                        card: card,
-                        onTap: () => _openChat(context, card),
-                      ),
+                      (card) => _buildSwipeCard(context, card, scope: 'action'),
                     ),
                     14.vSpacing,
                     Text(
@@ -129,10 +193,8 @@ class _ChatView extends StatelessWidget {
                     ),
                     10.vSpacing,
                     ...state.upcoming.map(
-                      (card) => ChatListCard(
-                        card: card,
-                        onTap: () => _openChat(context, card),
-                      ),
+                      (card) =>
+                          _buildSwipeCard(context, card, scope: 'upcoming'),
                     ),
                   ] else ...[
                     _DisputesTab(

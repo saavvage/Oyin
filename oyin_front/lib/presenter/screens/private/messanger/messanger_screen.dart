@@ -150,33 +150,59 @@ class _MessangerScreenState extends State<MessangerScreen>
   }
 
   Future<void> _onMenuAction(_MenuAction action) async {
-    final palette = context.palette;
-    final l10n = AppLocalizations.of(context);
-    String title;
-    String desc;
-    String confirm;
-    Future<bool> Function() onConfirm;
-
     switch (action) {
       case _MenuAction.delete:
-        title = l10n.messengerDialogDeleteTitle;
-        desc = l10n.messengerDialogDeleteDesc;
-        confirm = l10n.messengerDialogDeleteConfirm;
-        onConfirm = () => _cubit.deleteChat();
+        await _confirmDeleteChat();
         break;
       case _MenuAction.block:
-        title = l10n.messengerDialogBlockTitle;
-        desc = l10n.messengerDialogBlockDesc;
-        confirm = l10n.messengerDialogBlockConfirm;
-        onConfirm = () => _cubit.blockUser();
+        await _confirmBlockUser();
         break;
       case _MenuAction.report:
-        title = l10n.messengerDialogReportTitle;
-        desc = l10n.messengerDialogReportDesc;
-        confirm = l10n.messengerDialogReportConfirm;
-        onConfirm = () => _cubit.reportUser();
+        await _openReportModal();
         break;
     }
+  }
+
+  Future<void> _confirmDeleteChat() async {
+    final l10n = AppLocalizations.of(context);
+    final ok = await _confirmAction(
+      title: l10n.messengerDialogDeleteTitle,
+      desc: l10n.messengerDialogDeleteDesc,
+      confirmLabel: l10n.messengerDialogDeleteConfirm,
+      onConfirm: () => _cubit.deleteChat(),
+    );
+    if (!ok || !mounted) return;
+    _showSnack(
+      l10n.messengerChatDeleted,
+      title: l10n.notifTitleSuccess,
+      type: AppNotificationType.success,
+    );
+  }
+
+  Future<void> _confirmBlockUser() async {
+    final l10n = AppLocalizations.of(context);
+    final ok = await _confirmAction(
+      title: l10n.messengerDialogBlockTitle,
+      desc: l10n.messengerDialogBlockDesc,
+      confirmLabel: l10n.messengerDialogBlockConfirm,
+      onConfirm: () => _cubit.blockUser(),
+    );
+    if (!ok || !mounted) return;
+    _showSnack(
+      l10n.messengerUserBlocked,
+      title: l10n.notifTitleSuccess,
+      type: AppNotificationType.success,
+    );
+  }
+
+  Future<bool> _confirmAction({
+    required String title,
+    required String desc,
+    required String confirmLabel,
+    required Future<bool> Function() onConfirm,
+  }) async {
+    final palette = context.palette;
+    final l10n = AppLocalizations.of(context);
 
     final result = await showDialog<bool>(
       context: context,
@@ -187,51 +213,52 @@ class _MessangerScreenState extends State<MessangerScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.messengerDialogCancel),
+            child: Text(l10n.commonNo),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(confirm),
+            child: Text(confirmLabel),
           ),
         ],
       ),
     );
 
-    if (result == true) {
-      final ok = await onConfirm();
-      if (!mounted) return;
-      if (!ok) {
-        _showSnack(
-          l10n.messengerSomethingWrong,
-          title: l10n.notifTitleError,
-          type: AppNotificationType.error,
-        );
-        return;
-      }
+    if (result != true) return false;
 
-      switch (action) {
-        case _MenuAction.delete:
-          _showSnack(
-            l10n.messengerChatDeleted,
-            title: l10n.notifTitleSuccess,
-            type: AppNotificationType.success,
-          );
-          break;
-        case _MenuAction.block:
-          _showSnack(
-            l10n.messengerUserBlocked,
-            title: l10n.notifTitleSuccess,
-            type: AppNotificationType.success,
-          );
-          break;
-        case _MenuAction.report:
-          _showSnack(
-            l10n.messengerReportSent,
-            title: l10n.notifTitleSuccess,
-            type: AppNotificationType.success,
-          );
-          break;
-      }
+    final ok = await onConfirm();
+    if (!mounted) return false;
+    if (!ok) {
+      _showSnack(
+        l10n.messengerSomethingWrong,
+        title: l10n.notifTitleError,
+        type: AppNotificationType.error,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _openReportModal() async {
+    final l10n = AppLocalizations.of(context);
+    final sent = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: context.palette.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => _ReportSheet(
+        partnerName: _cubit.state.partnerName,
+        onSubmit: (reason) => _cubit.reportUser(reason: reason),
+      ),
+    );
+
+    if (sent == true && mounted) {
+      _showSnack(
+        l10n.messengerReportSent,
+        title: l10n.notifTitleSuccess,
+        type: AppNotificationType.success,
+      );
     }
   }
 
@@ -444,24 +471,284 @@ class _Header extends StatelessWidget {
             ),
           ),
           PopupMenuButton<_MenuAction>(
-            icon: const Icon(Icons.more_horiz),
+            tooltip: '',
+            color: palette.card,
+            surfaceTintColor: Colors.transparent,
+            elevation: 12,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: palette.badge),
+            ),
+            icon: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: palette.surface.withValues(alpha: 0.95),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: palette.badge),
+              ),
+              child: const Icon(Icons.more_horiz_rounded, size: 22),
+            ),
             onSelected: onMenu,
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: _MenuAction.delete,
-                child: Text(l10n.messengerActionDeleteChat),
+                child: _MenuActionRow(
+                  icon: Icons.delete_outline_rounded,
+                  label: l10n.messengerActionDeleteChat,
+                  iconColor: Colors.redAccent,
+                ),
               ),
               PopupMenuItem(
                 value: _MenuAction.block,
-                child: Text(l10n.messengerActionBlockUser),
+                child: _MenuActionRow(
+                  icon: Icons.block_rounded,
+                  label: l10n.messengerActionBlockUser,
+                  iconColor: Colors.orangeAccent,
+                ),
               ),
               PopupMenuItem(
                 value: _MenuAction.report,
-                child: Text(l10n.messengerActionReport),
+                child: _MenuActionRow(
+                  icon: Icons.flag_rounded,
+                  label: l10n.messengerActionReport,
+                  iconColor: Colors.amber,
+                ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MenuActionRow extends StatelessWidget {
+  const _MenuActionRow({
+    required this.icon,
+    required this.label,
+    required this.iconColor,
+  });
+
+  final IconData icon;
+  final String label;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: iconColor),
+        10.hSpacing,
+        Text(label),
+      ],
+    );
+  }
+}
+
+class _ReportSheet extends StatefulWidget {
+  const _ReportSheet({required this.partnerName, required this.onSubmit});
+
+  final String partnerName;
+  final Future<bool> Function(String reason) onSubmit;
+
+  @override
+  State<_ReportSheet> createState() => _ReportSheetState();
+}
+
+class _ReportSheetState extends State<_ReportSheet> {
+  static const int _maxChars = 500;
+
+  final TextEditingController _controller = TextEditingController();
+  bool _isSending = false;
+  String? _errorText;
+  int _usedChars = 0;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context);
+    final reason = _controller.text.trim();
+    if (reason.isEmpty) {
+      setState(() => _errorText = l10n.messengerReportDescriptionRequired);
+      return;
+    }
+
+    setState(() {
+      _errorText = null;
+      _isSending = true;
+    });
+
+    final ok = await widget.onSubmit(reason);
+    if (!mounted) return;
+
+    if (ok) {
+      Navigator.of(context).pop(true);
+      return;
+    }
+
+    setState(() => _isSending = false);
+    AppNotifier.showMessage(
+      context,
+      l10n.messengerSomethingWrong,
+      title: l10n.notifTitleError,
+      type: AppNotificationType.error,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final used = _usedChars;
+    final left = (_maxChars - used).clamp(0, _maxChars).toInt();
+
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          18,
+          20,
+          20 + MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 44,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: palette.badge,
+                  borderRadius: BorderRadius.circular(99),
+                ),
+              ),
+            ),
+            14.vSpacing,
+            Text(
+              l10n.messengerDialogReportTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.weighted(FontWeight.w800),
+            ),
+            12.vSpacing,
+            Text(
+              l10n.messengerReportTargetLabel,
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium?.colored(palette.muted),
+            ),
+            8.vSpacing,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: palette.surface,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: palette.badge),
+              ),
+              child: Text(
+                widget.partnerName,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.weighted(FontWeight.w700),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            14.vSpacing,
+            Text(
+              l10n.messengerReportDescriptionTitle,
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium?.colored(palette.muted),
+            ),
+            8.vSpacing,
+            TextField(
+              controller: _controller,
+              enabled: !_isSending,
+              maxLength: _maxChars,
+              maxLines: 7,
+              minLines: 5,
+              onChanged: (value) {
+                setState(() {
+                  _usedChars = value.length;
+                  if (_errorText != null) {
+                    _errorText = null;
+                  }
+                });
+              },
+              decoration: InputDecoration(
+                hintText: l10n.messengerReportDescriptionHint,
+                alignLabelWithHint: true,
+                errorText: _errorText,
+                counterText: '',
+                filled: true,
+                fillColor: palette.surface,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: palette.badge),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: palette.badge),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: BorderSide(color: palette.primary),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.redAccent),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            6.vSpacing,
+            Text(
+              l10n.messengerReportCounter(used, _maxChars, left),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.colored(palette.muted),
+            ),
+            16.vSpacing,
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _isSending ? null : _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: palette.primary,
+                  foregroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                child: _isSending
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.black,
+                        ),
+                      )
+                    : Text(
+                        l10n.messengerDialogReportConfirm,
+                        style: const TextStyle(fontWeight: FontWeight.w800),
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

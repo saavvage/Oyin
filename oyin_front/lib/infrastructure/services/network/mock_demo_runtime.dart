@@ -102,6 +102,7 @@ class MockDemoRuntime {
         .where((profile) {
           if (_likedProfileIds.contains(profile.id)) return false;
           if (_dislikedProfileIds.contains(profile.id)) return false;
+          if (_isProfileBlocked(profile.id)) return false;
           if (profile.distanceKm < distanceMin ||
               profile.distanceKm > distanceMax) {
             return false;
@@ -119,6 +120,12 @@ class MockDemoRuntime {
         })
         .map((profile) => profile.toMap())
         .toList();
+  }
+
+  bool _isProfileBlocked(String profileId) {
+    return _threadsById.values.any(
+      (thread) => thread.isBlocked && thread.partnerUserId == profileId,
+    );
   }
 
   Map<String, dynamic> swipe({
@@ -258,6 +265,80 @@ class MockDemoRuntime {
     if (thread == null) return;
     thread.isBlocked = blocked;
     thread.updatedAt = DateTime.now();
+  }
+
+  Map<String, dynamic> ensureThread({
+    required String threadId,
+    String? partnerUserId,
+    String? partnerName,
+    String? partnerAvatarUrl,
+    String bucket = 'upcoming',
+  }) {
+    final existing = _threadsById[threadId];
+    if (existing != null) {
+      return existing.toMap();
+    }
+
+    final profile = partnerUserId == null ? null : _profilesById[partnerUserId];
+    final resolvedName = (profile?.name ?? partnerName ?? '').trim();
+    final resolvedAvatar = (profile?.imageUrl ?? partnerAvatarUrl ?? '').trim();
+
+    final created = _MockThread(
+      id: threadId,
+      bucket: bucket,
+      statusKey: 'status_matched',
+      subtitle: 'Direct chat is ready.',
+      partnerName: resolvedName.isEmpty ? 'Opponent' : resolvedName,
+      partnerAvatarUrl: resolvedAvatar.isEmpty
+          ? 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80'
+          : resolvedAvatar,
+      partnerUserId: partnerUserId,
+      accent: 'green',
+      badgeCount: 0,
+      highlight: false,
+      buttonKey: null,
+      updatedAt: DateTime.now(),
+    );
+
+    _threadsById[threadId] = created;
+    _messagesByThreadId.putIfAbsent(threadId, () => []);
+    return created.toMap();
+  }
+
+  String? findThreadIdByPartner(String partnerUserId) {
+    final normalized = partnerUserId.trim();
+    if (normalized.isEmpty) return null;
+
+    final thread = _threadsById.values.cast<_MockThread?>().firstWhere(
+      (item) => item?.partnerUserId == normalized,
+      orElse: () => null,
+    );
+    return thread?.id;
+  }
+
+  Map<String, dynamic> createOrGetDirectThread({
+    required String partnerUserId,
+    String? partnerName,
+    String? partnerAvatarUrl,
+  }) {
+    final normalizedId = partnerUserId.trim();
+    if (normalizedId.isEmpty) {
+      throw StateError('partnerUserId is required for direct thread');
+    }
+
+    final existingId = findThreadIdByPartner(normalizedId);
+    if (existingId != null) {
+      final existing = _threadsById[existingId];
+      if (existing != null) return existing.toMap();
+    }
+
+    final threadId = 'mock-thread-user-$normalizedId';
+    return ensureThread(
+      threadId: threadId,
+      partnerUserId: normalizedId,
+      partnerName: partnerName,
+      partnerAvatarUrl: partnerAvatarUrl,
+    );
   }
 
   List<Map<String, dynamic>> myGames(String userId) {

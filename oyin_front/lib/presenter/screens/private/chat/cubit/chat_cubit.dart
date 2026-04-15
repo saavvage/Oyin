@@ -107,6 +107,29 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  Future<bool> deleteThread(String threadId) async {
+    final normalizedId = threadId.trim();
+    if (normalizedId.isEmpty) return false;
+
+    try {
+      await ChatApi.deleteThread(normalizedId);
+
+      emit(
+        state.copyWith(
+          actionRequired: state.actionRequired
+              .where((card) => card.id != normalizedId)
+              .toList(),
+          upcoming: state.upcoming
+              .where((card) => card.id != normalizedId)
+              .toList(),
+        ),
+      );
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   ChatCard _toCard(ChatThreadDto dto) {
     return ChatCard(
       id: dto.id,
